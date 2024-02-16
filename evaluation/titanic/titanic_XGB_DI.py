@@ -2,10 +2,6 @@ import json
 import os
 import sys
 
-from util.eval import get_confusion_matrix, get_classification_report
-from util.utils import create_dir, write_file
-from util.wandb import log_artifact
-
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), '../..'))
 # Add the directory to sys.path
@@ -30,6 +26,9 @@ import sklearn.metrics
 import autosklearn.classification
 from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
     average_odds_difference
+from util.eval import get_confusion_matrix, get_classification_report
+from util.utils import create_dir, write_file
+from util.wandb import log_artifact
 
 train_list = "data_orig_train.pkl"
 test_list = "data_orig_test.pkl"
