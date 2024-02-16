@@ -1,5 +1,6 @@
-import sys
+import json
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), '../..'))
@@ -9,28 +10,33 @@ import datetime
 import pickle
 
 from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import CategoricalHyperparameter, UniformFloatHyperparameter, \
-    UniformIntegerHyperparameter, UnParametrizedHyperparameter
-from sklearn.ensemble import RandomForestClassifier
+from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
+    UniformIntegerHyperparameter
 
 import autosklearn.pipeline.components.classification
 from autosklearn.Fairea.fairea import create_baseline
 from autosklearn.pipeline.components.classification \
     import AutoSklearnClassificationAlgorithm
-from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE, SIGNED_DATA
-from autosklearn.util.common import check_for_bool, check_none
+from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SIGNED_DATA
 import numpy as np
 import pandas as pd
 from aif360.datasets import StandardDataset
 from sklearn.linear_model import LogisticRegression
 import sklearn.metrics
 import autosklearn.classification
-from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, average_odds_difference
-import os, shutil
-
+from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
+    average_odds_difference
+import os
+from util.utils import write_file, create_dir
+from util.eval import get_confusion_matrix, get_classification_report
+from util.wandb import log_artifact
 
 train_list = "data_orig_train.pkl"
 test_list = "data_orig_test.pkl"
+
+create_dir("titanic_xgb_spd_results")
+
+
 def custom_preprocessing(df):
     def group_race(x):
         if x == "White":
@@ -76,7 +82,7 @@ test.loc[:, 'Survived'] = 0
 
 from sklearn.base import TransformerMixin
 from sklearn.pipeline import Pipeline, FeatureUnion
-from typing import List, Union, Dict
+from typing import List
 
 
 class SelectCols(TransformerMixin):
@@ -214,15 +220,15 @@ df = pd.concat((x_train, y_train), axis=1)
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
 data_orig_train = StandardDataset(train,
-                               label_name='Survived',
-                               protected_attribute_names=['Sex'],
-                               favorable_classes=[1],
-                               privileged_classes=[[1]])
+                                  label_name='Survived',
+                                  protected_attribute_names=['Sex'],
+                                  favorable_classes=[1],
+                                  privileged_classes=[[1]])
 data_orig_test = StandardDataset(test,
-                               label_name='Survived',
-                               protected_attribute_names=['Sex'],
-                               favorable_classes=[1],
-                               privileged_classes=[[1]])
+                                 label_name='Survived',
+                                 protected_attribute_names=['Sex'],
+                                 favorable_classes=[1],
+                                 privileged_classes=[[1]])
 
 privileged_groups = [{'Sex': 1}]
 unprivileged_groups = [{'Sex': 0}]
@@ -232,23 +238,6 @@ y_train = data_orig_train.labels.ravel()
 
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
-
-# dataset_orig = StandardDataset(df,
-#                                        label_name='Survived',
-#                                        protected_attribute_names=['Sex'],
-#                                        favorable_classes=[1],
-#                                        privileged_classes=[[1]])
-#
-# privileged_groups = [{'Sex': 1}]
-# unprivileged_groups = [{'Sex': 0}]
-#
-# data_orig_train, data_orig_test = dataset_orig.split([0.7], shuffle=True)
-#
-# X_train = data_orig_train.features
-# y_train = data_orig_train.labels.ravel()
-#
-# X_test = data_orig_test.features
-# y_test = data_orig_test.labels.ravel()
 
 
 class CustomXGBoost(AutoSklearnClassificationAlgorithm):
@@ -334,6 +323,8 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
 autosklearn.pipeline.components.classification.add_classifier(CustomXGBoost)
 cs = CustomXGBoost.get_hyperparameter_search_space()
 print(cs)
+
+
 ############################################################################
 # Custom metrics definition
 # =========================
@@ -376,14 +367,11 @@ def accuracy(solution, prediction):
         f = open("beta.txt", "r")
         beta = float(f.read())
         f.close()
-        # print('yyyy')
-    # print(beta)
     beta += 0.2
     if beta > 1.0:
         beta = 1.0
     try:
         num_keys = sum(1 for line in open('num_keys.txt'))
-        print(num_keys)
         beta -= 0.050 * int(int(num_keys) / 10)
         if int(num_keys) % 10 == 0:
             os.remove(temp_path + "/.auto-sklearn/ensemble_read_losses.pkl")
@@ -396,10 +384,16 @@ def accuracy(solution, prediction):
                         equal_opportunity_difference(subset_data_orig_train, prediction, solution, protected_attr),
                         average_odds_difference(subset_data_orig_train, prediction, solution, protected_attr)]
 
-    print(fairness_metrics[metric_id], 1 - np.mean(solution == prediction),
-          fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta), beta)
+    combined_score = fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta)
 
-    return fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta)
+    write_file(
+        "./titanic_xgb_spd_results/titanic_xgb_score.txt",
+        str(f"Combined Score: {combined_score}, Fairness Metric: {fairness_metrics}, "),
+        mode="a",
+    )
+
+    return combined_score
+
 
 ############################################################################
 # Second example: Use own accuracy metric
@@ -419,16 +413,21 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # ==========================
 
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=60*60,
+    time_left_for_this_task=60 * 60,
     # per_run_time_limit=500,
     memory_limit=10000000,
     include_estimators=['CustomXGBoost'],
     ensemble_size=1,
-    include_preprocessors=['extra_trees_preproc_for_classification', 'select_percentile_classification', 'select_rates_classification'],
+    include_preprocessors=['extra_trees_preproc_for_classification', 'select_percentile_classification',
+                           'select_rates_classification'],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer
 )
+
+print(automl)
+
+# Fit the model
 automl.fit(X_train, y_train)
 
 ############################################################################
@@ -436,6 +435,45 @@ automl.fit(X_train, y_train)
 # ====================================================
 
 print(automl.show_models())
+write_file(
+    "./titanic_xgb_spd_results/automl_models.json",
+    json.dumps(str(automl.show_models()), indent=4),
+)
+
+# Accessing the cv_results_ attribute to find information about the best model and its cost
+results = automl.cv_results_
+best_model_index = (
+        results["rank_test_scores"][0] - 1
+)  # Assuming the best model is ranked 1
+best_model_cost = results["mean_test_score"][best_model_index]
+print(f"Best Model Cost: {best_model_cost}")
+write_file("./titanic_xgb_spd_results/best_model_cost.txt", str(best_model_cost))
+
+# Access the RunHistory
+run_history = automl.automl_.runhistory_
+
+# Iterating through the RunHistory
+# Prepare data for JSON dump
+data_for_json = []
+for run_key, run_value in run_history.data.items():
+    config_id = run_key.config_id
+    config = run_history.ids_config[config_id]
+
+    # Convert configuration to a serializable format (dictionary with primitives)
+    config_dict = config.get_dictionary()
+
+    # Append configuration and cost to the list
+    data_for_json.append(
+        {
+            "configuration": config_dict,
+            "cost": run_value.cost,
+        }
+    )
+
+write_file(
+    "./titanic_xgb_spd_results/titanic_xgb_spd_models.json",
+    json.dumps(data_for_json, indent=4),
+)
 
 ###########################################################################
 # Get the Score of the final ensemble
@@ -451,8 +489,61 @@ predictions = automl.predict(X_test)
 count = 0
 print(count, len(predictions))
 print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-print(disparate_impact(data_orig_test, predictions, 'Sex'))
-print(statistical_parity_difference(data_orig_test, predictions, 'Sex'))
-print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'Sex'))
-print(average_odds_difference(data_orig_test, predictions, y_test, 'Sex'))
+write_file(
+    "./titanic_xgb_spd_results/accuracy_fairness_score.txt",
+    "Accuracy: " + str(sklearn.metrics.accuracy_score(y_test, predictions)) + "\n\n",
+    mode="a",
+)
 
+cm = get_confusion_matrix(y_test, predictions)
+cr = get_classification_report(y_test, predictions)
+write_file("./titanic_xgb_spd_results/classification_report.txt", str(cr))
+write_file("./titanic_xgb_spd_results/confusion_matrix.txt", str(cm))
+
+print("Disparate Impact: ", disparate_impact(data_orig_test, predictions, "Sex"))
+write_file(
+    "./titanic_xgb_spd_results/accuracy_fairness_score.txt",
+    "Disparate Impact: "
+    + str(disparate_impact(data_orig_test, predictions, "Sex"))
+    + "\n\n",
+    mode="a",
+)
+
+print(
+    "Statistical Parity Difference: ",
+    statistical_parity_difference(data_orig_test, predictions, "Sex"),
+)
+write_file(
+    "./titanic_xgb_spd_results/accuracy_fairness_score.txt",
+    "Statistical Parity Difference: "
+    + str(statistical_parity_difference(data_orig_test, predictions, "Sex"))
+    + "\n\n",
+    mode="a",
+)
+
+print(
+    "Equal Opportunity Difference: ",
+    equal_opportunity_difference(data_orig_test, predictions, y_test, "Sex"),
+)
+write_file(
+    "./titanic_xgb_spd_results/accuracy_fairness_score.txt",
+    "Equal Opportunity Difference: "
+    + str(equal_opportunity_difference(data_orig_test, predictions, y_test, "Sex"))
+    + "\n\n",
+    mode="a",
+)
+
+print(
+    "Average Odds Difference: ",
+    average_odds_difference(data_orig_test, predictions, y_test, "Sex"),
+)
+write_file(
+    "./titanic_xgb_spd_results/accuracy_fairness_score.txt",
+    "Average Odds Difference: "
+    + str(average_odds_difference(data_orig_test, predictions, y_test, "Sex"))
+    + "\n\n",
+    mode="a",
+)
+
+# Log artifacts in Wandb
+log_artifact("titanic_xgb_spd_results", "titanic_xgb_spd_60sp")
