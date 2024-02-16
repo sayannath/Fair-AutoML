@@ -395,9 +395,7 @@ def accuracy(solution, prediction):
     return combined_score
 
 
-############################################################################
-# Second example: Use own accuracy metric
-# =======================================
+
 print("#" * 80)
 print("Use self defined accuracy metric")
 accuracy_scorer = autosklearn.metrics.make_scorer(
@@ -408,9 +406,7 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_proba=False,
     needs_threshold=False,
 )
-############################################################################
-# Build and fit a classifier
-# ==========================
+
 
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
@@ -430,9 +426,6 @@ print(automl)
 # Fit the model
 automl.fit(X_train, y_train)
 
-############################################################################
-# Print the final ensemble constructed by auto-sklearn
-# ====================================================
 
 print(automl.show_models())
 write_file(
@@ -475,9 +468,6 @@ write_file(
     json.dumps(data_for_json, indent=4),
 )
 
-###########################################################################
-# Get the Score of the final ensemble
-# ===================================
 a_file = open("titanic_xgb_spd_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
@@ -488,6 +478,8 @@ a_file1.close()
 predictions = automl.predict(X_test)
 count = 0
 print(count, len(predictions))
+
+
 print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
 write_file(
     "./titanic_xgb_spd_results/accuracy_fairness_score.txt",
