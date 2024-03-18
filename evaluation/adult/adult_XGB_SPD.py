@@ -331,7 +331,7 @@ automl = autosklearn.classification.AutoSklearnClassifier(
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer
 )
-# automl.fit(X_train, y_train)
+automl.fit(X_train, y_train)
 
 ###########################################################################
 # Get the Score of the final ensemble
