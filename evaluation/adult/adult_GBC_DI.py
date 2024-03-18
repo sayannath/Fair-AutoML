@@ -10,8 +10,8 @@ possible to define your own metric and use it to fit and evaluate your model.
 The following examples show how to use built-in and self-defined metrics for a
 classification problem.
 """
-import sys
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), '../..'))
@@ -25,48 +25,43 @@ sys.path.append(package_dir)
 #     import AutoSklearnClassificationAlgorithm
 # from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
 import datetime
-import json
-
-import PipelineProfiler
 
 import pickle
-import shutil
-
-import math
-from sklearn.ensemble import RandomForestClassifier
 
 import autosklearn.classification
 import autosklearn.metrics
 import warnings
+
 warnings.filterwarnings('ignore')
-from aif360.datasets import AdultDataset
-from sklearn.preprocessing import StandardScaler
 import os
-import numpy as np
 
 import sklearn.metrics
-import autosklearn.classification
-from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, average_odds_difference
-from autosklearn.Fairea.utility import get_data,write_to_file
-from autosklearn.Fairea.fairea import create_baseline,normalize,get_classifier,classify_region,compute_area
+from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
+    average_odds_difference
+from autosklearn.Fairea.fairea import create_baseline
+
 train_list = "data_orig_train_adult.pkl"
 test_list = "data_orig_test_adult.pkl"
+
+
 def custom_preprocessing(df):
-        def group_race(x):
-            if x == "White":
-                return 1.0
-            else:
-                return 0.0
-        # Recode sex and race
-        df['sex'] = df['sex'].replace({'Female': 0.0, 'Male': 1.0})
-        df['race'] = df['race'].apply(lambda x: group_race(x))
-        return df
+    def group_race(x):
+        if x == "White":
+            return 1.0
+        else:
+            return 0.0
+
+    # Recode sex and race
+    df['sex'] = df['sex'].replace({'Female': 0.0, 'Male': 1.0})
+    df['race'] = df['race'].apply(lambda x: group_race(x))
+    return df
+
 
 ############################################################################
 # File Remover
 # ============
 now = str(datetime.datetime.now())[:19]
-now = now.replace(":","_")
+now = now.replace(":", "_")
 temp_path = "adult_gbc_di" + str(now)
 try:
     os.remove("test_split.txt")
@@ -88,39 +83,46 @@ f.close()
 # Data Loading
 # ============
 import pandas as pd
-from aif360.datasets import GermanDataset, StandardDataset
+from aif360.datasets import StandardDataset
 
-train = pd.read_pickle(train_list)
-test = pd.read_pickle(test_list)
-na_values=['?']
+# train = pd.read_pickle(train_list)
+# test = pd.read_pickle(test_list)
+
+df = pd.read_csv("../../dataset/adult/adult.csv")
+df = df[:15000]
+print("Dataset Shape: ", df.shape)
+
+# Split the dataset into train and test
+train = df.sample(frac=0.7, random_state=123)
+test = df.drop(train.index)
+
+na_values = ['?']
 default_mappings = {
     'label_maps': [{1.0: '>50K', 0.0: '<=50K'}],
     'protected_attribute_maps': [{1.0: 'White', 0.0: 'Non-white'},
                                  {1.0: 'Male', 0.0: 'Female'}]
 }
 
-
-
 data_orig_train = StandardDataset(df=train, label_name='income-per-year',
-            favorable_classes=['>50K', '>50K.'],
-            protected_attribute_names=['race'],
-            privileged_classes=[[1]],
-            instance_weights_name=None,
-            categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                  'relationship', 'native-country'],
-            features_to_keep=[],
-            features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-            custom_preprocessing=custom_preprocessing, metadata=default_mappings)
+                                  favorable_classes=['>50K', '>50K.'],
+                                  protected_attribute_names=['race'],
+                                  privileged_classes=[[1]],
+                                  instance_weights_name=None,
+                                  categorical_features=['workclass', 'education', 'marital-status', 'occupation',
+                                                        'relationship', 'native-country'],
+                                  features_to_keep=[],
+                                  features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
+                                  custom_preprocessing=custom_preprocessing, metadata=default_mappings)
 data_orig_test = StandardDataset(df=test, label_name='income-per-year',
-            favorable_classes=['>50K', '>50K.'],
-            protected_attribute_names=['race'],
-            privileged_classes=[[1]],
-            instance_weights_name=None,
-            categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                  'relationship', 'native-country'],
-            features_to_keep=[],
-            features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-            custom_preprocessing=custom_preprocessing, metadata=default_mappings)
+                                 favorable_classes=['>50K', '>50K.'],
+                                 protected_attribute_names=['race'],
+                                 privileged_classes=[[1]],
+                                 instance_weights_name=None,
+                                 categorical_features=['workclass', 'education', 'marital-status', 'occupation',
+                                                       'relationship', 'native-country'],
+                                 features_to_keep=[],
+                                 features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
+                                 custom_preprocessing=custom_preprocessing, metadata=default_mappings)
 
 privileged_groups = [{'race': 1}]
 unprivileged_groups = [{'race': 0}]
@@ -131,7 +133,6 @@ y_train = data_orig_train.labels.ravel()
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
 
-
 # scaler = StandardScaler()
 # X_train = scaler.fit_transform(X_train)
 # X_test = scaler.transform(X_test)
@@ -141,23 +142,22 @@ import numpy as np
 
 from ConfigSpace.configuration_space import ConfigurationSpace
 from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
-    UniformIntegerHyperparameter, UnParametrizedHyperparameter, Constant, \
-    CategoricalHyperparameter
-from ConfigSpace.conditions import EqualsCondition, InCondition
+    UniformIntegerHyperparameter, UnParametrizedHyperparameter, CategoricalHyperparameter
 
 from autosklearn.pipeline.components.base import (
     AutoSklearnClassificationAlgorithm,
     IterativeComponentWithSampleWeight)
-from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
-from autosklearn.util.common import check_none, check_for_bool
+from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS
+from autosklearn.util.common import check_none
 import autosklearn.pipeline.components.classification
+
 
 class CustomGBC(
     IterativeComponentWithSampleWeight,
     AutoSklearnClassificationAlgorithm
 ):
     def __init__(self, loss, learning_rate, n_estimators, max_features,
-                  min_samples_split, min_samples_leaf,
+                 min_samples_split, min_samples_leaf,
                  min_weight_fraction_leaf, max_leaf_nodes,
                  min_impurity_decrease, max_depth, random_state=20):
         self.loss = loss
@@ -264,13 +264,14 @@ class CustomGBC(
         cs.add_hyperparameters([n_estimators, loss, learning_rate, max_features,
                                 max_depth, min_samples_split, min_samples_leaf,
                                 min_weight_fraction_leaf, max_leaf_nodes,
-                                 min_impurity_decrease])
+                                min_impurity_decrease])
         return cs
 
 
 autosklearn.pipeline.components.classification.add_classifier(CustomGBC)
 cs = CustomGBC.get_hyperparameter_search_space()
 print(cs)
+
 
 ############################################################################
 # Custom metrics definition
@@ -303,12 +304,10 @@ def accuracy(solution, prediction):
         fair0 = np.array([np.mean([row[metric_id] for row in res["0"][degree]]) for degree in degrees])
         fair1 = np.array([np.mean([row[metric_id] for row in res["1"][degree]]) for degree in degrees])
 
-
         if min(acc0) > min(acc1):
             beta = (max(acc0) - min(acc0)) / (max(acc0) - min(acc0) + max(fair0))
         else:
             beta = (max(acc1) - min(acc1)) / (max(acc1) - min(acc1) + max(fair1))
-
 
         f = open("beta.txt", "w")
         f.write(str(beta))
@@ -346,7 +345,7 @@ def accuracy(solution, prediction):
 ############################################################################
 # Second example: Use own accuracy metric
 # =======================================
-print("#"*80)
+print("#" * 80)
 print("Use self defined accuracy metric")
 accuracy_scorer = autosklearn.metrics.make_scorer(
     name="accu",
@@ -357,12 +356,11 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_threshold=False,
 )
 
-
 ############################################################################
 # Build and fit a classifier
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=2*60*60,
+    time_left_for_this_task=2 * 60 * 60,
     # per_run_time_limit=500,
     memory_limit=10000000,
     include_estimators=['CustomGBC'],
@@ -388,7 +386,6 @@ a_file.close()
 a_file1 = open("automl_adult_gbc_di_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
-
 
 predictions = automl.predict(X_test)
 print(predictions)

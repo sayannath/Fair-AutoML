@@ -1,0 +1,16 @@
+execdir = .
+deterministic = True
+run_obj = quality
+overall_obj = par10
+par_factor = 10
+cost_for_crash = 0.0
+cutoff = 360.0
+memory_limit = 10000000.0
+algo_runs_timelimit = inf
+wallclock_limit = 3593.922460794449
+always_race_default = False
+ta_run_limit = inf
+train_inst_fn = adult_xgb_spd2024-03-18 13_17_56/smac3-output/run_1/train_insts.txt
+initial_incumbent = DEFAULT
+pcs_fn = adult_xgb_spd2024-03-18 13_17_56/smac3-output/run_1/configspace.json
+save_instantly = False
