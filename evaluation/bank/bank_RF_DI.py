@@ -88,8 +88,12 @@ f.close()
 import pandas as pd
 from aif360.datasets import  StandardDataset
 
-train = pd.read_pickle(train_list)
-test = pd.read_pickle(test_list)
+# Load the dataset
+df = pd.read_csv("../../dataset/bank/bank-additional-full.csv", delimiter=";")
+print("Dataset Shape: ", df.shape)
+
+train = df.sample(frac=0.7, random_state=123)
+test = df.drop(train.index)
 
 data_orig_train = StandardDataset(df=train, label_name='y',
             favorable_classes=['yes'],
@@ -388,3 +392,4 @@ a_file.close()
 a_file1 = open("automl_bank_rf_di" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
+print("=======================================================\n")

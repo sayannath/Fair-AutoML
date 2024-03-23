@@ -90,8 +90,12 @@ f.close()
 import pandas as pd
 from aif360.datasets import  StandardDataset
 
-train = pd.read_pickle(train_list)
-test = pd.read_pickle(test_list)
+# Load the dataset
+df = pd.read_csv("../../dataset/bank/bank-additional-full.csv", delimiter=";")
+print("Dataset Shape: ", df.shape)
+
+train = df.sample(frac=0.7, random_state=123)
+test = df.drop(train.index)
 
 data_orig_train = StandardDataset(df=train, label_name='y',
             favorable_classes=['yes'],
@@ -337,5 +341,5 @@ print(disparate_impact(data_orig_test, predictions, 'age'))
 print(statistical_parity_difference(data_orig_test, predictions, 'age'))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'age'))
 print(average_odds_difference(data_orig_test, predictions, y_test, 'age'))
-
+print("=======================================================\n")
 

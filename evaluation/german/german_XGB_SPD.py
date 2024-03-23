@@ -25,15 +25,17 @@ from aif360.datasets import GermanDataset
 
 import sklearn.metrics
 import autosklearn.classification
-from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference,average_odds_difference
+from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
+    average_odds_difference
 import os
 import shutil
 
 from autosklearn.util.common import check_for_bool, check_none
 
-
 train_list = "data_orig_train_german.pkl"
 test_list = "data_orig_test_german.pkl"
+
+
 def custom_preprocessing(df):
     def group_credit_hist(x):
         if x in ['A30', 'A31', 'A32']:
@@ -89,11 +91,12 @@ def custom_preprocessing(df):
 
     return df
 
+
 ############################################################################
 # File Remover
 # ============
 now = str(datetime.datetime.now())[:19]
-now = now.replace(":","_")
+now = now.replace(":", "_")
 temp_path = "german_knn_aod" + str(now)
 try:
     os.remove("test_split.txt")
@@ -126,63 +129,41 @@ default_mappings = {
                                  {1.0: 'Old', 0.0: 'Young'}],
 }
 data_orig_train = StandardDataset(df=train, label_name='credit',
-            favorable_classes=[1],
-            protected_attribute_names=['sex'],
-            privileged_classes=[[1]],
-            instance_weights_name=None,
-            categorical_features=['status', 'credit_history', 'purpose',
-                     'savings', 'employment', 'other_debtors', 'property',
-                     'installment_plans', 'housing', 'skill_level', 'telephone',
-                     'foreign_worker'],
-            features_to_keep=['age', 'sex', 'employment', 'housing', 'savings', 'credit_amount', 'month', 'purpose'],
-            features_to_drop=['personal_status'], na_values=na_values,
-            custom_preprocessing=custom_preprocessing, metadata=default_mappings)
+                                  favorable_classes=[1],
+                                  protected_attribute_names=['sex'],
+                                  privileged_classes=[[1]],
+                                  instance_weights_name=None,
+                                  categorical_features=['status', 'credit_history', 'purpose',
+                                                        'savings', 'employment', 'other_debtors', 'property',
+                                                        'installment_plans', 'housing', 'skill_level', 'telephone',
+                                                        'foreign_worker'],
+                                  features_to_keep=['age', 'sex', 'employment', 'housing', 'savings', 'credit_amount',
+                                                    'month', 'purpose'],
+                                  features_to_drop=['personal_status'], na_values=na_values,
+                                  custom_preprocessing=custom_preprocessing, metadata=default_mappings)
 
 data_orig_test = StandardDataset(df=test, label_name='credit',
-            favorable_classes=[1],
-            protected_attribute_names=['sex'],
-            privileged_classes=[[1]],
-            instance_weights_name=None,
-            categorical_features=['status', 'credit_history', 'purpose',
-                     'savings', 'employment', 'other_debtors', 'property',
-                     'installment_plans', 'housing', 'skill_level', 'telephone',
-                     'foreign_worker'],
-            features_to_keep=['age', 'sex', 'employment', 'housing', 'savings', 'credit_amount', 'month', 'purpose'],
-            features_to_drop=['personal_status'], na_values=na_values,
-            custom_preprocessing=custom_preprocessing, metadata=default_mappings)
+                                 favorable_classes=[1],
+                                 protected_attribute_names=['sex'],
+                                 privileged_classes=[[1]],
+                                 instance_weights_name=None,
+                                 categorical_features=['status', 'credit_history', 'purpose',
+                                                       'savings', 'employment', 'other_debtors', 'property',
+                                                       'installment_plans', 'housing', 'skill_level', 'telephone',
+                                                       'foreign_worker'],
+                                 features_to_keep=['age', 'sex', 'employment', 'housing', 'savings', 'credit_amount',
+                                                   'month', 'purpose'],
+                                 features_to_drop=['personal_status'], na_values=na_values,
+                                 custom_preprocessing=custom_preprocessing, metadata=default_mappings)
 
 privileged_groups = [{'sex': 1}]
 unprivileged_groups = [{'sex': 0}]
-
 
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
 
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
-
-
-# dataset_orig = GermanDataset(protected_attribute_names=['sex'],
-#                             privileged_classes=[[1]],
-#                             features_to_keep=['age', 'sex', 'employment', 'housing', 'savings', 'credit_amount', 'month', 'purpose'],
-#                             custom_preprocessing=custom_preprocessing)
-# privileged_groups = [{'sex': 1}]
-# unprivileged_groups = [{'sex': 0}]
-#
-# data_orig_train, data_orig_test = dataset_orig.split([0.7], shuffle=True)
-#
-# X_train = data_orig_train.features
-# y_train = data_orig_train.labels.ravel()
-#
-# X_test = data_orig_test.features
-# y_test = data_orig_test.labels.ravel()
-
-# from sklearn.preprocessing import StandardScaler
-#
-# Scaler_X = StandardScaler()
-# X_train = Scaler_X.fit_transform(X_train)
-# X_test = Scaler_X.transform(X_test)
-
 
 
 class CustomXGBoost(AutoSklearnClassificationAlgorithm):
@@ -266,6 +247,7 @@ autosklearn.pipeline.components.classification.add_classifier(CustomXGBoost)
 cs = CustomXGBoost.get_hyperparameter_search_space()
 print(cs)
 
+
 ############################################################################
 # Custom metrics definition
 # =========================
@@ -336,7 +318,7 @@ def accuracy(solution, prediction):
 ############################################################################
 # Second example: Use own accuracy metric
 # =======================================
-print("#"*80)
+print("#" * 80)
 print("Use self defined accuracy metric")
 accuracy_scorer = autosklearn.metrics.make_scorer(
     name="accu",
@@ -351,7 +333,7 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # ==========================
 
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=60*60,
+    time_left_for_this_task=60 * 60,
     # per_run_time_limit=500,
     memory_limit=10000000,
     include_estimators=['CustomXGBoost'],
@@ -385,4 +367,4 @@ print(disparate_impact(data_orig_test, predictions, 'sex'))
 print(statistical_parity_difference(data_orig_test, predictions, 'sex'))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'sex'))
 print(average_odds_difference(data_orig_test, predictions, y_test, 'sex'))
-
+print("=====================================================================\n")
