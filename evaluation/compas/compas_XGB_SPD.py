@@ -287,7 +287,7 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # Build and fit a classifier
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=15 * 60,
+    time_left_for_this_task=10 * 60,
     memory_limit=10000000,
     include_estimators=['CustomXGBoost'],
     ensemble_size=1,
@@ -330,7 +330,10 @@ data_orig_test = StandardDataset(
     privileged_classes=[['Female'], ['Caucasian']],
     instance_weights_name=None,
     categorical_features=[],
-    features_to_keep=[],
+    features_to_keep=['sex', 'age', 'age_cat', 'race',
+                      'juv_fel_count', 'juv_misd_count', 'juv_other_count',
+                      'priors_count', 'c_charge_degree', 'c_charge_desc',
+                      'two_year_recid'],
     features_to_drop=[],
     na_values=[],
     custom_preprocessing=None,
