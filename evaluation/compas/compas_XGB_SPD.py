@@ -334,7 +334,7 @@ data_orig_test = StandardDataset(
                       'priors_count', 'c_charge_degree', 'c_charge_desc', 'two_year_recid'],
     features_to_drop=[],
     na_values=[],
-    custom_preprocessing=default_preprocessing,
+    custom_preprocessing=None,
     metadata=default_mappings
 )
 
