@@ -34,6 +34,7 @@ import shutil
 import autosklearn.classification
 import autosklearn.metrics
 import warnings
+
 warnings.filterwarnings('ignore')
 from aif360.datasets import AdultDataset, BankDataset
 from sklearn.preprocessing import StandardScaler
@@ -42,11 +43,14 @@ import numpy as np
 
 import sklearn.metrics
 import autosklearn.classification
-from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, average_odds_difference
+from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
+    average_odds_difference
 from autosklearn.util.common import check_for_bool, check_none
 
 train_list = "data_orig_train_bank.pkl"
 test_list = "data_orig_test_bank.pkl"
+
+
 def custom_preprocessing(df):
     def group_race(x):
         if x == "White":
@@ -60,11 +64,12 @@ def custom_preprocessing(df):
 
     return df
 
+
 ############################################################################
 # File Remover
 # ============
 now = str(datetime.datetime.now())[:19]
-now = now.replace(":","_")
+now = now.replace(":", "_")
 temp_path = "bank_rf_spd" + str(now)
 try:
     os.remove("test_split.txt")
@@ -86,7 +91,7 @@ f.close()
 # ============
 
 import pandas as pd
-from aif360.datasets import  StandardDataset
+from aif360.datasets import StandardDataset
 
 # Load the dataset
 df = pd.read_csv("../../dataset/bank/bank-additional-full.csv", delimiter=";")
@@ -96,30 +101,34 @@ train = df.sample(frac=0.7, random_state=123)
 test = df.drop(train.index)
 
 data_orig_train = StandardDataset(df=train, label_name='y',
-            favorable_classes=['yes'],
-            protected_attribute_names=['age'],
-            privileged_classes=[lambda x: x >= 25],
-            instance_weights_name=None,
-            categorical_features=['job', 'marital', 'education', 'default',
-                     'housing', 'loan', 'contact', 'month', 'day_of_week',
-                     'poutcome'],
-            features_to_keep=['age', 'job', 'marital', 'education', 'default', 'housing', 'loan',
-                     'contact', 'month', 'day_of_week', 'duration', 'emp.var.rate', 'cons.price.idx',
-                     'cons.conf.idx', 'euribor3m', 'nr.employed', 'campaign', 'pdays', 'previous', 'poutcome'], features_to_drop=[], na_values=["unknown"],
-            custom_preprocessing=None, metadata=None)
+                                  favorable_classes=['yes'],
+                                  protected_attribute_names=['age'],
+                                  privileged_classes=[lambda x: x >= 25],
+                                  instance_weights_name=None,
+                                  categorical_features=['job', 'marital', 'education', 'default',
+                                                        'housing', 'loan', 'contact', 'month', 'day_of_week',
+                                                        'poutcome'],
+                                  features_to_keep=['age', 'job', 'marital', 'education', 'default', 'housing', 'loan',
+                                                    'contact', 'month', 'day_of_week', 'duration', 'emp.var.rate',
+                                                    'cons.price.idx',
+                                                    'cons.conf.idx', 'euribor3m', 'nr.employed', 'campaign', 'pdays',
+                                                    'previous', 'poutcome'], features_to_drop=[], na_values=["unknown"],
+                                  custom_preprocessing=None, metadata=None)
 
 data_orig_test = StandardDataset(df=test, label_name='y',
-            favorable_classes=['yes'],
-            protected_attribute_names=['age'],
-            privileged_classes=[lambda x: x >= 25],
-            instance_weights_name=None,
-            categorical_features=['job', 'marital', 'education', 'default',
-                     'housing', 'loan', 'contact', 'month', 'day_of_week',
-                     'poutcome'],
-            features_to_keep=['age', 'job', 'marital', 'education', 'default', 'housing', 'loan',
-                     'contact', 'month', 'day_of_week', 'duration', 'emp.var.rate', 'cons.price.idx',
-                     'cons.conf.idx', 'euribor3m', 'nr.employed', 'campaign', 'pdays', 'previous', 'poutcome'], features_to_drop=[], na_values=["unknown"],
-            custom_preprocessing=None, metadata=None)
+                                 favorable_classes=['yes'],
+                                 protected_attribute_names=['age'],
+                                 privileged_classes=[lambda x: x >= 25],
+                                 instance_weights_name=None,
+                                 categorical_features=['job', 'marital', 'education', 'default',
+                                                       'housing', 'loan', 'contact', 'month', 'day_of_week',
+                                                       'poutcome'],
+                                 features_to_keep=['age', 'job', 'marital', 'education', 'default', 'housing', 'loan',
+                                                   'contact', 'month', 'day_of_week', 'duration', 'emp.var.rate',
+                                                   'cons.price.idx',
+                                                   'cons.conf.idx', 'euribor3m', 'nr.employed', 'campaign', 'pdays',
+                                                   'previous', 'poutcome'], features_to_drop=[], na_values=["unknown"],
+                                 custom_preprocessing=None, metadata=None)
 
 privileged_groups = [{'age': 1}]
 unprivileged_groups = [{'age': 0}]
@@ -131,14 +140,13 @@ X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
 
 
-
 # sc_X = StandardScaler()
 # X_train = sc_X.fit_transform(X_train)
 # X_test = sc_X.transform(X_test)
 
 class CustomRandomForest(AutoSklearnClassificationAlgorithm):
     def __init__(self, n_estimators, criterion, max_features,
-                  min_samples_split, min_samples_leaf,
+                 min_samples_split, min_samples_leaf,
                  min_weight_fraction_leaf, bootstrap, max_leaf_nodes,
                  min_impurity_decrease, max_depth=9, random_state=1, n_jobs=1,
                  class_weight=None):
@@ -263,7 +271,7 @@ class CustomRandomForest(AutoSklearnClassificationAlgorithm):
         return cs
 
 
-#Add custom random forest classifier component to auto-sklearn.
+# Add custom random forest classifier component to auto-sklearn.
 autosklearn.pipeline.components.classification.add_classifier(CustomRandomForest)
 cs = CustomRandomForest.get_hyperparameter_search_space()
 print(cs)
@@ -342,7 +350,7 @@ def accuracy(solution, prediction):
 ############################################################################
 # Second example: Use own accuracy metric
 # =======================================
-print("#"*80)
+print("#" * 80)
 print("Use self defined accuracy metric")
 accuracy_scorer = autosklearn.metrics.make_scorer(
     name="accu",
@@ -353,17 +361,17 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_threshold=False,
 )
 
-
 ############################################################################
 # Build and fit a classifier
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=60*60,
+    time_left_for_this_task=60 * 60,
     # per_run_time_limit=500,
     memory_limit=10000000,
     include_estimators=['CustomRandomForest'],
     ensemble_size=1,
-    include_preprocessors=['select_rates_classification', 'feature_agglomeration', 'extra_trees_preproc_for_classification'],
+    include_preprocessors=['select_rates_classification', 'feature_agglomeration',
+                           'extra_trees_preproc_for_classification'],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer
@@ -389,7 +397,6 @@ a_file.close()
 a_file1 = open("automl_bank_rf_spd" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
-
 
 print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
 print(disparate_impact(data_orig_test, predictions, 'age'))

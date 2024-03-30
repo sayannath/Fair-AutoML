@@ -1,68 +1,31 @@
-# -*- encoding: utf-8 -*-
-"""
-=======
-Metrics
-=======
-
-*Auto-sklearn* supports various built-in metrics, which can be found in the
-:ref:`metrics section in the API <api:Built-in Metrics>`. However, it is also
-possible to define your own metric and use it to fit and evaluate your model.
-The following examples show how to use built-in and self-defined metrics for a
-classification problem.
-"""
+import json
 import os
 import sys
-
-import pandas as pd
-from aif360.datasets import StandardDataset
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), '../..'))
 # Add the directory to sys.path
 sys.path.append(package_dir)
+import datetime
+import pickle
+
 from ConfigSpace.configuration_space import ConfigurationSpace
 from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
     UniformIntegerHyperparameter
-from xgboost import XGBClassifier
 
 import autosklearn.pipeline.components.classification
+from autosklearn.Fairea.fairea import create_baseline
 from autosklearn.pipeline.components.classification \
     import AutoSklearnClassificationAlgorithm
 from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SIGNED_DATA
-import datetime
-
-import pickle
-
-import autosklearn.classification
-import autosklearn.metrics
-import warnings
-
-warnings.filterwarnings('ignore')
-import os
 import numpy as np
-
+import pandas as pd
+from aif360.datasets import StandardDataset
 import sklearn.metrics
 import autosklearn.classification
 from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
     average_odds_difference
-from autosklearn.Fairea.fairea import create_baseline
-
-train_list = "data_orig_train_adult.pkl"
-test_list = "data_orig_test_adult.pkl"
-
-
-def custom_preprocessing(df):
-    def group_race(x):
-        if x == "White":
-            return 1.0
-        else:
-            return 0.0
-
-    # Recode sex and race
-    df['sex'] = df['sex'].replace({'Female': 0.0, 'Male': 1.0})
-    df['race'] = df['race'].apply(lambda x: group_race(x))
-    return df
-
+import os
 
 ############################################################################
 # File Remover
@@ -70,7 +33,7 @@ def custom_preprocessing(df):
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "adult_xgb_spd" + str(now)
+temp_path = "compas_xgb_spd" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -87,62 +50,64 @@ except:
 f = open("beta.txt", "w")
 f.close()
 
-############################################################################
-# Data Loading
-# ============
-df = pd.read_csv("../../dataset/adult/adult.csv")
-df = df[:15000]
-print("Dataset Shape: ", df.shape)
+df = pd.read_csv('../../dataset/compas/compas-scores-two-years.csv')
+print("Dataset shape: ", df.shape)
 
-# Split the dataset into train and test
-train = df.sample(frac=0.7, random_state=123)
-test = df.drop(train.index)
-
-# train = pd.read_pickle(train_list)
-# test = pd.read_pickle(test_list)
-na_values = ['?']
 default_mappings = {
-    'label_maps': [{1.0: '>50K', 0.0: '<=50K'}],
-    'protected_attribute_maps': [{1.0: 'White', 0.0: 'Non-white'},
-                                 {1.0: 'Male', 0.0: 'Female'}]
+    'label_maps': [{1.0: 'Did recid.', 0.0: 'No recid.'}],
+    'protected_attribute_maps': [{0.0: 'Male', 1.0: 'Female'},
+                                 {1.0: 'Caucasian', 0.0: 'Not Caucasian'}]
 }
 
-data_orig_train = StandardDataset(df=train, label_name='income-per-year',
-                                  favorable_classes=['>50K', '>50K.'],
-                                  protected_attribute_names=['race'],
-                                  privileged_classes=[[1]],
-                                  instance_weights_name=None,
-                                  categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                        'relationship', 'native-country'],
-                                  features_to_keep=[],
-                                  features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-                                  custom_preprocessing=custom_preprocessing, metadata=default_mappings)
-data_orig_test = StandardDataset(df=test, label_name='income-per-year',
-                                 favorable_classes=['>50K', '>50K.'],
-                                 protected_attribute_names=['race'],
-                                 privileged_classes=[[1]],
-                                 instance_weights_name=None,
-                                 categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                       'relationship', 'native-country'],
-                                 features_to_keep=[],
-                                 features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-                                 custom_preprocessing=custom_preprocessing, metadata=default_mappings)
 
-privileged_groups = [{'race': 1}]
-unprivileged_groups = [{'race': 0}]
+def default_preprocessing(_df):
+    return _df[(_df.days_b_screening_arrest <= 30)
+               & (_df.days_b_screening_arrest >= -30)
+               & (_df.is_recid != -1)
+               & (_df.c_charge_degree != 'O')
+               & (_df.score_text != 'N/A')]
 
-X_train = data_orig_train.features
-y_train = data_orig_train.labels.ravel()
 
-X_test = data_orig_test.features
-y_test = data_orig_test.labels.ravel()
+dataset_orig = StandardDataset(
+    df=df,
+    label_name='two_year_recid', favorable_classes=[0],
+    protected_attribute_names=['sex', 'race'],
+    privileged_classes=[['Female'], ['Caucasian']],
+    instance_weights_name=None,
+    categorical_features=['age_cat', 'c_charge_degree',
+                          'c_charge_desc'],
+    features_to_keep=['sex', 'age', 'age_cat', 'race',
+                      'juv_fel_count', 'juv_misd_count', 'juv_other_count',
+                      'priors_count', 'c_charge_degree', 'c_charge_desc',
+                      'two_year_recid'],
+    features_to_drop=[], na_values=[],
+    custom_preprocessing=default_preprocessing,
+    metadata=default_mappings
+)
 
-print(f"X_train: {X_train.shape}")
-print(f"y_train: {y_train.shape}")
-print(f"X_test: {X_test.shape}")
-print(f"y_test: {y_test.shape}")
+print("Dataset Shape: ", dataset_orig.features.shape)
 
-print(type(data_orig_train))
+privileged_groups = [{'sex': 1}]
+unprivileged_groups = [{'sex': 0}]
+
+X_train = dataset_orig.features
+X_train = X_train[:5050, :]
+y_train = dataset_orig.labels.ravel()
+y_train = y_train[:5050]
+
+X_test = dataset_orig.features
+X_test = X_test[5050:, :]
+y_test = dataset_orig.labels.ravel()
+y_test = y_test[5050:]
+
+print("Train Shape: ", X_train.shape)
+print("Train Label Shape: ", y_train.shape)
+
+print("Test Shape: ", X_test.shape)
+print("Test Label Shape: ", y_test.shape)
+print("\n")
+
+print(type(dataset_orig))
 
 
 class CustomXGBoost(AutoSklearnClassificationAlgorithm):
@@ -152,17 +117,15 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
                  learning_rate,
                  subsample,
                  min_child_weight,
-                 n_jobs=1,
-                 verbosity=0,
-                 random_state=None,
+                 seed=0,
+                 random_state=None
                  ):
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.learning_rate = learning_rate
         self.subsample = subsample
         self.min_child_weight = min_child_weight
-        self.n_jobs = n_jobs
-        self.verbosity = verbosity
+        self.seed = seed
         self.random_state = random_state
 
     def fit(self, X, y):
@@ -173,9 +136,8 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
             learning_rate=self.learning_rate,
             subsample=self.subsample,
             min_child_weight=self.min_child_weight,
-            n_jobs=self.n_jobs,
-            verbosity=self.verbosity,
-            random_state=self.random_state,
+            seed=self.seed,
+            random_state=self.random_state
         )
         self.estimator.fit(X, y)
         return self
@@ -200,7 +162,6 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
                 'handles_multilabel': False,
                 'handles_multioutput': False,
                 'is_deterministic': False,
-                # Both input and output must be tuple(iterable)
                 'input': [DENSE, SIGNED_DATA, UNSIGNED_DATA],
                 'output': [PREDICTIONS]}
 
@@ -208,19 +169,15 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        # The maximum number of features used in the forest is calculated as m^max_features, where
-        # m is the total number of features, and max_features is the hyperparameter specified below.
-        # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
-        # corresponds with Geurts' heuristic.
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 166, 723, default_value=200)
-        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9,
-                                                 default_value=6)
-        learning_rate = UniformFloatHyperparameter("learning_rate", 0.16189, 0.55126,
-                                                   default_value=0.35)
-        subsample = UniformFloatHyperparameter("subsample", 0.34210, 0.86733,
-                                               default_value=0.86733)
+        n_estimators = UniformIntegerHyperparameter("n_estimators", 100, 1000, default_value=300)
+        max_depth = UniformIntegerHyperparameter("max_depth", 1, 10,
+                                                 default_value=4)
+        learning_rate = UniformFloatHyperparameter("learning_rate", 0.01, 0.9,
+                                                   default_value=0.08891)
+        subsample = UniformFloatHyperparameter("subsample", 0.1, 0.9,
+                                               default_value=0.86236)
 
-        min_child_weight = UniformIntegerHyperparameter("min_child_weight", 5, 17,
+        min_child_weight = UniformIntegerHyperparameter("min_child_weight", 1, 20,
                                                         default_value=5)
 
         cs.add_hyperparameters([n_estimators, max_depth, learning_rate, subsample,
@@ -233,13 +190,9 @@ cs = CustomXGBoost.get_hyperparameter_search_space()
 print(cs)
 
 
-############################################################################
-# Custom metrics definition
-# =========================
-
 def accuracy(solution, prediction):
     metric_id = 2
-    protected_attr = 'race'
+    protected_attr = 'sex'
     with open('test_split.txt') as f:
         first_line = f.read().splitlines()
         last_line = first_line[-1]
@@ -247,15 +200,33 @@ def accuracy(solution, prediction):
     for i in range(len(split)):
         split[i] = int(split[i])
 
-    subset_data_orig_train = data_orig_train.subset(split)
+    _dataset_orig = StandardDataset(
+        df=df,
+        label_name='two_year_recid', favorable_classes=[0],
+        protected_attribute_names=['sex', 'race'],
+        privileged_classes=[['Female'], ['Caucasian']],
+        instance_weights_name=None,
+        categorical_features=['age_cat', 'c_charge_degree',
+                              'c_charge_desc'],
+        features_to_keep=['sex', 'age', 'age_cat', 'race',
+                          'juv_fel_count', 'juv_misd_count', 'juv_other_count',
+                          'priors_count', 'c_charge_degree', 'c_charge_desc',
+                          'two_year_recid'],
+        features_to_drop=[], na_values=[],
+        custom_preprocessing=default_preprocessing,
+        metadata=default_mappings
+    )
+
+    subset_data_orig_train = _dataset_orig.subset(split)
 
     if os.stat("beta.txt").st_size == 0:
 
-        default = XGBClassifier(learning_rate=0.35, n_estimator=200, max_depth=6, subsample=1, min_child_weight=1)
+        import xgboost as xgb
+        default = xgb.XGBClassifier()
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
-        dataset_orig = subset_data_orig_train
-        res = create_baseline(default, dataset_orig, privileged_groups, unprivileged_groups,
+        _dataset_orig = subset_data_orig_train
+        res = create_baseline(default, _dataset_orig, privileged_groups, unprivileged_groups,
                               data_splits=10, repetitions=10, odds=mutation_strategies, options=[0, 1],
                               degrees=degrees)
         acc0 = np.array([np.mean([row[0] for row in res["0"][degree]]) for degree in degrees])
@@ -275,18 +246,12 @@ def accuracy(solution, prediction):
         f = open("beta.txt", "r")
         beta = float(f.read())
         f.close()
-        # print('yyyy')
-    # print(beta)
     beta += 0.2
     if beta > 1.0:
         beta = 1.0
-
     try:
         num_keys = sum(1 for line in open('num_keys.txt'))
-        print(num_keys)
         beta -= 0.050 * int(int(num_keys) / 10)
-        if beta < 0.0:
-            beta = 0
         if int(num_keys) % 10 == 0:
             os.remove(temp_path + "/.auto-sklearn/ensemble_read_losses.pkl")
         f.close()
@@ -323,7 +288,6 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
-    # per_run_time_limit=500,
     memory_limit=10000000,
     include_estimators=['CustomXGBoost'],
     ensemble_size=1,
@@ -354,7 +318,27 @@ predictions = automl.predict(X_test)
 print(predictions)
 print(y_test, len(predictions))
 print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-print(disparate_impact(data_orig_test, predictions, 'race'))
-print(statistical_parity_difference(data_orig_test, predictions, 'race'))
-print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'race'))
-print(average_odds_difference(data_orig_test, predictions, y_test, 'race'))
+
+features_df = pd.DataFrame(X_test, columns=dataset_orig.feature_names)
+labels_df = pd.DataFrame(y_test, columns=[dataset_orig.label_names[0]])
+full_df = pd.concat([features_df, labels_df], axis=1)
+data_orig_test = StandardDataset(
+    df=full_df,
+    label_name='two_year_recid',
+    favorable_classes=[0],
+    protected_attribute_names=['sex', 'race'],
+    privileged_classes=[['Female'], ['Caucasian']],
+    instance_weights_name=None,
+    categorical_features=['age_cat', 'c_charge_degree', 'c_charge_desc'],
+    features_to_keep=['sex', 'age', 'age_cat', 'race', 'juv_fel_count', 'juv_misd_count', 'juv_other_count',
+                      'priors_count', 'c_charge_degree', 'c_charge_desc', 'two_year_recid'],
+    features_to_drop=[],
+    na_values=[],
+    custom_preprocessing=default_preprocessing,
+    metadata=default_mappings
+)
+
+print(disparate_impact(data_orig_test, predictions, 'sex'))
+print(statistical_parity_difference(data_orig_test, predictions, 'sex'))
+print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'sex'))
+print(average_odds_difference(data_orig_test, predictions, y_test, 'sex'))
