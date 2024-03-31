@@ -1,4 +1,3 @@
-import json
 import os
 import sys
 
@@ -10,14 +9,14 @@ import datetime
 import pickle
 
 from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
-    UniformIntegerHyperparameter
+from ConfigSpace.hyperparameters import CategoricalHyperparameter
 
 import autosklearn.pipeline.components.classification
 from autosklearn.Fairea.fairea import create_baseline
 from autosklearn.pipeline.components.classification \
     import AutoSklearnClassificationAlgorithm
 from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SIGNED_DATA
+from sklearn.linear_model import LogisticRegression
 import numpy as np
 import pandas as pd
 from aif360.datasets import StandardDataset
@@ -33,7 +32,7 @@ import os
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "compas_xgb_di" + str(now)
+temp_path = "compas_lrg_aod" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -103,34 +102,54 @@ print("Test Shape: ", X_test.shape)
 print("Test Label Shape: ", y_test.shape)
 
 
-class CustomXGBoost(AutoSklearnClassificationAlgorithm):
-    def __init__(self,
-                 n_estimators,
-                 max_depth,
-                 learning_rate,
-                 subsample,
-                 min_child_weight,
-                 seed=0,
-                 random_state=None
+class CustomLRG(AutoSklearnClassificationAlgorithm):
+    def __init__(self, penalty,
+                 C,
+                 dual,
+                 class_weight=None,
+                 fit_intercept=True,
+                 intercept_scaling=1,
+                 max_iter=100,
+                 multi_class='ovr',
+                 n_jobs=1,
+                 random_state=None,
+                 solver='liblinear',
+                 tol=0.0001,
+                 verbose=0,
+                 warm_start=False,
                  ):
-        self.n_estimators = n_estimators
-        self.max_depth = max_depth
-        self.learning_rate = learning_rate
-        self.subsample = subsample
-        self.min_child_weight = min_child_weight
-        self.seed = seed
+        self.penalty = penalty
+        self.C = C
+        self.dual = dual
+        self.class_weight = class_weight
+        self.fit_intercept = fit_intercept
+        self.intercept_scaling = intercept_scaling
+        self.max_iter = max_iter
+        self.multi_class = multi_class
+        self.n_jobs = n_jobs
         self.random_state = random_state
+        self.solver = solver
+        self.tol = tol
+        self.verbose = verbose
+        self.warm_start = warm_start
 
     def fit(self, X, y):
-        from xgboost import XGBClassifier
-        self.estimator = XGBClassifier(
-            n_estimators=self.n_estimators,
-            max_depth=self.max_depth,
-            learning_rate=self.learning_rate,
-            subsample=self.subsample,
-            min_child_weight=self.min_child_weight,
-            seed=self.seed,
-            random_state=self.random_state
+        from sklearn.linear_model import LogisticRegression
+        self.estimator = LogisticRegression(
+            penalty=self.penalty,
+            C=self.C,
+            dual=self.dual,
+            class_weight=self.class_weight,
+            fit_intercept=self.fit_intercept,
+            intercept_scaling=self.intercept_scaling,
+            max_iter=self.max_iter,
+            multi_class=self.multi_class,
+            n_jobs=self.n_jobs,
+            random_state=self.random_state,
+            solver=self.solver,
+            tol=self.tol,
+            verbose=self.verbose,
+            warm_start=self.warm_start
         )
         self.estimator.fit(X, y)
         return self
@@ -147,8 +166,8 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
 
     @staticmethod
     def get_properties(dataset_properties=None):
-        return {'shortname': 'XG',
-                'name': 'XGBoost Classifier',
+        return {'shortname': 'LRG',
+                'name': 'LRG Classifier',
                 'handles_regression': False,
                 'handles_classification': True,
                 'handles_multiclass': True,
@@ -161,30 +180,25 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
+        penalty = CategoricalHyperparameter(name='penalty', choices=["l1", "l2"], default_value='l2')
+        C = CategoricalHyperparameter(name='C', choices=[1e-4, 1e-3, 1e-2, 1e-1, 0.5, 1., 5., 10., 15.],
+                                      default_value=1.)
+        dual = CategoricalHyperparameter(name='dual', choices=[True, False], default_value=False)
 
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 100, 1000, default_value=300)
-        max_depth = UniformIntegerHyperparameter("max_depth", 1, 10,
-                                                 default_value=4)
-        learning_rate = UniformFloatHyperparameter("learning_rate", 0.01, 0.9,
-                                                   default_value=0.08891)
-        subsample = UniformFloatHyperparameter("subsample", 0.1, 0.9,
-                                               default_value=0.86236)
-
-        min_child_weight = UniformIntegerHyperparameter("min_child_weight", 1, 20,
-                                                        default_value=5)
-
-        cs.add_hyperparameters([n_estimators, max_depth, learning_rate, subsample,
-                                min_child_weight])
+        cs.add_hyperparameters([penalty, C, dual])
         return cs
 
 
-autosklearn.pipeline.components.classification.add_classifier(CustomXGBoost)
-cs = CustomXGBoost.get_hyperparameter_search_space()
+autosklearn.pipeline.components.classification.add_classifier(CustomLRG)
+cs = CustomLRG.get_hyperparameter_search_space()
 print(cs)
 
 
+############################################################################
+# Custom metrics definition
+# =========================
 def accuracy(solution, prediction):
-    metric_id = 1
+    metric_id = 4
     protected_attr = 'sex'
     with open('test_split.txt') as f:
         first_line = f.read().splitlines()
@@ -197,12 +211,11 @@ def accuracy(solution, prediction):
 
     if os.stat("beta.txt").st_size == 0:
 
-        import xgboost as xgb
-        default = xgb.XGBClassifier()
+        default = LogisticRegression()
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
-        _dataset_orig = subset_data_orig_train
-        res = create_baseline(default, _dataset_orig, privileged_groups, unprivileged_groups,
+        dataset_orig = subset_data_orig_train
+        res = create_baseline(default, dataset_orig, privileged_groups, unprivileged_groups,
                               data_splits=10, repetitions=10, odds=mutation_strategies, options=[0, 1],
                               degrees=degrees)
         acc0 = np.array([np.mean([row[0] for row in res["0"][degree]]) for degree in degrees])
@@ -227,9 +240,12 @@ def accuracy(solution, prediction):
         beta = 1.0
     try:
         num_keys = sum(1 for line in open('num_keys.txt'))
+        print(num_keys)
         beta -= 0.050 * int(int(num_keys) / 10)
         if int(num_keys) % 10 == 0:
             os.remove(temp_path + "/.auto-sklearn/ensemble_read_losses.pkl")
+            num_keys += 1
+
         f.close()
     except FileNotFoundError:
         pass
@@ -251,53 +267,52 @@ def accuracy(solution, prediction):
 print("#" * 80)
 print("Use self defined accuracy metric")
 accuracy_scorer = autosklearn.metrics.make_scorer(
-    name="fair+acc",
+    name="accu",
     score_func=accuracy,
     optimum=1,
     greater_is_better=False,
     needs_proba=False,
     needs_threshold=False,
 )
-
 ############################################################################
 # Build and fit a classifier
 # ==========================
+
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
     memory_limit=10000000,
-    include_estimators=['CustomXGBoost'],
+    include_estimators=['CustomLRG'],
     ensemble_size=1,
-    include_preprocessors=['select_percentile_classification', 'select_rates_classification',
-                           'liblinear_svc_preprocessor'],
+    include_preprocessors=['select_percentile_classification', 'select_rates_classification', 'pca'],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer
 )
-
-print(automl)
-
 automl.fit(X_train, y_train)
+
+############################################################################
+# Print the final ensemble constructed by auto-sklearn
+# ====================================================
+
+print(automl.show_models())
 
 ###########################################################################
 # Get the Score of the final ensemble
 # ===================================
-
-print(automl.show_models())
-cs = automl.get_configuration_space(X_train, y_train)
-
-a_file = open("compas_xgb_di_60sp" + str(now) + ".pkl", "wb")
+a_file = open("compas_lrg_aod_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
 
-a_file1 = open("automl_compas_xgb_di_60sp" + str(now) + ".pkl", "wb")
+a_file1 = open("automl_compas_lrg_aod_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
-
 predictions = automl.predict(X_test)
-print(predictions)
-print(y_test, len(predictions))
-print("DI-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-
+count = 0
+for i in predictions:
+    if i == 0:
+        count += 1
+print(count, len(predictions))
+print("AOD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
 print(disparate_impact(dataset_orig_test, predictions, 'sex'))
 print(statistical_parity_difference(dataset_orig_test, predictions, 'sex'))
 print(equal_opportunity_difference(dataset_orig_test, predictions, y_test, 'sex'))

@@ -1,4 +1,3 @@
-import json
 import os
 import sys
 
@@ -9,15 +8,8 @@ sys.path.append(package_dir)
 import datetime
 import pickle
 
-from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
-    UniformIntegerHyperparameter
-
 import autosklearn.pipeline.components.classification
 from autosklearn.Fairea.fairea import create_baseline
-from autosklearn.pipeline.components.classification \
-    import AutoSklearnClassificationAlgorithm
-from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SIGNED_DATA
 import numpy as np
 import pandas as pd
 from aif360.datasets import StandardDataset
@@ -26,6 +18,16 @@ import autosklearn.classification
 from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
     average_odds_difference
 import os
+from ConfigSpace.configuration_space import ConfigurationSpace
+from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
+    UniformIntegerHyperparameter, UnParametrizedHyperparameter, CategoricalHyperparameter
+
+from autosklearn.pipeline.components.base import (
+    AutoSklearnClassificationAlgorithm,
+    IterativeComponentWithSampleWeight)
+from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS
+from autosklearn.util.common import check_none
+import autosklearn.pipeline.components.classification
 
 ############################################################################
 # File Remover
@@ -33,7 +35,7 @@ import os
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "compas_xgb_di" + str(now)
+temp_path = "compas_gbc_di" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -103,35 +105,61 @@ print("Test Shape: ", X_test.shape)
 print("Test Label Shape: ", y_test.shape)
 
 
-class CustomXGBoost(AutoSklearnClassificationAlgorithm):
-    def __init__(self,
-                 n_estimators,
-                 max_depth,
-                 learning_rate,
-                 subsample,
-                 min_child_weight,
-                 seed=0,
-                 random_state=None
-                 ):
-        self.n_estimators = n_estimators
-        self.max_depth = max_depth
+class CustomGBC(
+    IterativeComponentWithSampleWeight,
+    AutoSklearnClassificationAlgorithm
+):
+    def __init__(self, loss, learning_rate, n_estimators, max_features,
+                 min_samples_split, min_samples_leaf,
+                 min_weight_fraction_leaf, max_leaf_nodes,
+                 min_impurity_decrease, max_depth, random_state=20):
+        self.loss = loss
         self.learning_rate = learning_rate
-        self.subsample = subsample
-        self.min_child_weight = min_child_weight
-        self.seed = seed
+        self.n_estimators = n_estimators
+        self.max_features = max_features
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.min_samples_leaf = min_samples_leaf
+        self.min_weight_fraction_leaf = min_weight_fraction_leaf
+        self.max_leaf_nodes = max_leaf_nodes
+        self.min_impurity_decrease = min_impurity_decrease
         self.random_state = random_state
+        self.estimator = None
 
     def fit(self, X, y):
-        from xgboost import XGBClassifier
-        self.estimator = XGBClassifier(
-            n_estimators=self.n_estimators,
-            max_depth=self.max_depth,
+        from sklearn.ensemble import GradientBoostingClassifier
+
+        self.n_estimators = int(self.n_estimators)
+
+        self.min_samples_split = int(self.min_samples_split)
+        self.min_samples_leaf = int(self.min_samples_leaf)
+        self.min_weight_fraction_leaf = float(self.min_weight_fraction_leaf)
+
+        if self.max_features not in ("sqrt", "log2", "auto"):
+            max_features = int(X.shape[1] ** float(self.max_features))
+        else:
+            max_features = self.max_features
+
+        if check_none(self.max_leaf_nodes):
+            self.max_leaf_nodes = None
+        else:
+            self.max_leaf_nodes = int(self.max_leaf_nodes)
+
+        self.min_impurity_decrease = float(self.min_impurity_decrease)
+
+        self.estimator = GradientBoostingClassifier(
+            loss=self.loss,
             learning_rate=self.learning_rate,
-            subsample=self.subsample,
-            min_child_weight=self.min_child_weight,
-            seed=self.seed,
-            random_state=self.random_state
-        )
+            n_estimators=self.n_estimators,
+            max_features=max_features,
+            max_depth=self.max_depth,
+            min_samples_split=self.min_samples_split,
+            min_samples_leaf=self.min_samples_leaf,
+            min_weight_fraction_leaf=self.min_weight_fraction_leaf,
+            max_leaf_nodes=self.max_leaf_nodes,
+            random_state=self.random_state,
+            min_impurity_decrease=self.min_impurity_decrease,
+            warm_start=True)
         self.estimator.fit(X, y)
         return self
 
@@ -147,42 +175,52 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
 
     @staticmethod
     def get_properties(dataset_properties=None):
-        return {'shortname': 'XG',
-                'name': 'XGBoost Classifier',
+        return {'shortname': 'GB',
+                'name': 'Gradient Boosting Classifier',
                 'handles_regression': False,
                 'handles_classification': True,
                 'handles_multiclass': True,
                 'handles_multilabel': False,
                 'handles_multioutput': False,
-                'is_deterministic': False,
-                'input': [DENSE, SIGNED_DATA, UNSIGNED_DATA],
-                'output': [PREDICTIONS]}
+                'is_deterministic': True,
+                'input': (DENSE, UNSIGNED_DATA),
+                'output': (PREDICTIONS,)}
 
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 100, 1000, default_value=300)
-        max_depth = UniformIntegerHyperparameter("max_depth", 1, 10,
-                                                 default_value=4)
-        learning_rate = UniformFloatHyperparameter("learning_rate", 0.01, 0.9,
-                                                   default_value=0.08891)
-        subsample = UniformFloatHyperparameter("subsample", 0.1, 0.9,
-                                               default_value=0.86236)
+        n_estimators = UniformIntegerHyperparameter("n_estimators", 100, 900, default_value=177)
+        loss = CategoricalHyperparameter(
+            "loss", ["deviance", "exponential"], default_value="deviance")
+        learning_rate = UniformFloatHyperparameter("learning_rate", 0.1, 0.9, default_value=0.20866)
+        max_features = UniformFloatHyperparameter(
+            "max_features", 0.1, 0.9, default_value=0.5)
 
-        min_child_weight = UniformIntegerHyperparameter("min_child_weight", 1, 20,
-                                                        default_value=5)
+        max_depth = UniformIntegerHyperparameter("max_depth", 1, 10, default_value=3)
+        min_samples_split = UniformIntegerHyperparameter(
+            "min_samples_split", 1, 20, default_value=6)
+        min_samples_leaf = UniformIntegerHyperparameter(
+            "min_samples_leaf", 1, 20, default_value=5)
+        min_weight_fraction_leaf = UnParametrizedHyperparameter("min_weight_fraction_leaf", 0.)
+        max_leaf_nodes = UnParametrizedHyperparameter("max_leaf_nodes", "None")
+        min_impurity_decrease = UnParametrizedHyperparameter('min_impurity_decrease', 0.0)
 
-        cs.add_hyperparameters([n_estimators, max_depth, learning_rate, subsample,
-                                min_child_weight])
+        cs.add_hyperparameters([n_estimators, loss, learning_rate, max_features,
+                                max_depth, min_samples_split, min_samples_leaf,
+                                min_weight_fraction_leaf, max_leaf_nodes,
+                                min_impurity_decrease])
         return cs
 
 
-autosklearn.pipeline.components.classification.add_classifier(CustomXGBoost)
-cs = CustomXGBoost.get_hyperparameter_search_space()
+autosklearn.pipeline.components.classification.add_classifier(CustomGBC)
+cs = CustomGBC.get_hyperparameter_search_space()
 print(cs)
 
 
+############################################################################
+# Custom metrics definition
+# =========================
 def accuracy(solution, prediction):
     metric_id = 1
     protected_attr = 'sex'
@@ -196,13 +234,12 @@ def accuracy(solution, prediction):
     subset_data_orig_train = dataset_orig_train.subset(split)
 
     if os.stat("beta.txt").st_size == 0:
-
-        import xgboost as xgb
-        default = xgb.XGBClassifier()
+        from sklearn.ensemble import GradientBoostingClassifier
+        default = GradientBoostingClassifier()
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
-        _dataset_orig = subset_data_orig_train
-        res = create_baseline(default, _dataset_orig, privileged_groups, unprivileged_groups,
+        dataset_orig = subset_data_orig_train
+        res = create_baseline(default, dataset_orig, privileged_groups, unprivileged_groups,
                               data_splits=10, repetitions=10, odds=mutation_strategies, options=[0, 1],
                               degrees=degrees)
         acc0 = np.array([np.mean([row[0] for row in res["0"][degree]]) for degree in degrees])
@@ -227,9 +264,11 @@ def accuracy(solution, prediction):
         beta = 1.0
     try:
         num_keys = sum(1 for line in open('num_keys.txt'))
+        print(num_keys)
         beta -= 0.050 * int(int(num_keys) / 10)
         if int(num_keys) % 10 == 0:
             os.remove(temp_path + "/.auto-sklearn/ensemble_read_losses.pkl")
+            num_keys += 1
         f.close()
     except FileNotFoundError:
         pass
@@ -251,53 +290,52 @@ def accuracy(solution, prediction):
 print("#" * 80)
 print("Use self defined accuracy metric")
 accuracy_scorer = autosklearn.metrics.make_scorer(
-    name="fair+acc",
+    name="accu",
     score_func=accuracy,
     optimum=1,
     greater_is_better=False,
     needs_proba=False,
     needs_threshold=False,
 )
-
 ############################################################################
 # Build and fit a classifier
 # ==========================
+
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
     memory_limit=10000000,
-    include_estimators=['CustomXGBoost'],
+    include_estimators=['CustomGBC'],
     ensemble_size=1,
-    include_preprocessors=['select_percentile_classification', 'select_rates_classification',
-                           'liblinear_svc_preprocessor'],
+    include_preprocessors=['kernel_pca', 'fast_ica', 'select_percentile_classification'],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer
 )
-
-print(automl)
-
 automl.fit(X_train, y_train)
+
+############################################################################
+# Print the final ensemble constructed by auto-sklearn
+# ====================================================
+
+print(automl.show_models())
 
 ###########################################################################
 # Get the Score of the final ensemble
 # ===================================
-
-print(automl.show_models())
-cs = automl.get_configuration_space(X_train, y_train)
-
-a_file = open("compas_xgb_di_60sp" + str(now) + ".pkl", "wb")
+a_file = open("compas_gbc_di_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
 
-a_file1 = open("automl_compas_xgb_di_60sp" + str(now) + ".pkl", "wb")
+a_file1 = open("automl_compas_gbc_di_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
-
 predictions = automl.predict(X_test)
-print(predictions)
-print(y_test, len(predictions))
+count = 0
+for i in predictions:
+    if i == 0:
+        count += 1
+print(count, len(predictions))
 print("DI-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-
 print(disparate_impact(dataset_orig_test, predictions, 'sex'))
 print(statistical_parity_difference(dataset_orig_test, predictions, 'sex'))
 print(equal_opportunity_difference(dataset_orig_test, predictions, y_test, 'sex'))

@@ -285,11 +285,11 @@ automl.fit(X_train, y_train)
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
 
-a_file = open("adult_xgb_spd_60sp" + str(now) + ".pkl", "wb")
+a_file = open("compas_xgb_spd_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
 
-a_file1 = open("automl_adult_xgb_spd_60sp" + str(now) + ".pkl", "wb")
+a_file1 = open("automl_compas_xgb_spd_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
 
