@@ -85,29 +85,22 @@ dataset_orig = StandardDataset(
     metadata=default_mappings
 )
 
-print("Dataset Shape: ", dataset_orig.features.shape)
-
 privileged_groups = [{'sex': 1}]
 unprivileged_groups = [{'sex': 0}]
 
-X_train = dataset_orig.features
-X_train = X_train[:5050, :]
-y_train = dataset_orig.labels.ravel()
-y_train = y_train[:5050]
+dataset_orig_train, dataset_orig_test = dataset_orig.split([0.7], shuffle=True)
 
-X_test = dataset_orig.features
-X_test = X_test[5050:, :]
-y_test = dataset_orig.labels.ravel()
-y_test = y_test[5050:]
+X_train = dataset_orig_train.features
+y_train = dataset_orig_train.labels.ravel()
+
+X_test = dataset_orig_test.features
+y_test = dataset_orig_test.labels.ravel()
 
 print("Train Shape: ", X_train.shape)
 print("Train Label Shape: ", y_train.shape)
 
 print("Test Shape: ", X_test.shape)
 print("Test Label Shape: ", y_test.shape)
-print("\n")
-
-print(type(dataset_orig))
 
 
 class CustomXGBoost(AutoSklearnClassificationAlgorithm):
@@ -200,24 +193,7 @@ def accuracy(solution, prediction):
     for i in range(len(split)):
         split[i] = int(split[i])
 
-    _dataset_orig = StandardDataset(
-        df=df,
-        label_name='two_year_recid', favorable_classes=[0],
-        protected_attribute_names=['sex', 'race'],
-        privileged_classes=[['Female'], ['Caucasian']],
-        instance_weights_name=None,
-        categorical_features=['age_cat', 'c_charge_degree',
-                              'c_charge_desc'],
-        features_to_keep=['sex', 'age', 'age_cat', 'race',
-                          'juv_fel_count', 'juv_misd_count', 'juv_other_count',
-                          'priors_count', 'c_charge_degree', 'c_charge_desc',
-                          'two_year_recid'],
-        features_to_drop=[], na_values=[],
-        custom_preprocessing=default_preprocessing,
-        metadata=default_mappings
-    )
-
-    subset_data_orig_train = _dataset_orig.subset(split)
+    subset_data_orig_train = dataset_orig_train.subset(split)
 
     if os.stat("beta.txt").st_size == 0:
 
@@ -287,7 +263,7 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # Build and fit a classifier
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=10 * 60,
+    time_left_for_this_task=60 * 60,
     memory_limit=10000000,
     include_estimators=['CustomXGBoost'],
     ensemble_size=1,
@@ -297,6 +273,9 @@ automl = autosklearn.classification.AutoSklearnClassifier(
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer
 )
+
+print(automl)
+
 automl.fit(X_train, y_train)
 
 ###########################################################################
@@ -319,25 +298,7 @@ print(predictions)
 print(y_test, len(predictions))
 print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
 
-features_df = pd.DataFrame(X_test, columns=dataset_orig.feature_names)
-labels_df = pd.DataFrame(y_test, columns=[dataset_orig.label_names[0]])
-full_df = pd.concat([features_df, labels_df], axis=1)
-data_orig_test = StandardDataset(
-    df=full_df,
-    label_name='two_year_recid',
-    favorable_classes=[0],
-    protected_attribute_names=['sex', 'race'],
-    privileged_classes=[['Female'], ['Caucasian']],
-    instance_weights_name=None,
-    categorical_features=[],
-    features_to_keep=['sex', 'age'],
-    features_to_drop=[],
-    na_values=[],
-    custom_preprocessing=None,
-    metadata=default_mappings
-)
-
-print(disparate_impact(data_orig_test, predictions, 'sex'))
-print(statistical_parity_difference(data_orig_test, predictions, 'sex'))
-print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'sex'))
-print(average_odds_difference(data_orig_test, predictions, y_test, 'sex'))
+print(disparate_impact(dataset_orig_test, predictions, 'sex'))
+print(statistical_parity_difference(dataset_orig_test, predictions, 'sex'))
+print(equal_opportunity_difference(dataset_orig_test, predictions, y_test, 'sex'))
+print(average_odds_difference(dataset_orig_test, predictions, y_test, 'sex'))
