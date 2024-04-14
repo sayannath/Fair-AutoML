@@ -203,16 +203,16 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
         # m is the total number of features, and max_features is the hyperparameter specified below.
         # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
         # corresponds with Geurts' heuristic.
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 210, 767, default_value=210)
-        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9,
-                                                         default_value=7)
-        learning_rate = UniformFloatHyperparameter("learning_rate", 0.17415, 0.73086,
-                                                        default_value=0.17415)
-        subsample = UniformFloatHyperparameter("subsample", 0.24078, 0.76294,
-                                                  default_value=0.75)
+        n_estimators = UniformIntegerHyperparameter("n_estimators", 50, 1000, default_value=300)
+        max_depth = UniformIntegerHyperparameter("max_depth", 1, 10,
+                                                 default_value=4)
+        learning_rate = UniformFloatHyperparameter("learning_rate", 0.01, 0.9,
+                                                   default_value=0.08891)
+        subsample = UniformFloatHyperparameter("subsample", 0.1, 0.9,
+                                               default_value=0.86236)
 
-        min_child_weight = UniformIntegerHyperparameter("min_child_weight", 6, 17,
-                                                         default_value=6)
+        min_child_weight = UniformIntegerHyperparameter("min_child_weight", 1, 20,
+                                                        default_value=5)
 
 
         cs.add_hyperparameters([n_estimators, max_depth, learning_rate, subsample,
