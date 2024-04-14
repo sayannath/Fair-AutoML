@@ -33,16 +33,16 @@ for file in *.py; do
     echo "---------------------"
 done
 
-#cd .. || exit
-#cd evaluation/compas || exit
-#
-## Find all Python files and run them one by one
-#for file in *.py; do
-#    echo "Running $file ..."
-#    python "$file"
-#    echo "$file completed."
-#    echo "---------------------"
-#done
+cd .. || exit
+cd evaluation/compas || exit
+
+# Find all Python files and run them one by one
+for file in *.py; do
+    echo "Running $file ..."
+    python "$file"
+    echo "$file completed."
+    echo "---------------------"
+done
 
 cd .. || exit
 cd evaluation/titanic || exit
