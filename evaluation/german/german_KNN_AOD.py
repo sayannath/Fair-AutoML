@@ -239,7 +239,7 @@ class CustomKNN(AutoSklearnClassificationAlgorithm):
         cs = ConfigurationSpace()
 
         n_neighbors = UniformIntegerHyperparameter(
-            name="n_neighbors", lower=13, upper=67, log=True, default_value=13)
+            name="n_neighbors", lower=1, upper=200, log=True, default_value=12)
         weights = CategoricalHyperparameter(
             name="weights", choices=["uniform", "distance"], default_value="uniform")
         p = CategoricalHyperparameter(name="p", choices=[1, 2], default_value=2)

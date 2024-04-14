@@ -27,13 +27,16 @@ from aif360.datasets import StandardDataset
 from sklearn.linear_model import LogisticRegression
 import sklearn.metrics
 import autosklearn.classification
-from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, average_odds_difference
+from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
+    average_odds_difference
 import os, shutil
 
 from sklearn.model_selection import train_test_split
 
 train_list = "data_orig_train.pkl"
 test_list = "data_orig_test.pkl"
+
+
 def custom_preprocessing(df):
     def group_race(x):
         if x == "White":
@@ -217,15 +220,15 @@ df = pd.concat((x_train, y_train), axis=1)
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
 data_orig_train = StandardDataset(train,
-                               label_name='Survived',
-                               protected_attribute_names=['Sex'],
-                               favorable_classes=[1],
-                               privileged_classes=[[1]])
+                                  label_name='Survived',
+                                  protected_attribute_names=['Sex'],
+                                  favorable_classes=[1],
+                                  privileged_classes=[[1]])
 data_orig_test = StandardDataset(test,
-                               label_name='Survived',
-                               protected_attribute_names=['Sex'],
-                               favorable_classes=[1],
-                               privileged_classes=[[1]])
+                                 label_name='Survived',
+                                 protected_attribute_names=['Sex'],
+                                 favorable_classes=[1],
+                                 privileged_classes=[[1]])
 
 privileged_groups = [{'Sex': 1}]
 unprivileged_groups = [{'Sex': 0}]
@@ -235,6 +238,7 @@ y_train = data_orig_train.labels.ravel()
 
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
+
 
 # dataset_orig = StandardDataset(df,
 #                                        label_name='Survived',
@@ -351,26 +355,17 @@ class CustomRandomForest(AutoSklearnClassificationAlgorithm):
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        # The maximum number of features used in the forest is calculated as m^max_features, where
-        # m is the total number of features, and max_features is the hyperparameter specified below.
-        # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
-        # corresponds with Geurts' heuristic.
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 514, 1686, default_value=1686)
+        n_estimators = UniformIntegerHyperparameter("n_estimators", 100, 2000, default_value=1572)
         criterion = CategoricalHyperparameter(
             "criterion", ["gini", "entropy"], default_value="gini")
-
-        # The maximum number of features used in the forest is calculated as m^max_features, where
-        # m is the total number of features, and max_features is the hyperparameter specified below.
-        # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
-        # corresponds with Geurts' heuristic.
         max_features = UniformFloatHyperparameter(
-            "max_features", 0.42868, 0.85788, default_value=0.5)
+            "max_features", 0.1, 0.9, default_value=0.53111)
 
         max_depth = UnParametrizedHyperparameter("max_depth", "None")
         min_samples_split = UniformIntegerHyperparameter(
-            "min_samples_split", 6, 16, default_value=6)
+            "min_samples_split", 1, 20, default_value=6)
         min_samples_leaf = UniformIntegerHyperparameter(
-            "min_samples_leaf", 5, 16, default_value=6)
+            "min_samples_leaf", 1, 20, default_value=6)
         min_weight_fraction_leaf = UnParametrizedHyperparameter("min_weight_fraction_leaf", 0.)
         max_leaf_nodes = UnParametrizedHyperparameter("max_leaf_nodes", "None")
         min_impurity_decrease = UnParametrizedHyperparameter('min_impurity_decrease', 0.0)
@@ -383,10 +378,12 @@ class CustomRandomForest(AutoSklearnClassificationAlgorithm):
         return cs
 
 
-#Add custom random forest classifier component to auto-sklearn.
+# Add custom random forest classifier component to auto-sklearn.
 autosklearn.pipeline.components.classification.add_classifier(CustomRandomForest)
 cs = CustomRandomForest.get_hyperparameter_search_space()
 print(cs)
+
+
 ############################################################################
 # Custom metrics definition
 # =========================
@@ -455,6 +452,7 @@ def accuracy(solution, prediction):
 
     return fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta)
 
+
 ############################################################################
 # Second example: Use own accuracy metric
 # =======================================
@@ -473,7 +471,7 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # ==========================
 
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=60*60,
+    time_left_for_this_task=60 * 60,
     # per_run_time_limit=500,
     memory_limit=10000000,
     include_estimators=['CustomRandomForest'],
@@ -512,5 +510,3 @@ print(disparate_impact(data_orig_test, predictions, 'Sex'))
 print(statistical_parity_difference(data_orig_test, predictions, 'Sex'))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'Sex'))
 print(average_odds_difference(data_orig_test, predictions, y_test, 'Sex'))
-
-

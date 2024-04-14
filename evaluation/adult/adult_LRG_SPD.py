@@ -200,10 +200,12 @@ class CustomLRG(AutoSklearnClassificationAlgorithm):
         # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
         # corresponds with Geurts' heuristic.
 
-        penalty = CategoricalHyperparameter(name='penalty', choices=["l2"], default_value='l2')
-        C = CategoricalHyperparameter(name='C', choices=[1e-4, 1e-3, 1e-2, 1e-1, 0.5, 1., 5., 10., 15.],
+        penalty = CategoricalHyperparameter(name='penalty', choices=["l1", "l2"], default_value='l2')
+        C = CategoricalHyperparameter(name='C',
+                                      choices=[1e-8, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 0.5, 1., 5., 10., 15., 20., 50.,
+                                               100., 1000.],
                                       default_value=1.)
-        dual = CategoricalHyperparameter(name='dual', choices=[False], default_value=False)
+        dual = CategoricalHyperparameter(name='dual', choices=[True, False], default_value=False)
 
         cs.add_hyperparameters([penalty, C, dual])
         return cs

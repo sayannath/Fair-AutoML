@@ -190,7 +190,7 @@ class CustomGBC(
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 100, 900, default_value=177)
+        n_estimators = UniformIntegerHyperparameter("n_estimators", 100, 1200, default_value=177)
         loss = CategoricalHyperparameter(
             "loss", ["deviance", "exponential"], default_value="deviance")
         learning_rate = UniformFloatHyperparameter("learning_rate", 0.1, 0.9, default_value=0.20866)

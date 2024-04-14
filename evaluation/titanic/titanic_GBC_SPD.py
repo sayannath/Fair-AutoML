@@ -29,10 +29,10 @@ from autosklearn.upgrade.metric import disparate_impact, statistical_parity_diff
     average_odds_difference
 import os, shutil
 
-
-
 train_list = "data_orig_train.pkl"
 test_list = "data_orig_test.pkl"
+
+
 def custom_preprocessing(df):
     def group_race(x):
         if x == "White":
@@ -216,15 +216,15 @@ df = pd.concat((x_train, y_train), axis=1)
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
 data_orig_train = StandardDataset(train,
-                               label_name='Survived',
-                               protected_attribute_names=['Sex'],
-                               favorable_classes=[1],
-                               privileged_classes=[[1]])
+                                  label_name='Survived',
+                                  protected_attribute_names=['Sex'],
+                                  favorable_classes=[1],
+                                  privileged_classes=[[1]])
 data_orig_test = StandardDataset(test,
-                               label_name='Survived',
-                               protected_attribute_names=['Sex'],
-                               favorable_classes=[1],
-                               privileged_classes=[[1]])
+                                 label_name='Survived',
+                                 protected_attribute_names=['Sex'],
+                                 favorable_classes=[1],
+                                 privileged_classes=[[1]])
 
 privileged_groups = [{'Sex': 1}]
 unprivileged_groups = [{'Sex': 0}]
@@ -353,25 +353,18 @@ class CustomGBC(
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        # 'n_estimators': [100],
-        # 'learning_rate': [1e-3, 1e-2, 1e-1, 0.5, 1.],
-        # 'max_depth': range(1, 11),
-        # 'min_samples_split': range(2, 21),
-        # 'min_samples_leaf': range(1, 21),
-        # 'subsample': np.arange(0.05, 1.01, 0.05),
-        # 'max_features': np.arange(0.05, 1.01, 0.05)
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 177, 731, default_value=177)
+        n_estimators = UniformIntegerHyperparameter("n_estimators", 100, 1200, default_value=177)
         loss = CategoricalHyperparameter(
             "loss", ["deviance", "exponential"], default_value="deviance")
-        learning_rate = UniformFloatHyperparameter("learning_rate", 0.20866, 0.74261, default_value=0.20866)
+        learning_rate = UniformFloatHyperparameter("learning_rate", 0.1, 0.9, default_value=0.20866)
         max_features = UniformFloatHyperparameter(
-            "max_features", 0.22631, 0.73291, default_value=0.5)
+            "max_features", 0.1, 0.9, default_value=0.5)
 
-        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9, default_value=3)
+        max_depth = UniformIntegerHyperparameter("max_depth", 1, 10, default_value=3)
         min_samples_split = UniformIntegerHyperparameter(
-            "min_samples_split", 6, 16, default_value=6)
+            "min_samples_split", 1, 20, default_value=6)
         min_samples_leaf = UniformIntegerHyperparameter(
-            "min_samples_leaf", 5, 16, default_value=5)
+            "min_samples_leaf", 1, 20, default_value=5)
         min_weight_fraction_leaf = UnParametrizedHyperparameter("min_weight_fraction_leaf", 0.)
         max_leaf_nodes = UnParametrizedHyperparameter("max_leaf_nodes", "None")
         min_impurity_decrease = UnParametrizedHyperparameter('min_impurity_decrease', 0.0)
@@ -386,6 +379,7 @@ class CustomGBC(
 autosklearn.pipeline.components.classification.add_classifier(CustomGBC)
 cs = CustomGBC.get_hyperparameter_search_space()
 print(cs)
+
 
 ############################################################################
 # Custom metrics definition

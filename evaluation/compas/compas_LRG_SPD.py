@@ -181,7 +181,9 @@ class CustomLRG(AutoSklearnClassificationAlgorithm):
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
         penalty = CategoricalHyperparameter(name='penalty', choices=["l1", "l2"], default_value='l2')
-        C = CategoricalHyperparameter(name='C', choices=[1e-4, 1e-3, 1e-2, 1e-1, 0.5, 1., 5., 10., 15.],
+        C = CategoricalHyperparameter(name='C',
+                                      choices=[1e-8, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 0.5, 1., 5., 10., 15., 20., 50.,
+                                               100., 1000.],
                                       default_value=1.)
         dual = CategoricalHyperparameter(name='dual', choices=[True, False], default_value=False)
 
