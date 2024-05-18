@@ -6,7 +6,7 @@
 #SBATCH --time=2-00:00:00
 #SBATCH --mem=150G
 #SBATCH --partition=cpu2023
-#SBATCH --output=my_cpu_job.log   # Standard output and error log
+#SBATCH --output=fair-automl-45min.log   # Standard output and error log
 
 ####### Load necessary modules #############
 source ~/anaconda3/etc/profile.d/conda.sh
