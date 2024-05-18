@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd .. || exit
-cd adult || exit
+cd evaluation/adult || exit
 
 # Find all Python files and run them one by one
 for file in *.py; do

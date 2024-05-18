@@ -429,7 +429,7 @@ for i in range(len(train_list)):
     # ==========================
 
     automl = autosklearn.classification.AutoSklearnClassifier(
-        time_left_for_this_task=60 * 60,
+        time_left_for_this_task=90 * 60,
         # per_run_time_limit=500,
         memory_limit=10000000,
         include_estimators=['CustomLRG'],
