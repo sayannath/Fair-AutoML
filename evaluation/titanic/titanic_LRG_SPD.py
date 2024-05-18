@@ -213,8 +213,8 @@ x_train, y_train = train_pp[x_columns], train_pp[target]
 x_test = test_pp[x_columns]
 
 df = pd.concat((x_train, y_train), axis=1)
-train = pd.read_pickle(train_list[i])
-test = pd.read_pickle(test_list[i])
+train = pd.read_pickle(train_list)
+test = pd.read_pickle(test_list)
 data_orig_train = StandardDataset(train,
                                   label_name='Survived',
                                   protected_attribute_names=['Sex'],

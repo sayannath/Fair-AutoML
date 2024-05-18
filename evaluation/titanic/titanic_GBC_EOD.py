@@ -362,9 +362,9 @@ class CustomGBC(
 
         max_depth = UniformIntegerHyperparameter("max_depth", 1, 10, default_value=3)
         min_samples_split = UniformIntegerHyperparameter(
-            "min_samples_split", 1, 20, default_value=6)
+            "min_samples_split", 2, 20, default_value=6)
         min_samples_leaf = UniformIntegerHyperparameter(
-            "min_samples_leaf", 1, 20, default_value=5)
+            "min_samples_leaf", 2, 20, default_value=5)
         min_weight_fraction_leaf = UnParametrizedHyperparameter("min_weight_fraction_leaf", 0.)
         max_leaf_nodes = UnParametrizedHyperparameter("max_leaf_nodes", "None")
         min_impurity_decrease = UnParametrizedHyperparameter('min_impurity_decrease', 0.0)
