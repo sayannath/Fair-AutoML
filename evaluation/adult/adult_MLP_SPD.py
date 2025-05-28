@@ -20,7 +20,7 @@ sys.path.append(package_dir)
 from ConfigSpace.configuration_space import ConfigurationSpace
 from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
     UniformIntegerHyperparameter
-from xgboost import XGBClassifier
+from sklearn.neural_network import MLPClassifier
 
 import autosklearn.pipeline.components.classification
 from autosklearn.pipeline.components.classification \
@@ -129,13 +129,6 @@ y_train = data_orig_train.labels.ravel()
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
 
-
-
-# scaler = StandardScaler()
-# X_train = scaler.fit_transform(X_train)
-# X_test = scaler.transform(X_test)
-# data_orig_test.features = X_test
-
 class CustomXGBoost(AutoSklearnClassificationAlgorithm):
     def __init__(self,
                  n_estimators,
@@ -223,11 +216,6 @@ autosklearn.pipeline.components.classification.add_classifier(CustomXGBoost)
 cs = CustomXGBoost.get_hyperparameter_search_space()
 print(cs)
 
-
-############################################################################
-# Custom metrics definition
-# =========================
-
 def accuracy(solution, prediction):
     metric_id = 2
     protected_attr = 'race'
@@ -295,9 +283,6 @@ def accuracy(solution, prediction):
     return fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta)
 
 
-############################################################################
-# Second example: Use own accuracy metric
-# =======================================
 print("#" * 80)
 print("Use self defined accuracy metric")
 accuracy_scorer = autosklearn.metrics.make_scorer(
@@ -309,9 +294,6 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_threshold=False,
 )
 
-############################################################################
-# Build and fit a classifier
-# ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task= 60 * 60,
     # per_run_time_limit=500,
@@ -324,10 +306,6 @@ automl = autosklearn.classification.AutoSklearnClassifier(
     metric=accuracy_scorer
 )
 automl.fit(X_train, y_train)
-
-###########################################################################
-# Get the Score of the final ensemble
-# ===================================
 
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
