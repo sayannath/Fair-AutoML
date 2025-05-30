@@ -1,15 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-=======
-Metrics
-=======
-
-*Auto-sklearn* supports various built-in metrics, which can be found in the
-:ref:`metrics section in the API <api:Built-in Metrics>`. However, it is also
-possible to define your own metric and use it to fit and evaluate your model.
-The following examples show how to use built-in and self-defined metrics for a
-classification problem.
-"""
 import os
 import sys
 
@@ -17,14 +5,9 @@ import sys
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), '../..'))
 # Add the directory to sys.path
 sys.path.append(package_dir)
-from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
-    UniformIntegerHyperparameter
 from sklearn.neural_network import MLPClassifier
 
 import autosklearn.pipeline.components.classification
-from autosklearn.pipeline.components.classification \
-    import AutoSklearnClassificationAlgorithm
 from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SIGNED_DATA
 import datetime
 
@@ -36,7 +19,6 @@ import warnings
 
 warnings.filterwarnings('ignore')
 import os
-import numpy as np
 
 import sklearn.metrics
 import autosklearn.classification
@@ -46,6 +28,8 @@ from autosklearn.Fairea.fairea import create_baseline
 
 train_list = "data_orig_train_adult.pkl"
 test_list = "data_orig_test_adult.pkl"
+
+
 def custom_preprocessing(df):
     def group_race(x):
         if x == "White":
@@ -65,7 +49,7 @@ def custom_preprocessing(df):
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "adult_xgb_spd" + str(now)
+temp_path = "adult_mlp_spd" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -90,35 +74,33 @@ from aif360.datasets import StandardDataset
 
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
-na_values=['?']
+na_values = ['?']
 default_mappings = {
     'label_maps': [{1.0: '>50K', 0.0: '<=50K'}],
     'protected_attribute_maps': [{1.0: 'White', 0.0: 'Non-white'},
                                  {1.0: 'Male', 0.0: 'Female'}]
 }
 
-
-
 data_orig_train = StandardDataset(df=train, label_name='income-per-year',
-            favorable_classes=['>50K', '>50K.'],
-            protected_attribute_names=['race'],
-            privileged_classes=[[1]],
-            instance_weights_name=None,
-            categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                  'relationship', 'native-country'],
-            features_to_keep=[],
-            features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-            custom_preprocessing=custom_preprocessing, metadata=default_mappings)
+                                  favorable_classes=['>50K', '>50K.'],
+                                  protected_attribute_names=['race'],
+                                  privileged_classes=[[1]],
+                                  instance_weights_name=None,
+                                  categorical_features=['workclass', 'education', 'marital-status', 'occupation',
+                                                        'relationship', 'native-country'],
+                                  features_to_keep=[],
+                                  features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
+                                  custom_preprocessing=custom_preprocessing, metadata=default_mappings)
 data_orig_test = StandardDataset(df=test, label_name='income-per-year',
-            favorable_classes=['>50K', '>50K.'],
-            protected_attribute_names=['race'],
-            privileged_classes=[[1]],
-            instance_weights_name=None,
-            categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                  'relationship', 'native-country'],
-            features_to_keep=[],
-            features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-            custom_preprocessing=custom_preprocessing, metadata=default_mappings)
+                                 favorable_classes=['>50K', '>50K.'],
+                                 protected_attribute_names=['race'],
+                                 privileged_classes=[[1]],
+                                 instance_weights_name=None,
+                                 categorical_features=['workclass', 'education', 'marital-status', 'occupation',
+                                                       'relationship', 'native-country'],
+                                 features_to_keep=[],
+                                 features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
+                                 custom_preprocessing=custom_preprocessing, metadata=default_mappings)
 
 privileged_groups = [{'race': 1}]
 unprivileged_groups = [{'race': 0}]
@@ -129,36 +111,47 @@ y_train = data_orig_train.labels.ravel()
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
 
-class CustomXGBoost(AutoSklearnClassificationAlgorithm):
-    def __init__(self,
-                 n_estimators,
-                 max_depth,
-                 learning_rate,
-                 subsample,
-                 min_child_weight,
-                 n_jobs=1,
-                 verbosity=0,
-                 random_state=None,
-                 ):
-        self.n_estimators = n_estimators
-        self.max_depth = max_depth
-        self.learning_rate = learning_rate
-        self.subsample = subsample
-        self.min_child_weight = min_child_weight
-        self.n_jobs = n_jobs
-        self.verbosity = verbosity
+import numpy as np
+from autosklearn.pipeline.components.base import AutoSklearnClassificationAlgorithm
+from ConfigSpace.configuration_space import ConfigurationSpace
+from ConfigSpace.hyperparameters import (
+    UniformIntegerHyperparameter,
+    UniformFloatHyperparameter,
+    CategoricalHyperparameter,
+)
+
+
+class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
+    def __init__(
+            self,
+            num_units,
+            alpha,
+            learning_rate_init,
+            max_iter,
+            tol,
+            activation,
+            random_state=None,
+    ):
+        self.num_units = num_units
+        self.hidden_layer_sizes = (num_units,)
+        self.alpha = alpha
+        self.learning_rate_init = learning_rate_init
+        self.max_iter = max_iter
+        self.tol = tol
+        self.activation = activation
         self.random_state = random_state
+        self.estimator = None
 
     def fit(self, X, y):
-        from xgboost import XGBClassifier
-        self.estimator = XGBClassifier(
-            n_estimators=self.n_estimators,
-            max_depth=self.max_depth,
-            learning_rate=self.learning_rate,
-            subsample=self.subsample,
-            min_child_weight=self.min_child_weight,
-            n_jobs=self.n_jobs,
-            verbosity=self.verbosity,
+        from sklearn.neural_network import MLPClassifier
+
+        self.estimator = MLPClassifier(
+            hidden_layer_sizes=self.hidden_layer_sizes,
+            alpha=self.alpha,
+            learning_rate_init=self.learning_rate_init,
+            max_iter=self.max_iter,
+            tol=self.tol,
+            activation=self.activation,
             random_state=self.random_state,
         )
         self.estimator.fit(X, y)
@@ -176,45 +169,57 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
 
     @staticmethod
     def get_properties(dataset_properties=None):
-        return {'shortname': 'XG',
-                'name': 'XGBoost Classifier',
-                'handles_regression': False,
-                'handles_classification': True,
-                'handles_multiclass': True,
-                'handles_multilabel': False,
-                'handles_multioutput': False,
-                'is_deterministic': False,
-                # Both input and output must be tuple(iterable)
-                'input': [DENSE, SIGNED_DATA, UNSIGNED_DATA],
-                'output': [PREDICTIONS]}
+        return {
+            'shortname': 'MLP',
+            'name': 'Multi-Layer Perceptron Classifier',
+            'handles_regression': False,
+            'handles_classification': True,
+            'handles_multiclass': True,
+            'handles_multilabel': False,
+            'handles_multioutput': False,
+            'is_deterministic': False,
+            'input': [DENSE, SIGNED_DATA, UNSIGNED_DATA],
+            'output': [PREDICTIONS],
+        }
 
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        # The maximum number of features used in the forest is calculated as m^max_features, where
-        # m is the total number of features, and max_features is the hyperparameter specified below.
-        # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
-        # corresponds with Geurts' heuristic.
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 166, 723, default_value=200)
-        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9,
-                                                 default_value=6)
-        learning_rate = UniformFloatHyperparameter("learning_rate", 0.16189, 0.55126,
-                                                   default_value=0.35)
-        subsample = UniformFloatHyperparameter("subsample", 0.34210, 0.86733,
-                                               default_value=0.86733)
+        num_units = UniformIntegerHyperparameter(
+            'num_units', 50, 500, default_value=100
+        )
+        alpha = UniformFloatHyperparameter(
+            'alpha', 1e-6, 1e-1, log=True, default_value=1e-4
+        )
+        learning_rate_init = UniformFloatHyperparameter(
+            'learning_rate_init', 1e-4, 1.0, log=True, default_value=0.001
+        )
+        max_iter = UniformIntegerHyperparameter(
+            'max_iter', 100, 500, default_value=300
+        )
+        tol = UniformFloatHyperparameter(
+            'tol', 1e-5, 1e-2, log=True, default_value=1e-4
+        )
+        activation = CategoricalHyperparameter(
+            'activation', ['identity', 'logistic', 'tanh', 'relu'], default_value='relu'
+        )
 
-        min_child_weight = UniformIntegerHyperparameter("min_child_weight", 5, 17,
-                                                        default_value=5)
-
-        cs.add_hyperparameters([n_estimators, max_depth, learning_rate, subsample,
-                                min_child_weight])
+        cs.add_hyperparameters([
+            num_units,
+            alpha,
+            learning_rate_init,
+            max_iter,
+            tol,
+            activation,
+        ])
         return cs
 
 
-autosklearn.pipeline.components.classification.add_classifier(CustomXGBoost)
-cs = CustomXGBoost.get_hyperparameter_search_space()
+autosklearn.pipeline.components.classification.add_classifier(CustomMLPClassifier)
+cs = CustomMLPClassifier.get_hyperparameter_search_space()
 print(cs)
+
 
 def accuracy(solution, prediction):
     metric_id = 2
@@ -230,7 +235,15 @@ def accuracy(solution, prediction):
 
     if os.stat("beta.txt").st_size == 0:
 
-        default = XGBClassifier(learning_rate=0.35, n_estimator=200, max_depth=6, subsample=1, min_child_weight=1)
+        default = MLPClassifier(
+            hidden_layer_sizes=(100,),  # analogous to n_estimators=200 → 1 hidden layer of 100 units
+            alpha=1e-4,  # L2 penalty (default small value)
+            learning_rate_init=0.001,  # analogous to learning_rate=0.35
+            max_iter=300,  # analogous to max_depth=6 → more iterations 
+            tol=1e-4,  # convergence tolerance
+            activation='relu',  # common default
+            random_state=None
+        )
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
         dataset_orig = subset_data_orig_train
@@ -295,12 +308,12 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 )
 
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task= 60 * 60,
-    # per_run_time_limit=500,
+    time_left_for_this_task=60 * 60,
     memory_limit=10000000,
-    include_estimators=['CustomXGBoost'],
+    include_estimators=['CustomMLPClassifier'],
     ensemble_size=1,
-    include_preprocessors=['select_percentile_classification', 'extra_trees_preproc_for_classification', 'select_rates_classification'],
+    include_preprocessors=['select_percentile_classification', 'extra_trees_preproc_for_classification',
+                           'select_rates_classification'],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer
@@ -310,11 +323,11 @@ automl.fit(X_train, y_train)
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
 
-a_file = open("adult_xgb_spd_60sp" + str(now) + ".pkl", "wb")
+a_file = open("adult_mlp_spd_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
 
-a_file1 = open("automl_adult_xgb_spd_60sp" + str(now) + ".pkl", "wb")
+a_file1 = open("automl_adult_mlp_spd_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
 
@@ -326,3 +339,22 @@ print(disparate_impact(data_orig_test, predictions, 'race'))
 print(statistical_parity_difference(data_orig_test, predictions, 'race'))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'race'))
 print(average_odds_difference(data_orig_test, predictions, y_test, 'race'))
+
+"""
+[(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'none', 'classifier:__choice__': 'CustomMLPClassifier', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'one_hot_encoding', 'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'no_coalescense', 'data_preprocessing:numerical_transformer:imputation:strategy': 'median', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'quantile_transformer', 'feature_preprocessor:__choice__': 'select_percentile_classification', 'classifier:CustomMLPClassifier:activation': 'tanh', 'classifier:CustomMLPClassifier:alpha': 9.06951244369216e-06, 'classifier:CustomMLPClassifier:learning_rate_init': 0.0003061846285843726, 'classifier:CustomMLPClassifier:max_iter': 427, 'classifier:CustomMLPClassifier:num_units': 132, 'classifier:CustomMLPClassifier:tol': 1.0647657119371486e-05, 'data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles': 1404, 'data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution': 'normal', 'feature_preprocessor:select_percentile_classification:percentile': 8.604359373105005, 'feature_preprocessor:select_percentile_classification:score_func': 'chi2'},
+dataset_properties={
+  'task': 1,
+  'sparse': False,
+  'multilabel': False,
+  'multiclass': False,
+  'target_type': 'classification',
+  'signed': False})),
+]
+[0. 0. 0. ... 0. 0. 0.]
+[0. 0. 0. ... 0. 0. 1.] 13803
+SPD-Accuracy score: 0.7932333550677388
+0.4226624870104957
+0.018312473201201475
+0.011695765844276812
+0.007141271373881104
+"""
