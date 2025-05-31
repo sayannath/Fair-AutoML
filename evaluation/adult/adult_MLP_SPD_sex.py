@@ -34,9 +34,18 @@ from autosklearn.upgrade.metric import (
     average_odds_difference,
 )
 from autosklearn.Fairea.fairea import create_baseline
+import numpy as np
+from autosklearn.pipeline.components.base import AutoSklearnClassificationAlgorithm
+from ConfigSpace.configuration_space import ConfigurationSpace
+from ConfigSpace.hyperparameters import (
+    UniformIntegerHyperparameter,
+    UniformFloatHyperparameter,
+    CategoricalHyperparameter,
+)
 
 train_list = "data_orig_train_adult.pkl"
 test_list = "data_orig_test_adult.pkl"
+protected_attribute = "sex"
 
 
 def custom_preprocessing(df):
@@ -58,7 +67,7 @@ def custom_preprocessing(df):
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "adult_mlp_spd" + str(now)
+temp_path = "adult_mlp_spd_sex" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -96,7 +105,7 @@ data_orig_train = StandardDataset(
     df=train,
     label_name="income-per-year",
     favorable_classes=[">50K", ">50K."],
-    protected_attribute_names=["race"],
+    protected_attribute_names=["sex"],
     privileged_classes=[[1]],
     instance_weights_name=None,
     categorical_features=[
@@ -117,7 +126,7 @@ data_orig_test = StandardDataset(
     df=test,
     label_name="income-per-year",
     favorable_classes=[">50K", ">50K."],
-    protected_attribute_names=["race"],
+    protected_attribute_names=["sex"],
     privileged_classes=[[1]],
     instance_weights_name=None,
     categorical_features=[
@@ -135,8 +144,8 @@ data_orig_test = StandardDataset(
     metadata=default_mappings,
 )
 
-privileged_groups = [{"race": 1}]
-unprivileged_groups = [{"race": 0}]
+privileged_groups = [{"sex": 1}]
+unprivileged_groups = [{"sex": 0}]
 
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
@@ -144,26 +153,22 @@ y_train = data_orig_train.labels.ravel()
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
 
-import numpy as np
-from autosklearn.pipeline.components.base import AutoSklearnClassificationAlgorithm
-from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import (
-    UniformIntegerHyperparameter,
-    UniformFloatHyperparameter,
-    CategoricalHyperparameter,
-)
+print(X_train.shape)
+print(y_train.shape)
+print(X_test.shape)
+print(y_test.shape)
 
 
 class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
     def __init__(
-        self,
-        num_units,
-        alpha,
-        learning_rate_init,
-        max_iter,
-        tol,
-        activation,
-        random_state=None,
+            self,
+            num_units,
+            alpha,
+            learning_rate_init,
+            max_iter,
+            tol,
+            activation,
+            random_state=None,
     ):
         self.num_units = num_units
         self.hidden_layer_sizes = (num_units,)
@@ -256,7 +261,7 @@ print(cs)
 
 def accuracy(solution, prediction):
     metric_id = 2
-    protected_attr = "race"
+    protected_attr = "sex"
     with open("test_split.txt") as f:
         first_line = f.read().splitlines()
         last_line = first_line[-1]
@@ -364,7 +369,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-        1 - np.mean(solution == prediction)
+            1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
@@ -398,11 +403,11 @@ automl.fit(X_train, y_train)
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
 
-a_file = open("adult_mlp_spd_60sp" + str(now) + ".pkl", "wb")
+a_file = open("adult_mlp_spd_sex_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
 
-a_file1 = open("automl_adult_mlp_spd_60sp" + str(now) + ".pkl", "wb")
+a_file1 = open("automl_adult_mlp_spd_sex_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
 
@@ -410,13 +415,20 @@ predictions = automl.predict(X_test)
 print(predictions)
 print(y_test, len(predictions))
 print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-print(disparate_impact(data_orig_test, predictions, "race"))
-print(statistical_parity_difference(data_orig_test, predictions, "race"))
-print(equal_opportunity_difference(data_orig_test, predictions, y_test, "race"))
-print(average_odds_difference(data_orig_test, predictions, y_test, "race"))
+print(disparate_impact(data_orig_test, predictions, "sex"))
+print(statistical_parity_difference(data_orig_test, predictions, "sex"))
+print(equal_opportunity_difference(data_orig_test, predictions, y_test, "sex"))
+print(average_odds_difference(data_orig_test, predictions, y_test, "sex"))
 
 """
-[(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'none', 'classifier:__choice__': 'CustomMLPClassifier', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'one_hot_encoding', 'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'no_coalescense', 'data_preprocessing:numerical_transformer:imputation:strategy': 'median', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'quantile_transformer', 'feature_preprocessor:__choice__': 'select_percentile_classification', 'classifier:CustomMLPClassifier:activation': 'tanh', 'classifier:CustomMLPClassifier:alpha': 9.06951244369216e-06, 'classifier:CustomMLPClassifier:learning_rate_init': 0.0003061846285843726, 'classifier:CustomMLPClassifier:max_iter': 427, 'classifier:CustomMLPClassifier:num_units': 132, 'classifier:CustomMLPClassifier:tol': 1.0647657119371486e-05, 'data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles': 1404, 'data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution': 'normal', 'feature_preprocessor:select_percentile_classification:percentile': 8.604359373105005, 'feature_preprocessor:select_percentile_classification:score_func': 'chi2'},
+[(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'weighting', 'classifier:__choice__': 'CustomMLPClassifier', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'no_encoding', 
+'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'minority_coalescer', 'data_preprocessing:numerical_transformer:imputation:strategy': 'most_frequent', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'standardize', 
+'feature_preprocessor:__choice__': 'extra_trees_preproc_for_classification', 'classifier:CustomMLPClassifier:activation': 'logistic', 'classifier:CustomMLPClassifier:alpha': 0.0012591922214020886, 
+'classifier:CustomMLPClassifier:learning_rate_init': 0.448034530319751, 'classifier:CustomMLPClassifier:max_iter': 369, 'classifier:CustomMLPClassifier:num_units': 107, 'classifier:CustomMLPClassifier:tol': 0.009228559779518287, 
+'data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction': 0.32319280511228843, 'feature_preprocessor:extra_trees_preproc_for_classification:bootstrap': 'True', 
+'feature_preprocessor:extra_trees_preproc_for_classification:criterion': 'entropy', 'feature_preprocessor:extra_trees_preproc_for_classification:max_depth': 'None', 'feature_preprocessor:extra_trees_preproc_for_classification:max_features': 0.5177449238777125, 
+'feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes': 'None', 'feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease': 0.0, 'feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf': 8, 
+'feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split': 16, 'feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf': 0.0, 'feature_preprocessor:extra_trees_preproc_for_classification:n_estimators': 100},
 dataset_properties={
   'task': 1,
   'sparse': False,
@@ -425,29 +437,11 @@ dataset_properties={
   'target_type': 'classification',
   'signed': False})),
 ]
-[0. 0. 0. ... 0. 0. 0.]
+[0. 0. 1. ... 0. 0. 0.]
 [0. 0. 0. ... 0. 0. 1.] 13803
-SPD-Accuracy score: 0.7932333550677388
-0.4226624870104957
-0.018312473201201475
-0.011695765844276812
-0.007141271373881104
-
-[(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'weighting', 'classifier:__choice__': 'CustomMLPClassifier', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'one_hot_encoding', 'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'no_coalescense', 'data_preprocessing:numerical_transformer:imputation:strategy': 'mean', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'none', 'feature_preprocessor:__choice__': 'select_rates_classification', 'classifier:CustomMLPClassifier:activation': 'relu', 'classifier:CustomMLPClassifier:alpha': 8.53470702955356e-06, 'classifier:CustomMLPClassifier:learning_rate_init': 0.004404904926454415, 'classifier:CustomMLPClassifier:max_iter': 162, 'classifier:CustomMLPClassifier:num_units': 421, 'classifier:CustomMLPClassifier:tol': 0.004526731091676338, 'feature_preprocessor:select_rates_classification:alpha': 0.15408510840723771, 'feature_preprocessor:select_rates_classification:score_func': 'chi2', 'feature_preprocessor:select_rates_classification:mode': 'fdr'},
-dataset_properties={
-  'task': 1,
-  'sparse': False,
-  'multilabel': False,
-  'multiclass': False,
-  'target_type': 'classification',
-  'signed': False})),
-]
-[0. 0. 0. ... 0. 0. 0.]
-[0. 0. 0. ... 0. 0. 1.] 13803
-SPD-Accuracy score: 0.800043468811128
-0.3478805984581633
-0.019312719816304606
-0.017045807414530545
-0.008829041579820273
-
+SPD-Accuracy score: 0.8267767876548576
+0.5051297276723183
+0.06396886525992622
+0.1769189976572622
+0.09456890851278879
 """
