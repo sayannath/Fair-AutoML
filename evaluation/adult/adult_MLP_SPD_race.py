@@ -416,6 +416,21 @@ print(statistical_parity_difference(data_orig_test, predictions, "race"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "race"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "race"))
 
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_mlp_spd_race_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)
+
 """
 [(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'none', 'classifier:__choice__': 'CustomMLPClassifier', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'one_hot_encoding', 'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'no_coalescense', 'data_preprocessing:numerical_transformer:imputation:strategy': 'median', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'quantile_transformer', 'feature_preprocessor:__choice__': 'select_percentile_classification', 'classifier:CustomMLPClassifier:activation': 'tanh', 'classifier:CustomMLPClassifier:alpha': 9.06951244369216e-06, 'classifier:CustomMLPClassifier:learning_rate_init': 0.0003061846285843726, 'classifier:CustomMLPClassifier:max_iter': 427, 'classifier:CustomMLPClassifier:num_units': 132, 'classifier:CustomMLPClassifier:tol': 1.0647657119371486e-05, 'data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles': 1404, 'data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution': 'normal', 'feature_preprocessor:select_percentile_classification:percentile': 8.604359373105005, 'feature_preprocessor:select_percentile_classification:score_func': 'chi2'},
 dataset_properties={

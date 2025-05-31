@@ -113,7 +113,6 @@ default_mappings = {
     ],
 }
 
-
 data_orig_train = StandardDataset(
     df=train,
     label_name="income-per-year",
@@ -442,3 +441,18 @@ print(disparate_impact(data_orig_test, predictions, "race"))
 print(statistical_parity_difference(data_orig_test, predictions, "race"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "race"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "race"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_xgb_spd_race_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)

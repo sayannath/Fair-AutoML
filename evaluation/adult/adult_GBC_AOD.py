@@ -1,66 +1,31 @@
-# -*- encoding: utf-8 -*-
-"""
-=======
-Metrics
-=======
-
-*Auto-sklearn* supports various built-in metrics, which can be found in the
-:ref:`metrics section in the API <api:Built-in Metrics>`. However, it is also
-possible to define your own metric and use it to fit and evaluate your model.
-The following examples show how to use built-in and self-defined metrics for a
-classification problem.
-"""
-import sys
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
 # Add the directory to sys.path
 sys.path.append(package_dir)
 
-# from ConfigSpace.configuration_space import ConfigurationSpace
-# from ConfigSpace.hyperparameters import CategoricalHyperparameter, UniformFloatHyperparameter, \
-#     UniformIntegerHyperparameter
-# import autosklearn.pipeline.components.classification
-# from autosklearn.pipeline.components.classification \
-#     import AutoSklearnClassificationAlgorithm
-# from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
 import datetime
-import json
-
-import PipelineProfiler
 
 import pickle
-import shutil
-
-import math
-from sklearn.ensemble import RandomForestClassifier
 
 import autosklearn.classification
 import autosklearn.metrics
 import warnings
 
 warnings.filterwarnings("ignore")
-from aif360.datasets import AdultDataset
-from sklearn.preprocessing import StandardScaler
 import os
-import numpy as np
 
 import sklearn.metrics
-import autosklearn.classification
 from autosklearn.upgrade.metric import (
     disparate_impact,
     statistical_parity_difference,
     equal_opportunity_difference,
     average_odds_difference,
 )
-from autosklearn.Fairea.utility import get_data, write_to_file
 from autosklearn.Fairea.fairea import (
     create_baseline,
-    normalize,
-    get_classifier,
-    classify_region,
-    compute_area,
 )
 
 
@@ -84,7 +49,6 @@ def custom_preprocessing(df):
 ############################################################################
 # File Remover
 # ============
-import shutil
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
@@ -109,7 +73,7 @@ f.close()
 # Data Loading
 # ============
 import pandas as pd
-from aif360.datasets import GermanDataset, StandardDataset
+from aif360.datasets import StandardDataset
 
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
@@ -181,17 +145,15 @@ from ConfigSpace.hyperparameters import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
     UnParametrizedHyperparameter,
-    Constant,
     CategoricalHyperparameter,
 )
-from ConfigSpace.conditions import EqualsCondition, InCondition
 
 from autosklearn.pipeline.components.base import (
     AutoSklearnClassificationAlgorithm,
     IterativeComponentWithSampleWeight,
 )
-from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
-from autosklearn.util.common import check_none, check_for_bool
+from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS
+from autosklearn.util.common import check_none
 import autosklearn.pipeline.components.classification
 
 
@@ -514,3 +476,18 @@ print(disparate_impact(data_orig_test, predictions, "race"))
 print(statistical_parity_difference(data_orig_test, predictions, "race"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "race"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "race"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_gbc_aod_race_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)

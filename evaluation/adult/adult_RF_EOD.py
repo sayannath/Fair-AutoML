@@ -1,17 +1,5 @@
-# -*- encoding: utf-8 -*-
-"""
-=======
-Metrics
-=======
-
-*Auto-sklearn* supports various built-in metrics, which can be found in the
-:ref:`metrics section in the API <api:Built-in Metrics>`. However, it is also
-possible to define your own metric and use it to fit and evaluate your model.
-The following examples show how to use built-in and self-defined metrics for a
-classification problem.
-"""
-import sys
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
@@ -30,14 +18,9 @@ from autosklearn.pipeline.components.classification import (
 )
 from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
 import datetime
-import json
-
-import PipelineProfiler
 
 import pickle
-import shutil
 
-import math
 from sklearn.ensemble import RandomForestClassifier
 
 import autosklearn.classification
@@ -47,8 +30,6 @@ import warnings
 from autosklearn.util.common import check_none, check_for_bool
 
 warnings.filterwarnings("ignore")
-from aif360.datasets import AdultDataset
-from sklearn.preprocessing import StandardScaler
 import os
 import numpy as np
 
@@ -60,13 +41,8 @@ from autosklearn.upgrade.metric import (
     equal_opportunity_difference,
     average_odds_difference,
 )
-from autosklearn.Fairea.utility import get_data, write_to_file
 from autosklearn.Fairea.fairea import (
     create_baseline,
-    normalize,
-    get_classifier,
-    classify_region,
-    compute_area,
 )
 
 train_list = "data_orig_train_adult.pkl"
@@ -111,7 +87,7 @@ f.close()
 # Data Loading
 # ============
 import pandas as pd
-from aif360.datasets import GermanDataset, StandardDataset
+from aif360.datasets import StandardDataset
 
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
@@ -123,7 +99,6 @@ default_mappings = {
         {1.0: "Male", 0.0: "Female"},
     ],
 }
-
 
 data_orig_train = StandardDataset(
     df=train,
@@ -349,6 +324,8 @@ class CustomRandomForest(AutoSklearnClassificationAlgorithm):
 autosklearn.pipeline.components.classification.add_classifier(CustomRandomForest)
 cs = CustomRandomForest.get_hyperparameter_search_space()
 print(cs)
+
+
 ############################################################################
 # Custom metrics definition
 # =========================
@@ -469,7 +446,6 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_threshold=False,
 )
 
-
 ############################################################################
 # Build and fit a classifier
 # ==========================
@@ -496,7 +472,6 @@ automl.fit(X_train, y_train)
 
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
-import shutil
 
 a_file = open("adult_rf_eod_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
@@ -506,7 +481,6 @@ a_file1 = open("automl_adult_rf_eod_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
 
-
 predictions = automl.predict(X_test)
 print(predictions)
 print(y_test, len(predictions))
@@ -515,3 +489,18 @@ print(disparate_impact(data_orig_test, predictions, "race"))
 print(statistical_parity_difference(data_orig_test, predictions, "race"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "race"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "race"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_xgb_eod_race_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)

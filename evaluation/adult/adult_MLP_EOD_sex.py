@@ -415,6 +415,12 @@ print(statistical_parity_difference(data_orig_test, predictions, "sex"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "sex"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "sex"))
 
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
 import json
 from utils.file_ops import write_file
 from utils.run_history import _get_run_history

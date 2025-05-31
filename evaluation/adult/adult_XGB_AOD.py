@@ -10,8 +10,8 @@ possible to define your own metric and use it to fit and evaluate your model.
 The following examples show how to use built-in and self-defined metrics for a
 classification problem.
 """
-import sys
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
@@ -19,7 +19,6 @@ package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.
 sys.path.append(package_dir)
 from ConfigSpace.configuration_space import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
-    CategoricalHyperparameter,
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
@@ -33,27 +32,17 @@ from autosklearn.pipeline.constants import (
     DENSE,
     UNSIGNED_DATA,
     PREDICTIONS,
-    SPARSE,
     SIGNED_DATA,
 )
 import datetime
-import json
-
-import PipelineProfiler
 
 import pickle
-import shutil
-
-import math
-from sklearn.ensemble import RandomForestClassifier
 
 import autosklearn.classification
 import autosklearn.metrics
 import warnings
 
 warnings.filterwarnings("ignore")
-from aif360.datasets import AdultDataset
-from sklearn.preprocessing import StandardScaler
 import os
 import numpy as np
 
@@ -65,15 +54,9 @@ from autosklearn.upgrade.metric import (
     equal_opportunity_difference,
     average_odds_difference,
 )
-from autosklearn.Fairea.utility import get_data, write_to_file
 from autosklearn.Fairea.fairea import (
     create_baseline,
-    normalize,
-    get_classifier,
-    classify_region,
-    compute_area,
 )
-
 
 train_list = "data_orig_train_adult.pkl"
 test_list = "data_orig_test_adult.pkl"
@@ -95,7 +78,6 @@ def custom_preprocessing(df):
 ############################################################################
 # File Remover
 # ============
-import shutil
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
@@ -120,7 +102,7 @@ f.close()
 # Data Loading
 # ============
 import pandas as pd
-from aif360.datasets import GermanDataset, StandardDataset
+from aif360.datasets import StandardDataset
 
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
@@ -132,7 +114,6 @@ default_mappings = {
         {1.0: "Male", 0.0: "Female"},
     ],
 }
-
 
 data_orig_train = StandardDataset(
     df=train,
@@ -185,6 +166,7 @@ y_train = data_orig_train.labels.ravel()
 
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
+
 
 # scaler = StandardScaler()
 # X_train = scaler.fit_transform(X_train)
@@ -461,3 +443,18 @@ print(disparate_impact(data_orig_test, predictions, "race"))
 print(statistical_parity_difference(data_orig_test, predictions, "race"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "race"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "race"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_xgb_aod_race_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)

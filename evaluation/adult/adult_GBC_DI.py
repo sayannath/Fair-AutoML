@@ -477,8 +477,7 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # Build and fit a classifier
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=2 * 60 * 60,
-    # per_run_time_limit=500,
+    time_left_for_this_task=60 * 60,
     memory_limit=10000000,
     include_estimators=["CustomGBC"],
     ensemble_size=1,

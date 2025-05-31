@@ -1,65 +1,31 @@
-# -*- encoding: utf-8 -*-
-"""
-=======
-Metrics
-=======
-
-*Auto-sklearn* supports various built-in metrics, which can be found in the
-:ref:`metrics section in the API <api:Built-in Metrics>`. However, it is also
-possible to define your own metric and use it to fit and evaluate your model.
-The following examples show how to use built-in and self-defined metrics for a
-classification problem.
-"""
-import sys
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
 # Add the directory to sys.path
 sys.path.append(package_dir)
-# from ConfigSpace.configuration_space import ConfigurationSpace
-# from ConfigSpace.hyperparameters import CategoricalHyperparameter, UniformFloatHyperparameter, \
-#     UniformIntegerHyperparameter
-# import autosklearn.pipeline.components.classification
-# from autosklearn.pipeline.components.classification \
-#     import AutoSklearnClassificationAlgorithm
-# from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
-import datetime
-import json
 
-import PipelineProfiler
+import datetime
 
 import pickle
-import shutil
-
-import math
-from sklearn.ensemble import RandomForestClassifier
 
 import autosklearn.classification
 import autosklearn.metrics
 import warnings
 
 warnings.filterwarnings("ignore")
-from aif360.datasets import AdultDataset
-from sklearn.preprocessing import StandardScaler
 import os
-import numpy as np
 
 import sklearn.metrics
-import autosklearn.classification
 from autosklearn.upgrade.metric import (
     disparate_impact,
     statistical_parity_difference,
     equal_opportunity_difference,
     average_odds_difference,
 )
-from autosklearn.Fairea.utility import get_data, write_to_file
 from autosklearn.Fairea.fairea import (
     create_baseline,
-    normalize,
-    get_classifier,
-    classify_region,
-    compute_area,
 )
 
 train_list = "data_orig_train_adult.pkl"
@@ -104,7 +70,7 @@ f.close()
 # Data Loading
 # ============
 import pandas as pd
-from aif360.datasets import GermanDataset, StandardDataset
+from aif360.datasets import StandardDataset
 
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
@@ -116,7 +82,6 @@ default_mappings = {
         {1.0: "Male", 0.0: "Female"},
     ],
 }
-
 
 data_orig_train = StandardDataset(
     df=train,
@@ -177,34 +142,32 @@ from ConfigSpace.hyperparameters import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
     UnParametrizedHyperparameter,
-    Constant,
     CategoricalHyperparameter,
 )
-from ConfigSpace.conditions import EqualsCondition, InCondition
 
 from autosklearn.pipeline.components.base import (
     AutoSklearnClassificationAlgorithm,
     IterativeComponentWithSampleWeight,
 )
-from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
-from autosklearn.util.common import check_none, check_for_bool
+from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS
+from autosklearn.util.common import check_none
 import autosklearn.pipeline.components.classification
 
 
 class CustomGBC(IterativeComponentWithSampleWeight, AutoSklearnClassificationAlgorithm):
     def __init__(
-        self,
-        loss,
-        learning_rate,
-        n_estimators,
-        max_features,
-        min_samples_split,
-        min_samples_leaf,
-        min_weight_fraction_leaf,
-        max_leaf_nodes,
-        min_impurity_decrease,
-        max_depth,
-        random_state=20,
+            self,
+            loss,
+            learning_rate,
+            n_estimators,
+            max_features,
+            min_samples_split,
+            min_samples_leaf,
+            min_weight_fraction_leaf,
+            max_leaf_nodes,
+            min_impurity_decrease,
+            max_depth,
+            random_state=20,
     ):
         self.loss = loss
         self.learning_rate = learning_rate
@@ -448,7 +411,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-        1 - np.mean(solution == prediction)
+            1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
@@ -466,13 +429,11 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_threshold=False,
 )
 
-
 ############################################################################
 # Build and fit a classifier
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=2 * 60 * 60,
-    # per_run_time_limit=500,
+    time_left_for_this_task=60 * 60,
     memory_limit=10000000,
     include_estimators=["CustomGBC"],
     ensemble_size=1,
@@ -493,7 +454,6 @@ automl.fit(X_train, y_train)
 
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
-import shutil
 
 a_file = open("adult_gbc_spd_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
@@ -511,3 +471,18 @@ print(disparate_impact(data_orig_test, predictions, "race"))
 print(statistical_parity_difference(data_orig_test, predictions, "race"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "race"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "race"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_gbc_eod_race_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)
