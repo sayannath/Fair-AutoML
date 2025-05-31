@@ -24,20 +24,22 @@ def setup_logger(
     # logging_config must be a dictionary object specifying the configuration
     # for the loggers to be used in auto-sklearn.
     if logging_config is None:
-        with open(os.path.join(os.path.dirname(__file__), 'logging.yaml'), 'r') as fh:
+        with open(os.path.join(os.path.dirname(__file__), "logging.yaml"), "r") as fh:
             logging_config = yaml.safe_load(fh)
 
     if filename is None:
-        filename = logging_config['handlers']['file_handler']['filename']
-    logging_config['handlers']['file_handler']['filename'] = os.path.join(
+        filename = logging_config["handlers"]["file_handler"]["filename"]
+    logging_config["handlers"]["file_handler"]["filename"] = os.path.join(
         output_dir, filename
     )
 
     if distributedlog_filename is None:
-        distributedlog_filename = logging_config['handlers']['distributed_logfile']['filename']
-    logging_config['handlers']['distributed_logfile']['filename'] = os.path.join(
-            output_dir, distributedlog_filename
-        )
+        distributedlog_filename = logging_config["handlers"]["distributed_logfile"][
+            "filename"
+        ]
+    logging_config["handlers"]["distributed_logfile"]["filename"] = os.path.join(
+        output_dir, distributedlog_filename
+    )
     logging.config.dictConfig(logging_config)
 
 
@@ -45,7 +47,7 @@ def _create_logger(name: str) -> logging.Logger:
     return logging.getLogger(name)
 
 
-def get_logger(name: str) -> 'PickableLoggerAdapter':
+def get_logger(name: str) -> "PickableLoggerAdapter":
     logger = PickableLoggerAdapter(name)
     return logger
 
@@ -65,7 +67,7 @@ class PickableLoggerAdapter(object):
         Dictionary, representing the object state to be pickled. Ignores
         the self.logger field and only returns the logger name.
         """
-        return {'name': self.name}
+        return {"name": self.name}
 
     def __setstate__(self, state: Dict[str, Any]) -> None:
         """
@@ -77,7 +79,7 @@ class PickableLoggerAdapter(object):
         state - dictionary, containing the logger name.
 
         """
-        self.name = state['name']
+        self.name = state["name"]
         self.logger = _create_logger(self.name)
 
     def debug(self, msg: str, *args: Any, **kwargs: Any) -> None:
@@ -107,20 +109,16 @@ class PickableLoggerAdapter(object):
 
 def get_named_client_logger(
     name: str,
-    host: str = 'localhost',
+    host: str = "localhost",
     port: int = logging.handlers.DEFAULT_TCP_LOGGING_PORT,
-) -> 'PicklableClientLogger':
-    logger = PicklableClientLogger(
-        name=name,
-        host=host,
-        port=port
-    )
+) -> "PicklableClientLogger":
+    logger = PicklableClientLogger(name=name, host=host, port=port)
     return logger
 
 
 def _get_named_client_logger(
     name: str,
-    host: str = 'localhost',
+    host: str = "localhost",
     port: int = logging.handlers.DEFAULT_TCP_LOGGING_PORT,
 ) -> logging.Logger:
     """
@@ -151,7 +149,7 @@ def _get_named_client_logger(
     # We add client not only to identify that this is the client
     # communication part of the logger, but to make sure we have
     # a new singleton with the desired socket handlers
-    local_logger = _create_logger('Client-' + name)
+    local_logger = _create_logger("Client-" + name)
     local_logger.propagate = False
     local_logger.setLevel(logging.DEBUG)
 
@@ -159,8 +157,9 @@ def _get_named_client_logger(
         # Ignore mypy logging.handlers.SocketHandler has no attribute port
         # This is not the case clearly, yet MyPy assumes this is not the case
         # Even when using direct casting or getattr
-        ports = [getattr(handler, 'port', None
-                         ) for handler in local_logger.handlers]  # type: ignore[attr-defined]
+        ports = [
+            getattr(handler, "port", None) for handler in local_logger.handlers
+        ]  # type: ignore[attr-defined]
     except AttributeError:
         # We do not want to log twice but adding multiple times the same
         # handler. So we check to what ports we communicate to
@@ -181,11 +180,7 @@ class PicklableClientLogger(PickableLoggerAdapter):
         self.name = name
         self.host = host
         self.port = port
-        self.logger = _get_named_client_logger(
-            name=name,
-            host=host,
-            port=port
-        )
+        self.logger = _get_named_client_logger(name=name, host=host, port=port)
 
     def __getstate__(self) -> Dict[str, Any]:
         """
@@ -197,9 +192,9 @@ class PicklableClientLogger(PickableLoggerAdapter):
         the self.logger field and only returns the logger name.
         """
         return {
-            'name': self.name,
-            'host': self.host,
-            'port': self.port,
+            "name": self.name,
+            "host": self.host,
+            "port": self.port,
         }
 
     def __setstate__(self, state: Dict[str, Any]) -> None:
@@ -212,9 +207,9 @@ class PicklableClientLogger(PickableLoggerAdapter):
         state - dictionary, containing the logger name.
 
         """
-        self.name = state['name']
-        self.host = state['host']
-        self.port = state['port']
+        self.name = state["name"]
+        self.host = state["host"]
+        self.port = state["port"]
         self.logger = _get_named_client_logger(
             name=self.name,
             host=self.host,
@@ -239,7 +234,7 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
             chunk = self.connection.recv(4)  # type: ignore[attr-defined]
             if len(chunk) < 4:
                 break
-            slen = struct.unpack('>L', chunk)[0]
+            slen = struct.unpack(">L", chunk)[0]
             chunk = self.connection.recv(slen)  # type: ignore[attr-defined]
             while len(chunk) < slen:
                 chunk = chunk + self.connection.recv(slen - len(chunk))  # type: ignore[attr-defined]  # noqa: E501
@@ -276,9 +271,9 @@ def start_log_server(
     logging_config: Dict,
     output_dir: str,
 ) -> None:
-    setup_logger(filename=filename,
-                 logging_config=logging_config,
-                 output_dir=output_dir)
+    setup_logger(
+        filename=filename, logging_config=logging_config, output_dir=output_dir
+    )
 
     while True:
         # Loop until we find a valid port
@@ -309,7 +304,7 @@ class LogRecordSocketReceiver(socketserver.ThreadingTCPServer):
 
     def __init__(
         self,
-        host: str = 'localhost',
+        host: str = "localhost",
         port: int = logging.handlers.DEFAULT_TCP_LOGGING_PORT,
         handler: Type[LogRecordStreamHandler] = LogRecordStreamHandler,
         logname: Optional[str] = None,
@@ -322,9 +317,7 @@ class LogRecordSocketReceiver(socketserver.ThreadingTCPServer):
 
     def serve_until_stopped(self) -> None:
         while True:
-            rd, wr, ex = select.select([self.socket.fileno()],
-                                       [], [],
-                                       self.timeout)
+            rd, wr, ex = select.select([self.socket.fileno()], [], [], self.timeout)
             if rd:
                 self.handle_request()
             if self.event is not None and self.event.is_set():

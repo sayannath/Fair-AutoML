@@ -16,10 +16,7 @@ from autosklearn.metrics import calculate_loss, Scorer
 from autosklearn.util.backend import Backend
 
 
-__all__ = [
-    'eval_t',
-    'TestEvaluator'
-]
+__all__ = ["eval_t", "TestEvaluator"]
 
 
 class TestEvaluator(AbstractEvaluator):
@@ -51,15 +48,15 @@ class TestEvaluator(AbstractEvaluator):
             include=include,
             exclude=exclude,
             disable_file_output=disable_file_output,
-            init_params=init_params
+            init_params=init_params,
         )
         self.configuration = configuration
 
-        self.X_train = self.datamanager.data['X_train']
-        self.Y_train = self.datamanager.data['Y_train']
+        self.X_train = self.datamanager.data["X_train"]
+        self.Y_train = self.datamanager.data["Y_train"]
 
-        self.X_test = self.datamanager.data.get('X_test')
-        self.Y_test = self.datamanager.data.get('Y_test')
+        self.X_test = self.datamanager.data.get("X_test")
+        self.Y_test = self.datamanager.data.get("Y_test")
 
         self.model = self._get_model()
 
@@ -83,23 +80,27 @@ class TestEvaluator(AbstractEvaluator):
     ) -> Tuple[Union[Dict[str, float], float], np.array, Any, Any]:
 
         if train:
-            Y_pred = self.predict_function(self.X_train, self.model,
-                                           self.task_type, self.Y_train)
+            Y_pred = self.predict_function(
+                self.X_train, self.model, self.task_type, self.Y_train
+            )
             err = calculate_loss(
                 solution=self.Y_train,
                 prediction=Y_pred,
                 task_type=self.task_type,
                 metric=self.metric,
-                scoring_functions=self.scoring_functions)
+                scoring_functions=self.scoring_functions,
+            )
         else:
-            Y_pred = self.predict_function(self.X_test, self.model,
-                                           self.task_type, self.Y_train)
+            Y_pred = self.predict_function(
+                self.X_test, self.model, self.task_type, self.Y_train
+            )
             err = calculate_loss(
                 solution=self.Y_test,
                 prediction=Y_pred,
                 task_type=self.task_type,
                 metric=self.metric,
-                scoring_functions=self.scoring_functions)
+                scoring_functions=self.scoring_functions,
+            )
 
         return err, Y_pred, None, None
 
@@ -124,13 +125,18 @@ def eval_t(
     budget: Optional[float] = None,
     budget_type: Optional[str] = None,
 ) -> None:
-    evaluator = TestEvaluator(configuration=config,
-                              backend=backend, metric=metric, seed=seed,
-                              port=port,
-                              queue=queue,
-                              scoring_functions=scoring_functions,
-                              include=include, exclude=exclude,
-                              disable_file_output=disable_file_output,
-                              init_params=init_params)
+    evaluator = TestEvaluator(
+        configuration=config,
+        backend=backend,
+        metric=metric,
+        seed=seed,
+        port=port,
+        queue=queue,
+        scoring_functions=scoring_functions,
+        include=include,
+        exclude=exclude,
+        disable_file_output=disable_file_output,
+        init_params=init_params,
+    )
 
     evaluator.fit_predict_and_loss()

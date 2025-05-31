@@ -26,7 +26,7 @@ def _parse_categorical(line):
 
     first_bracket = line.find("{")
     second_bracket = line.find("}")
-    domain_values = line[first_bracket + 1:second_bracket]
+    domain_values = line[first_bracket + 1 : second_bracket]
     cat_values = domain_values.split(",")
     if len(cat_values) < 1:
         raise ValueError("Expected at least one value in %s" % line)

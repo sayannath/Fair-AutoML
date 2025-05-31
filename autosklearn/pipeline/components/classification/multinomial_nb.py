@@ -1,8 +1,10 @@
 import numpy as np
 
 from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
-    CategoricalHyperparameter
+from ConfigSpace.hyperparameters import (
+    UniformFloatHyperparameter,
+    CategoricalHyperparameter,
+)
 
 from autosklearn.pipeline.components.base import (
     AutoSklearnClassificationAlgorithm,
@@ -31,7 +33,7 @@ class MultinomialNB(AutoSklearnClassificationAlgorithm):
         self.estimator = sklearn.naive_bayes.MultinomialNB(
             alpha=self.alpha,
             fit_prior=self.fit_prior,
-            )
+        )
         self.classes_ = np.unique(y.astype(int))
 
         # Because the pipeline guarantees that each feature is positive,
@@ -44,8 +46,10 @@ class MultinomialNB(AutoSklearnClassificationAlgorithm):
         # Fallback for multilabel classification
         if len(y.shape) > 1 and y.shape[1] > 1:
             import sklearn.multiclass
+
             self.estimator = sklearn.multiclass.OneVsRestClassifier(
-                self.estimator, n_jobs=1)
+                self.estimator, n_jobs=1
+            )
         self.estimator.fit(X, y)
 
         return self
@@ -62,16 +66,18 @@ class MultinomialNB(AutoSklearnClassificationAlgorithm):
 
     @staticmethod
     def get_properties(dataset_properties=None):
-        return {'shortname': 'MultinomialNB',
-                'name': 'Multinomial Naive Bayes classifier',
-                'handles_regression': False,
-                'handles_classification': True,
-                'handles_multiclass': True,
-                'handles_multilabel': True,
-                'handles_multioutput': False,
-                'is_deterministic': True,
-                'input': (DENSE, SPARSE, SIGNED_DATA),
-                'output': (PREDICTIONS,)}
+        return {
+            "shortname": "MultinomialNB",
+            "name": "Multinomial Naive Bayes classifier",
+            "handles_regression": False,
+            "handles_classification": True,
+            "handles_multiclass": True,
+            "handles_multilabel": True,
+            "handles_multioutput": False,
+            "is_deterministic": True,
+            "input": (DENSE, SPARSE, SIGNED_DATA),
+            "output": (PREDICTIONS,),
+        }
 
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):
@@ -80,12 +86,13 @@ class MultinomialNB(AutoSklearnClassificationAlgorithm):
         # the smoothing parameter is a non-negative float
         # I will limit it to 100 and put it on a logarithmic scale. (SF)
         # Please adjust that, if you know a proper range, this is just a guess.
-        alpha = UniformFloatHyperparameter(name="alpha", lower=1e-2, upper=100,
-                                           default_value=1, log=True)
+        alpha = UniformFloatHyperparameter(
+            name="alpha", lower=1e-2, upper=100, default_value=1, log=True
+        )
 
-        fit_prior = CategoricalHyperparameter(name="fit_prior",
-                                              choices=["True", "False"],
-                                              default_value="True")
+        fit_prior = CategoricalHyperparameter(
+            name="fit_prior", choices=["True", "False"], default_value="True"
+        )
 
         cs.add_hyperparameters([alpha, fit_prior])
 

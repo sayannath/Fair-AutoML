@@ -2,21 +2,26 @@ import sys
 import os
 
 # Get the directory path containing autosklearn
-package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), '../..'))
+package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
 # Add the directory to sys.path
 sys.path.append(package_dir)
 import datetime
 import pickle
 
 from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import CategoricalHyperparameter, UniformFloatHyperparameter, \
-UniformIntegerHyperparameter, UnParametrizedHyperparameter
+from ConfigSpace.hyperparameters import (
+    CategoricalHyperparameter,
+    UniformFloatHyperparameter,
+    UniformIntegerHyperparameter,
+    UnParametrizedHyperparameter,
+)
 from sklearn.ensemble import RandomForestClassifier
 
 import autosklearn.pipeline.components.classification
 from autosklearn.Fairea.fairea import create_baseline
-from autosklearn.pipeline.components.classification \
-import AutoSklearnClassificationAlgorithm
+from autosklearn.pipeline.components.classification import (
+    AutoSklearnClassificationAlgorithm,
+)
 from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
 from autosklearn.util.common import check_for_bool, check_none
 import numpy as np
@@ -25,13 +30,19 @@ from aif360.datasets import StandardDataset
 from sklearn.linear_model import LogisticRegression
 import sklearn.metrics
 import autosklearn.classification
-from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, average_odds_difference
+from autosklearn.upgrade.metric import (
+    disparate_impact,
+    statistical_parity_difference,
+    equal_opportunity_difference,
+    average_odds_difference,
+)
 import os, shutil
-
 
 
 train_list = "data_orig_train.pkl"
 test_list = "data_orig_test.pkl"
+
+
 def custom_preprocessing(df):
     def group_race(x):
         if x == "White":
@@ -40,8 +51,8 @@ def custom_preprocessing(df):
             return 0.0
 
     # Recode sex and race
-    df['sex'] = df['sex'].replace({'Female': 0.0, 'Male': 1.0})
-    df['race'] = df['race'].apply(lambda x: group_race(x))
+    df["sex"] = df["sex"].replace({"Female": 0.0, "Male": 1.0})
+    df["race"] = df["race"].apply(lambda x: group_race(x))
 
     return df
 
@@ -72,9 +83,9 @@ f.close()
 # Data Loading
 # ============
 
-train = pd.read_csv('train.csv')
-test = pd.read_csv('test.csv')
-test.loc[:, 'Survived'] = 0
+train = pd.read_csv("train.csv")
+test = pd.read_csv("test.csv")
+test.loc[:, "Survived"] = 0
 
 from sklearn.base import TransformerMixin
 from sklearn.pipeline import Pipeline, FeatureUnion
@@ -96,7 +107,7 @@ class SelectCols(TransformerMixin):
         return x[self.cols]
 
 
-sc = SelectCols(cols=['Sex', 'Survived'])
+sc = SelectCols(cols=["Sex", "Survived"])
 sc.transform(train.sample(5))
 
 
@@ -129,7 +140,7 @@ class LabelEncoder(TransformerMixin):
 
 
 le = LabelEncoder()
-le.fit_transform(train[['Pclass', 'Sex']].sample(5))
+le.fit_transform(train[["Pclass", "Sex"]].sample(5))
 
 
 class NumericEncoder(TransformerMixin):
@@ -138,8 +149,8 @@ class NumericEncoder(TransformerMixin):
     def fit(self, x: pd.DataFrame) -> "NumericEncoder":
         """Learn median for every column in x."""
         self.encoders_ = {
-            c: pd.to_numeric(x[c],
-                             errors='coerce').median(skipna=True) for c in x}
+            c: pd.to_numeric(x[c], errors="coerce").median(skipna=True) for c in x
+        }
 
         return self
 
@@ -149,9 +160,9 @@ class NumericEncoder(TransformerMixin):
         for c in x:
             new_cols = pd.DataFrame()
             # Find invalid values that aren't nans (-inf, inf, string)
-            invalid_idx = pd.to_numeric(x[c].replace([-np.inf, np.inf],
-                                                     np.nan),
-                                        errors='coerce').isnull()
+            invalid_idx = pd.to_numeric(
+                x[c].replace([-np.inf, np.inf], np.nan), errors="coerce"
+            ).isnull()
 
             # Copy to new df for this column
             new_cols.loc[:, c] = x[c].copy()
@@ -164,50 +175,65 @@ class NumericEncoder(TransformerMixin):
             output_dfs.append(new_cols)
 
         # Concat list of output_dfs to single df
-        df = pd.concat(output_dfs,
-                       axis=1)
+        df = pd.concat(output_dfs, axis=1)
 
         return df.fillna(0)
 
 
 ne = NumericEncoder()
-ne.fit_transform(train[['Age', 'Fare']].sample(5))
+ne.fit_transform(train[["Age", "Fare"]].sample(5))
 
 # LabelEncoding fork: Select object columns -> label encode
-pp_object_cols = Pipeline([('select', SelectCols(cols=['Sex', 'Survived',
-                                                       'Cabin', 'Ticket',
-                                                       'SibSp', 'Embarked',
-                                                       'Parch', 'Pclass',
-                                                       'Name'])),
-                           ('process', LabelEncoder())])
+pp_object_cols = Pipeline(
+    [
+        (
+            "select",
+            SelectCols(
+                cols=[
+                    "Sex",
+                    "Survived",
+                    "Cabin",
+                    "Ticket",
+                    "SibSp",
+                    "Embarked",
+                    "Parch",
+                    "Pclass",
+                    "Name",
+                ]
+            ),
+        ),
+        ("process", LabelEncoder()),
+    ]
+)
 
 # NumericEncoding fork: Select numeric columns -> numeric encode
-pp_numeric_cols = Pipeline([('select', SelectCols(cols=['Age',
-                                                        'Fare'])),
-                            ('process', NumericEncoder())])
+pp_numeric_cols = Pipeline(
+    [("select", SelectCols(cols=["Age", "Fare"])), ("process", NumericEncoder())]
+)
 
 # We won't use the next part, but typically the pipeline would continue to
 # the model (after dropping 'Survived' from the training data, of course).
 # For example:
-pp_pipeline = FeatureUnion([('object_cols', pp_object_cols),
-                            ('numeric_cols', pp_numeric_cols)])
+pp_pipeline = FeatureUnion(
+    [("object_cols", pp_object_cols), ("numeric_cols", pp_numeric_cols)]
+)
 
-model_pipeline = Pipeline([('pp', pp_pipeline),
-                           ('mod', LogisticRegression())])
+model_pipeline = Pipeline([("pp", pp_pipeline), ("mod", LogisticRegression())])
 train_ = train
 
 # .fit_transform on train
-train_pp = pd.concat((pp_numeric_cols.fit_transform(train_),
-                      pp_object_cols.fit_transform(train_)),
-                     axis=1)
+train_pp = pd.concat(
+    (pp_numeric_cols.fit_transform(train_), pp_object_cols.fit_transform(train_)),
+    axis=1,
+)
 
 # .transform on test
-test_pp = pd.concat((pp_numeric_cols.transform(test),
-                     pp_object_cols.transform(test)),
-                    axis=1)
+test_pp = pd.concat(
+    (pp_numeric_cols.transform(test), pp_object_cols.transform(test)), axis=1
+)
 test_pp.sample(5)
 
-target = 'Survived'
+target = "Survived"
 x_columns = [c for c in train_pp if c != target]
 x_train, y_train = train_pp[x_columns], train_pp[target]
 x_test = test_pp[x_columns]
@@ -215,19 +241,23 @@ x_test = test_pp[x_columns]
 df = pd.concat((x_train, y_train), axis=1)
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
-data_orig_train = StandardDataset(train,
-                               label_name='Survived',
-                               protected_attribute_names=['Sex'],
-                               favorable_classes=[1],
-                               privileged_classes=[[1]])
-data_orig_test = StandardDataset(test,
-                               label_name='Survived',
-                               protected_attribute_names=['Sex'],
-                               favorable_classes=[1],
-                               privileged_classes=[[1]])
+data_orig_train = StandardDataset(
+    train,
+    label_name="Survived",
+    protected_attribute_names=["Sex"],
+    favorable_classes=[1],
+    privileged_classes=[[1]],
+)
+data_orig_test = StandardDataset(
+    test,
+    label_name="Survived",
+    protected_attribute_names=["Sex"],
+    favorable_classes=[1],
+    privileged_classes=[[1]],
+)
 
-privileged_groups = [{'Sex': 1}]
-unprivileged_groups = [{'Sex': 0}]
+privileged_groups = [{"Sex": 1}]
+unprivileged_groups = [{"Sex": 0}]
 
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
@@ -254,11 +284,22 @@ y_test = data_orig_test.labels.ravel()
 
 
 class CustomRandomForest(AutoSklearnClassificationAlgorithm):
-    def __init__(self, n_estimators, criterion,
-                  min_samples_split, min_samples_leaf,
-                 min_weight_fraction_leaf, bootstrap, max_leaf_nodes,
-                 min_impurity_decrease, max_features="auto", max_depth=7, random_state=42, n_jobs=-1,
-                 class_weight=None):
+    def __init__(
+        self,
+        n_estimators,
+        criterion,
+        min_samples_split,
+        min_samples_leaf,
+        min_weight_fraction_leaf,
+        bootstrap,
+        max_leaf_nodes,
+        min_impurity_decrease,
+        max_features="auto",
+        max_depth=7,
+        random_state=42,
+        n_jobs=-1,
+        class_weight=None,
+    ):
         self.n_estimators = n_estimators
         self.criterion = criterion
         self.max_features = max_features
@@ -317,7 +358,8 @@ class CustomRandomForest(AutoSklearnClassificationAlgorithm):
             random_state=self.random_state,
             n_jobs=self.n_jobs,
             class_weight=self.class_weight,
-            warm_start=True)
+            warm_start=True,
+        )
         self.estimator.fit(X, y)
         return self
 
@@ -333,16 +375,18 @@ class CustomRandomForest(AutoSklearnClassificationAlgorithm):
 
     @staticmethod
     def get_properties(dataset_properties=None):
-        return {'shortname': 'RF',
-                'name': 'Random Forest Classifier',
-                'handles_regression': False,
-                'handles_classification': True,
-                'handles_multiclass': True,
-                'handles_multilabel': True,
-                'handles_multioutput': False,
-                'is_deterministic': True,
-                'input': (DENSE, SPARSE, UNSIGNED_DATA),
-                'output': (PREDICTIONS,)}
+        return {
+            "shortname": "RF",
+            "name": "Random Forest Classifier",
+            "handles_regression": False,
+            "handles_classification": True,
+            "handles_multiclass": True,
+            "handles_multilabel": True,
+            "handles_multioutput": False,
+            "is_deterministic": True,
+            "input": (DENSE, SPARSE, UNSIGNED_DATA),
+            "output": (PREDICTIONS,),
+        }
 
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):
@@ -352,45 +396,68 @@ class CustomRandomForest(AutoSklearnClassificationAlgorithm):
         # m is the total number of features, and max_features is the hyperparameter specified below.
         # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
         # corresponds with Geurts' heuristic.
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 413, 1611, default_value=1611)
+        n_estimators = UniformIntegerHyperparameter(
+            "n_estimators", 413, 1611, default_value=1611
+        )
         criterion = CategoricalHyperparameter(
-            "criterion", ["gini", "entropy"], default_value="gini")
+            "criterion", ["gini", "entropy"], default_value="gini"
+        )
 
         # The maximum number of features used in the forest is calculated as m^max_features, where
         # m is the total number of features, and max_features is the hyperparameter specified below.
         # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
         # corresponds with Geurts' heuristic.
         max_features = UniformFloatHyperparameter(
-            "max_features", 0.35752, 0.84313, default_value=0.5)
+            "max_features", 0.35752, 0.84313, default_value=0.5
+        )
 
         max_depth = UnParametrizedHyperparameter("max_depth", "None")
         min_samples_split = UniformIntegerHyperparameter(
-            "min_samples_split", 6, 16, default_value=6)
+            "min_samples_split", 6, 16, default_value=6
+        )
         min_samples_leaf = UniformIntegerHyperparameter(
-            "min_samples_leaf", 5, 16, default_value=6)
-        min_weight_fraction_leaf = UnParametrizedHyperparameter("min_weight_fraction_leaf", 0.)
+            "min_samples_leaf", 5, 16, default_value=6
+        )
+        min_weight_fraction_leaf = UnParametrizedHyperparameter(
+            "min_weight_fraction_leaf", 0.0
+        )
         max_leaf_nodes = UnParametrizedHyperparameter("max_leaf_nodes", "None")
-        min_impurity_decrease = UnParametrizedHyperparameter('min_impurity_decrease', 0.0)
+        min_impurity_decrease = UnParametrizedHyperparameter(
+            "min_impurity_decrease", 0.0
+        )
         bootstrap = CategoricalHyperparameter(
-            "bootstrap", ["True", "False"], default_value="True")
-        cs.add_hyperparameters([n_estimators, criterion, max_features,
-                                max_depth, min_samples_split, min_samples_leaf,
-                                min_weight_fraction_leaf, max_leaf_nodes,
-                                bootstrap, min_impurity_decrease])
+            "bootstrap", ["True", "False"], default_value="True"
+        )
+        cs.add_hyperparameters(
+            [
+                n_estimators,
+                criterion,
+                max_features,
+                max_depth,
+                min_samples_split,
+                min_samples_leaf,
+                min_weight_fraction_leaf,
+                max_leaf_nodes,
+                bootstrap,
+                min_impurity_decrease,
+            ]
+        )
         return cs
 
 
-#Add custom random forest classifier component to auto-sklearn.
+# Add custom random forest classifier component to auto-sklearn.
 autosklearn.pipeline.components.classification.add_classifier(CustomRandomForest)
 cs = CustomRandomForest.get_hyperparameter_search_space()
 print(cs)
+
+
 ############################################################################
 # Custom metrics definition
 # =========================
 def accuracy(solution, prediction):
     metric_id = 3
-    protected_attr = 'Sex'
-    with open('test_split.txt') as f:
+    protected_attr = "Sex"
+    with open("test_split.txt") as f:
         first_line = f.read().splitlines()
         last_line = first_line[-1]
         split = list(last_line.split(","))
@@ -401,19 +468,50 @@ def accuracy(solution, prediction):
 
     if os.stat("beta.txt").st_size == 0:
 
-        default = RandomForestClassifier(n_estimators=1750, criterion='gini', max_features=0.5, min_samples_split=6,
-                                         min_samples_leaf=6, min_weight_fraction_leaf=0.0, max_leaf_nodes=None,
-                                         min_impurity_decrease=0.0, bootstrap=True, max_depth=None)
+        default = RandomForestClassifier(
+            n_estimators=1750,
+            criterion="gini",
+            max_features=0.5,
+            min_samples_split=6,
+            min_samples_leaf=6,
+            min_weight_fraction_leaf=0.0,
+            max_leaf_nodes=None,
+            min_impurity_decrease=0.0,
+            bootstrap=True,
+            max_depth=None,
+        )
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
         dataset_orig = subset_data_orig_train
-        res = create_baseline(default, dataset_orig, privileged_groups, unprivileged_groups,
-                              data_splits=10, repetitions=10, odds=mutation_strategies, options=[0, 1],
-                              degrees=degrees)
-        acc0 = np.array([np.mean([row[0] for row in res["0"][degree]]) for degree in degrees])
-        acc1 = np.array([np.mean([row[0] for row in res["1"][degree]]) for degree in degrees])
-        fair0 = np.array([np.mean([row[metric_id] for row in res["0"][degree]]) for degree in degrees])
-        fair1 = np.array([np.mean([row[metric_id] for row in res["1"][degree]]) for degree in degrees])
+        res = create_baseline(
+            default,
+            dataset_orig,
+            privileged_groups,
+            unprivileged_groups,
+            data_splits=10,
+            repetitions=10,
+            odds=mutation_strategies,
+            options=[0, 1],
+            degrees=degrees,
+        )
+        acc0 = np.array(
+            [np.mean([row[0] for row in res["0"][degree]]) for degree in degrees]
+        )
+        acc1 = np.array(
+            [np.mean([row[0] for row in res["1"][degree]]) for degree in degrees]
+        )
+        fair0 = np.array(
+            [
+                np.mean([row[metric_id] for row in res["0"][degree]])
+                for degree in degrees
+            ]
+        )
+        fair1 = np.array(
+            [
+                np.mean([row[metric_id] for row in res["1"][degree]])
+                for degree in degrees
+            ]
+        )
 
         if min(acc0) > min(acc1):
             beta = (max(acc0) - min(acc0)) / (max(acc0) - min(acc0) + max(fair0))
@@ -433,7 +531,7 @@ def accuracy(solution, prediction):
     if beta > 1.0:
         beta = 1.0
     try:
-        num_keys = sum(1 for line in open('num_keys.txt'))
+        num_keys = sum(1 for line in open("num_keys.txt"))
         print(num_keys)
         beta -= 0.050 * int(int(num_keys) / 10)
         if int(num_keys) % 10 == 0:
@@ -441,16 +539,32 @@ def accuracy(solution, prediction):
         f.close()
     except FileNotFoundError:
         pass
-    fairness_metrics = [1 - np.mean(solution == prediction),
-                        disparate_impact(subset_data_orig_train, prediction, protected_attr),
-                        statistical_parity_difference(subset_data_orig_train, prediction, protected_attr),
-                        equal_opportunity_difference(subset_data_orig_train, prediction, solution, protected_attr),
-                        average_odds_difference(subset_data_orig_train, prediction, solution, protected_attr)]
+    fairness_metrics = [
+        1 - np.mean(solution == prediction),
+        disparate_impact(subset_data_orig_train, prediction, protected_attr),
+        statistical_parity_difference(
+            subset_data_orig_train, prediction, protected_attr
+        ),
+        equal_opportunity_difference(
+            subset_data_orig_train, prediction, solution, protected_attr
+        ),
+        average_odds_difference(
+            subset_data_orig_train, prediction, solution, protected_attr
+        ),
+    ]
 
-    print(fairness_metrics[metric_id], 1 - np.mean(solution == prediction),
-          fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta), beta)
+    print(
+        fairness_metrics[metric_id],
+        1 - np.mean(solution == prediction),
+        fairness_metrics[metric_id] * beta
+        + (1 - np.mean(solution == prediction)) * (1 - beta),
+        beta,
+    )
 
-    return fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta)
+    return fairness_metrics[metric_id] * beta + (
+        1 - np.mean(solution == prediction)
+    ) * (1 - beta)
+
 
 ############################################################################
 # Second example: Use own accuracy metric
@@ -470,15 +584,19 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # ==========================
 
 automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=60*60,
+    time_left_for_this_task=60 * 60,
     # per_run_time_limit=500,
     memory_limit=10000000,
-    include_estimators=['CustomRandomForest'],
+    include_estimators=["CustomRandomForest"],
     ensemble_size=1,
-    include_preprocessors=['fast_ica', 'polynomial', 'select_percentile_classification'],
+    include_preprocessors=[
+        "fast_ica",
+        "polynomial",
+        "select_percentile_classification",
+    ],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
-    metric=accuracy_scorer
+    metric=accuracy_scorer,
 )
 automl.fit(X_train, y_train)
 
@@ -499,10 +617,10 @@ for i in predictions:
         count += 1
 print(count, len(predictions))
 print("EOD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-print(disparate_impact(data_orig_test, predictions, 'Sex'))
-print(statistical_parity_difference(data_orig_test, predictions, 'Sex'))
-print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'Sex'))
-print(average_odds_difference(data_orig_test, predictions, y_test, 'Sex'))
+print(disparate_impact(data_orig_test, predictions, "Sex"))
+print(statistical_parity_difference(data_orig_test, predictions, "Sex"))
+print(equal_opportunity_difference(data_orig_test, predictions, y_test, "Sex"))
+print(average_odds_difference(data_orig_test, predictions, y_test, "Sex"))
 
 a_file = open("titanic_rf_eod_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)

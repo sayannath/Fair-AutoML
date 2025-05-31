@@ -19,13 +19,15 @@ def softmax(df):
 
 def convert_multioutput_multiclass_to_multilabel(probas):
     if isinstance(probas, np.ndarray) and len(probas.shape) > 2:
-        raise ValueError('New unsupported sklearn output!')
+        raise ValueError("New unsupported sklearn output!")
     if isinstance(probas, list):
         multioutput_probas = np.ndarray((probas[0].shape[0], len(probas)))
         for i, output in enumerate(probas):
             if output.shape[1] > 2:
-                raise ValueError('Multioutput-Multiclass supported by '
-                                 'scikit-learn, but not by auto-sklearn!')
+                raise ValueError(
+                    "Multioutput-Multiclass supported by "
+                    "scikit-learn, but not by auto-sklearn!"
+                )
             # Only copy the probability of something having class 1
             elif output.shape[1] == 2:
                 multioutput_probas[:, i] = output[:, 1]

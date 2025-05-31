@@ -12,9 +12,7 @@ class VarianceThreshold(AutoSklearnPreprocessingAlgorithm):
         self.random_state = random_state
 
     def fit(self, X, y=None):
-        self.preprocessor = sklearn.feature_selection.VarianceThreshold(
-            threshold=0.0
-        )
+        self.preprocessor = sklearn.feature_selection.VarianceThreshold(threshold=0.0)
         self.preprocessor = self.preprocessor.fit(X)
         return self
 
@@ -26,18 +24,18 @@ class VarianceThreshold(AutoSklearnPreprocessingAlgorithm):
     @staticmethod
     def get_properties(dataset_properties=None):
         return {
-            'shortname': 'Variance Threshold',
-            'name': 'Variance Threshold (constant feature removal)',
-            'handles_regression': True,
-            'handles_classification': True,
-            'handles_multiclass': True,
-            'handles_multilabel': True,
-            'handles_multioutput': True,
-            'is_deterministic': True,
-            'handles_sparse': True,
-            'handles_dense': True,
-            'input': (DENSE, SPARSE, UNSIGNED_DATA),
-            'output': (INPUT,),
+            "shortname": "Variance Threshold",
+            "name": "Variance Threshold (constant feature removal)",
+            "handles_regression": True,
+            "handles_classification": True,
+            "handles_multiclass": True,
+            "handles_multilabel": True,
+            "handles_multioutput": True,
+            "is_deterministic": True,
+            "handles_sparse": True,
+            "handles_dense": True,
+            "input": (DENSE, SPARSE, UNSIGNED_DATA),
+            "output": (INPUT,),
         }
 
     @staticmethod

@@ -2,27 +2,29 @@ from sklearn.datasets import fetch_openml
 import pandas as pd
 
 # Load from OpenML
-adult = fetch_openml(name='adult', version=2, as_frame=True)
+adult = fetch_openml(name="adult", version=2, as_frame=True)
 df = adult.frame
 
 # Drop rows with missing values (marked with '?')
-df = df[~df.isin(['?']).any(axis=1)]
+df = df[~df.isin(["?"]).any(axis=1)]
 
 # Separate features and target
-X = df.drop('class', axis=1)
-y = df['class']
+X = df.drop("class", axis=1)
+y = df["class"]
 
 # One-hot encode categorical features
 X = pd.get_dummies(X)
 
 # Encode the labels to 0/1
-y = y.map({'<=50K': 0, '>50K': 1})
+y = y.map({"<=50K": 0, ">50K": 1})
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 # Split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
 # Scale
 scaler = StandardScaler()

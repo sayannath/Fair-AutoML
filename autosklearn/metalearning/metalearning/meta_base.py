@@ -13,8 +13,11 @@ class Run(object):
         self.runtime = runtime
 
     def __repr__(self):
-        return "Run:\nresult: %3.3f\nruntime: %3.3f\n%s" % \
-               (self.result, self.runtime, str(self.configuration))
+        return "Run:\nresult: %3.3f\nruntime: %3.3f\n%s" % (
+            self.result,
+            self.runtime,
+            str(self.configuration),
+        )
 
 
 class Instance(object):
@@ -46,8 +49,9 @@ class MetaBase(object):
         for algorithm_id in self.configurations:
             configuration = self.configurations[algorithm_id]
             try:
-                configurations[str(algorithm_id)] = \
-                    (Configuration(configuration_space, values=configuration))
+                configurations[str(algorithm_id)] = Configuration(
+                    configuration_space, values=configuration
+                )
             except (ValueError, KeyError) as e:
                 self.logger.debug("Error reading configurations: %s", e)
 
@@ -56,11 +60,13 @@ class MetaBase(object):
     def add_dataset(self, name, metafeatures):
         metafeatures.name = name
         if isinstance(metafeatures, DatasetMetafeatures):
-            data_ = {mf.name: mf.value for mf in metafeatures.metafeature_values.values()}
+            data_ = {
+                mf.name: mf.value for mf in metafeatures.metafeature_values.values()
+            }
             metafeatures = pd.Series(name=name, data=data_, dtype=np.float64)
         if name.lower() in self.metafeatures.index:
             self.logger.warning(
-                'Dataset %s already in meta-data. Removing occurence.', name.lower()
+                "Dataset %s already in meta-data. Removing occurence.", name.lower()
             )
             self.metafeatures.drop(name.lower(), inplace=True)
         self.metafeatures = self.metafeatures.append(metafeatures)
@@ -95,8 +101,7 @@ class MetaBase(object):
         """This is inside an extra function for testing purpose"""
         # Load the task
 
-        self.logger.info("Going to use the following metafeature subset: %s",
-                         features)
+        self.logger.info("Going to use the following metafeature subset: %s", features)
         all_metafeatures = self.metafeatures
         all_metafeatures = all_metafeatures.loc[:, features]
 

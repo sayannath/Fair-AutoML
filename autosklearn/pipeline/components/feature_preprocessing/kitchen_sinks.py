@@ -1,6 +1,8 @@
 from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import UniformFloatHyperparameter, \
-    UniformIntegerHyperparameter
+from ConfigSpace.hyperparameters import (
+    UniformFloatHyperparameter,
+    UniformIntegerHyperparameter,
+)
 
 from autosklearn.pipeline.components.base import AutoSklearnPreprocessingAlgorithm
 from autosklearn.pipeline.constants import SPARSE, DENSE, UNSIGNED_DATA, INPUT
@@ -9,7 +11,7 @@ from autosklearn.pipeline.constants import SPARSE, DENSE, UNSIGNED_DATA, INPUT
 class RandomKitchenSinks(AutoSklearnPreprocessingAlgorithm):
 
     def __init__(self, gamma, n_components, random_state=None):
-        """ Parameters:
+        """Parameters:
         gamma: float
                Parameter of the rbf kernel to be approximated exp(-gamma * x^2)
 
@@ -27,7 +29,8 @@ class RandomKitchenSinks(AutoSklearnPreprocessingAlgorithm):
         self.gamma = float(self.gamma)
 
         self.preprocessor = sklearn.kernel_approximation.RBFSampler(
-            self.gamma, self.n_components, self.random_state)
+            self.gamma, self.n_components, self.random_state
+        )
         self.preprocessor.fit(X)
         return self
 
@@ -38,23 +41,27 @@ class RandomKitchenSinks(AutoSklearnPreprocessingAlgorithm):
 
     @staticmethod
     def get_properties(dataset_properties=None):
-        return {'shortname': 'KitchenSink',
-                'name': 'Random Kitchen Sinks',
-                'handles_regression': True,
-                'handles_classification': True,
-                'handles_multiclass': True,
-                'handles_multilabel': True,
-                'handles_multioutput': True,
-                'is_deterministic': True,
-                'input': (SPARSE, DENSE, UNSIGNED_DATA),
-                'output': (INPUT, UNSIGNED_DATA)}
+        return {
+            "shortname": "KitchenSink",
+            "name": "Random Kitchen Sinks",
+            "handles_regression": True,
+            "handles_classification": True,
+            "handles_multiclass": True,
+            "handles_multilabel": True,
+            "handles_multioutput": True,
+            "is_deterministic": True,
+            "input": (SPARSE, DENSE, UNSIGNED_DATA),
+            "output": (INPUT, UNSIGNED_DATA),
+        }
 
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):
         gamma = UniformFloatHyperparameter(
-            "gamma", 3.0517578125e-05, 8, default_value=1.0, log=True)
+            "gamma", 3.0517578125e-05, 8, default_value=1.0, log=True
+        )
         n_components = UniformIntegerHyperparameter(
-            "n_components", 50, 10000, default_value=100, log=True)
+            "n_components", 50, 10000, default_value=100, log=True
+        )
         cs = ConfigurationSpace()
         cs.add_hyperparameters([gamma, n_components])
         return cs

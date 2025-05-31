@@ -1,5 +1,5 @@
 import pandas as pd
-from ucimlrepo import fetch_ucirepo  
+from ucimlrepo import fetch_ucirepo
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier

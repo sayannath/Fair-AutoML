@@ -156,14 +156,14 @@ from ConfigSpace.hyperparameters import (
 
 class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
     def __init__(
-            self,
-            num_units,
-            alpha,
-            learning_rate_init,
-            max_iter,
-            tol,
-            activation,
-            random_state=None,
+        self,
+        num_units,
+        alpha,
+        learning_rate_init,
+        max_iter,
+        tol,
+        activation,
+        random_state=None,
     ):
         self.num_units = num_units
         self.hidden_layer_sizes = (num_units,)
@@ -364,7 +364,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-            1 - np.mean(solution == prediction)
+        1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
@@ -414,6 +414,15 @@ print(disparate_impact(data_orig_test, predictions, "sex"))
 print(statistical_parity_difference(data_orig_test, predictions, "sex"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "sex"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "sex"))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_mlp_eod_sex_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)
 
 """
 [(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'weighting', 'classifier:__choice__': 'CustomMLPClassifier', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'no_encoding', 'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'no_coalescense', 'data_preprocessing:numerical_transformer:imputation:strategy': 'mean', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'standardize', 'feature_preprocessor:__choice__': 'select_percentile_classification', 'classifier:CustomMLPClassifier:activation': 'logistic', 'classifier:CustomMLPClassifier:alpha': 1.183263734912664e-05, 'classifier:CustomMLPClassifier:learning_rate_init': 0.06626934251267717, 'classifier:CustomMLPClassifier:max_iter': 209, 'classifier:CustomMLPClassifier:num_units': 330, 'classifier:CustomMLPClassifier:tol': 0.0005231941843870837, 'feature_preprocessor:select_percentile_classification:percentile': 12.695830855430765, 'feature_preprocessor:select_percentile_classification:score_func': 'mutual_info'},

@@ -18,7 +18,8 @@ class OneHotEncoder(AutoSklearnPreprocessingAlgorithm):
             self.preprocessor = SparseOneHotEncoder()
         else:
             self.preprocessor = DenseOneHotEncoder(
-                sparse=False, categories='auto', handle_unknown='ignore')
+                sparse=False, categories="auto", handle_unknown="ignore"
+            )
         self.preprocessor.fit(X, y)
         return self
 
@@ -32,18 +33,20 @@ class OneHotEncoder(AutoSklearnPreprocessingAlgorithm):
 
     @staticmethod
     def get_properties(dataset_properties=None):
-        return {'shortname': '1Hot',
-                'name': 'One Hot Encoder',
-                'handles_regression': True,
-                'handles_classification': True,
-                'handles_multiclass': True,
-                'handles_multilabel': True,
-                'handles_multioutput': True,
-                # TODO find out of this is right!
-                'handles_sparse': True,
-                'handles_dense': True,
-                'input': (DENSE, SPARSE, UNSIGNED_DATA),
-                'output': (INPUT,), }
+        return {
+            "shortname": "1Hot",
+            "name": "One Hot Encoder",
+            "handles_regression": True,
+            "handles_classification": True,
+            "handles_multiclass": True,
+            "handles_multilabel": True,
+            "handles_multioutput": True,
+            # TODO find out of this is right!
+            "handles_sparse": True,
+            "handles_dense": True,
+            "input": (DENSE, SPARSE, UNSIGNED_DATA),
+            "output": (INPUT,),
+        }
 
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):

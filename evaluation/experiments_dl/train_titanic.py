@@ -8,14 +8,16 @@ from sklearn.metrics import classification_report, accuracy_score
 df = pd.read_csv("../../dataset/titanic/train.csv")
 
 # Select useful columns and drop rows with missing values
-df = df[['Survived', 'Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']].dropna()
+df = df[
+    ["Survived", "Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked"]
+].dropna()
 
 # Define target and features
-y = df['Survived']
-X = df.drop('Survived', axis=1)
+y = df["Survived"]
+X = df.drop("Survived", axis=1)
 
 # One-hot encode categorical variables
-X = pd.get_dummies(X, columns=['Sex', 'Embarked'], drop_first=True)
+X = pd.get_dummies(X, columns=["Sex", "Embarked"], drop_first=True)
 
 # Train-test split
 X_train, X_test, y_train, y_test = train_test_split(

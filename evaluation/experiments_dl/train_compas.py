@@ -6,20 +6,26 @@ df = pd.read_csv(url)
 
 # Filter to only the needed rows and features
 df = df[
-    (df['days_b_screening_arrest'] <= 30) &
-    (df['days_b_screening_arrest'] >= -30) &
-    (df['is_recid'] != -1) &
-    (df['c_charge_degree'] != 'O') &
-    (df['score_text'] != 'N/A')
-    ]
+    (df["days_b_screening_arrest"] <= 30)
+    & (df["days_b_screening_arrest"] >= -30)
+    & (df["is_recid"] != -1)
+    & (df["c_charge_degree"] != "O")
+    & (df["score_text"] != "N/A")
+]
 
 # Target variable: whether someone reoffended within 2 years
-y = df['two_year_recid']
+y = df["two_year_recid"]
 
 # Selected features
 features = {
-    'age', 'sex', 'race', 'juv_fel_count', 'juv_misd_count',
-    'juv_other_count', 'priors_count', 'c_charge_degree'
+    "age",
+    "sex",
+    "race",
+    "juv_fel_count",
+    "juv_misd_count",
+    "juv_other_count",
+    "priors_count",
+    "c_charge_degree",
 }
 X = df[features]
 
@@ -30,7 +36,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 # Split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
 # Scale
 scaler = StandardScaler()

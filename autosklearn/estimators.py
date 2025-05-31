@@ -36,7 +36,7 @@ class AutoSklearnEstimator(BaseEstimator):
         exclude_estimators=None,
         include_preprocessors=None,
         exclude_preprocessors=None,
-        resampling_strategy='holdout',
+        resampling_strategy="holdout",
         resampling_strategy_arguments=None,
         tmp_folder=None,
         output_folder=None,
@@ -246,11 +246,12 @@ class AutoSklearnEstimator(BaseEstimator):
         """  # noqa (links are too long)
         # Raise error if the given total time budget is less than 60 seconds.
         if time_left_for_this_task < 30:
-            raise ValueError("Time left for this task must be at least "
-                             "30 seconds. ")
+            raise ValueError("Time left for this task must be at least " "30 seconds. ")
         self.time_left_for_this_task = time_left_for_this_task
         self.per_run_time_limit = per_run_time_limit
-        self.initial_configurations_via_metalearning = initial_configurations_via_metalearning
+        self.initial_configurations_via_metalearning = (
+            initial_configurations_via_metalearning
+        )
         self.ensemble_size = ensemble_size
         self.ensemble_nbest = ensemble_nbest
         self.max_models_on_disc = max_models_on_disc
@@ -302,7 +303,7 @@ class AutoSklearnEstimator(BaseEstimator):
             output_directory=self.output_folder,
             delete_tmp_folder_after_terminate=self.delete_tmp_folder_after_terminate,
             delete_output_folder_after_terminate=self.delete_output_folder_after_terminate,
-            )
+        )
 
         automl = self._get_automl_class()(
             backend=backend,
@@ -328,7 +329,7 @@ class AutoSklearnEstimator(BaseEstimator):
             logging_config=self.logging_config,
             metadata_directory=self.metadata_directory,
             metric=self.metric,
-            scoring_functions=self.scoring_functions
+            scoring_functions=self.scoring_functions,
         )
         # print(automl)
         return automl
@@ -350,7 +351,7 @@ class AutoSklearnEstimator(BaseEstimator):
         self,
         X: SUPPORTED_FEAT_TYPES,
         y: SUPPORTED_TARGET_TYPES,
-        config: Union[Configuration,  Dict[str, Union[str, float, int]]],
+        config: Union[Configuration, Dict[str, Union[str, float, int]]],
         dataset_name: Optional[str] = None,
         X_test: Optional[SUPPORTED_FEAT_TYPES] = None,
         y_test: Optional[SUPPORTED_TARGET_TYPES] = None,
@@ -358,7 +359,7 @@ class AutoSklearnEstimator(BaseEstimator):
         *args,
         **kwargs: Dict,
     ) -> Tuple[Optional[BasePipeline], RunInfo, RunValue]:
-        """ Fits and individual pipeline configuration and returns
+        """Fits and individual pipeline configuration and returns
         the result to the user.
 
         The Estimator constraints are honored, for example the resampling
@@ -405,16 +406,27 @@ class AutoSklearnEstimator(BaseEstimator):
         """
         if self.automl_ is None:
             self.automl_ = self.build_automl()
-        return self.automl_.fit_pipeline(X=X, y=y,
-                                         dataset_name=dataset_name,
-                                         config=config,
-                                         feat_type=feat_type,
-                                         X_test=X_test, y_test=y_test,
-                                         *args, **kwargs)
+        return self.automl_.fit_pipeline(
+            X=X,
+            y=y,
+            dataset_name=dataset_name,
+            config=config,
+            feat_type=feat_type,
+            X_test=X_test,
+            y_test=y_test,
+            *args,
+            **kwargs,
+        )
 
-    def fit_ensemble(self, y, task=None, precision=32,
-                     dataset_name=None, ensemble_nbest=None,
-                     ensemble_size=None):
+    def fit_ensemble(
+        self,
+        y,
+        task=None,
+        precision=32,
+        dataset_name=None,
+        ensemble_nbest=None,
+        ensemble_size=None,
+    ):
         """Fit an ensemble to models trained during an optimization process.
 
         All parameters are ``None`` by default. If no other value is given,
@@ -500,8 +512,7 @@ class AutoSklearnEstimator(BaseEstimator):
         return self.automl_.predict(X, batch_size=batch_size, n_jobs=n_jobs)
 
     def predict_proba(self, X, batch_size=None, n_jobs=1):
-        return self.automl_.predict_proba(
-             X, batch_size=batch_size, n_jobs=n_jobs)
+        return self.automl_.predict_proba(X, batch_size=batch_size, n_jobs=n_jobs)
 
     def score(self, X, y):
         return self.automl_.score(X, y)
@@ -587,12 +598,18 @@ class AutoSklearnEstimator(BaseEstimator):
         """
         if self.automl_ is None:
             self.automl_ = self.build_automl()
-        return self.automl_.fit(
-            X, y,
-            X_test=X_test, y_test=y_test,
-            dataset_name=dataset_name,
-            only_return_configuration_space=True,
-        ) if self.automl_.configuration_space is None else self.automl_.configuration_space
+        return (
+            self.automl_.fit(
+                X,
+                y,
+                X_test=X_test,
+                y_test=y_test,
+                dataset_name=dataset_name,
+                only_return_configuration_space=True,
+            )
+            if self.automl_.configuration_space is None
+            else self.automl_.configuration_space
+        )
 
 
 class AutoSklearnClassifier(AutoSklearnEstimator, ClassifierMixin):
@@ -601,11 +618,7 @@ class AutoSklearnClassifier(AutoSklearnEstimator, ClassifierMixin):
 
     """
 
-    def fit(self, X, y,
-            X_test=None,
-            y_test=None,
-            feat_type=None,
-            dataset_name=None):
+    def fit(self, X, y, X_test=None, y_test=None, feat_type=None, dataset_name=None):
         """Fit *auto-sklearn* to given training set (X, y).
 
         Fit both optimizes the machine learning models and builds an ensemble
@@ -651,18 +664,16 @@ class AutoSklearnClassifier(AutoSklearnEstimator, ClassifierMixin):
         # type of data is compatible with auto-sklearn. Legal target
         # types are: binary, multiclass, multilabel-indicator.
         target_type = type_of_target(y)
-        supported_types = ['binary', 'multiclass', 'multilabel-indicator']
+        supported_types = ["binary", "multiclass", "multilabel-indicator"]
         if target_type not in supported_types:
-            raise ValueError("Classification with data of type {} is "
-                             "not supported. Supported types are {}. "
-                             "You can find more information about scikit-learn "
-                             "data types in: "
-                             "https://scikit-learn.org/stable/modules/multiclass.html"
-                             "".format(
-                                    target_type,
-                                    supported_types
-                                )
-                             )
+            raise ValueError(
+                "Classification with data of type {} is "
+                "not supported. Supported types are {}. "
+                "You can find more information about scikit-learn "
+                "data types in: "
+                "https://scikit-learn.org/stable/modules/multiclass.html"
+                "".format(target_type, supported_types)
+            )
 
         # remember target type for using in predict_proba later.
         self.target_type = target_type
@@ -699,7 +710,6 @@ class AutoSklearnClassifier(AutoSklearnEstimator, ClassifierMixin):
         return super().predict(X, batch_size=batch_size, n_jobs=n_jobs)
 
     def predict_proba(self, X, batch_size=None, n_jobs=1):
-
         """Predict probabilities of classes for all samples X.
 
         Parameters
@@ -717,22 +727,19 @@ class AutoSklearnClassifier(AutoSklearnEstimator, ClassifierMixin):
             The predicted class probabilities.
 
         """
-        pred_proba = super().predict_proba(
-            X, batch_size=batch_size, n_jobs=n_jobs)
+        pred_proba = super().predict_proba(X, batch_size=batch_size, n_jobs=n_jobs)
 
         # Check if all probabilities sum up to 1.
         # Assert only if target type is not multilabel-indicator.
-        if self.target_type not in ['multilabel-indicator']:
-            assert(
-                np.allclose(
-                    np.sum(pred_proba, axis=1),
-                    np.ones_like(pred_proba[:, 0]))
+        if self.target_type not in ["multilabel-indicator"]:
+            assert np.allclose(
+                np.sum(pred_proba, axis=1), np.ones_like(pred_proba[:, 0])
             ), "prediction probability does not sum up to 1!"
 
         # Check that all probability values lie between 0 and 1.
-        assert(
-            (pred_proba >= 0).all() and (pred_proba <= 1).all()
-        ), "found prediction probability value outside of [0, 1]!"
+        assert (pred_proba >= 0).all() and (
+            pred_proba <= 1
+        ).all(), "found prediction probability value outside of [0, 1]!"
 
         return pred_proba
 
@@ -746,11 +753,7 @@ class AutoSklearnRegressor(AutoSklearnEstimator, RegressorMixin):
 
     """
 
-    def fit(self, X, y,
-            X_test=None,
-            y_test=None,
-            feat_type=None,
-            dataset_name=None):
+    def fit(self, X, y, X_test=None, y_test=None, feat_type=None, dataset_name=None):
         """Fit *Auto-sklearn* to given training set (X, y).
 
         Fit both optimizes the machine learning models and builds an ensemble
@@ -795,18 +798,21 @@ class AutoSklearnRegressor(AutoSklearnEstimator, RegressorMixin):
         # multiclass : because [3.0, 1.0, 5.0] is considered as multiclass
         # binary: because [1.0, 0.0] is considered multiclass
         target_type = type_of_target(y)
-        supported_types = ['continuous', 'binary', 'multiclass', 'continuous-multioutput']
+        supported_types = [
+            "continuous",
+            "binary",
+            "multiclass",
+            "continuous-multioutput",
+        ]
         if target_type not in supported_types:
-            raise ValueError("Regression with data of type {} is "
-                             "not supported. Supported types are {}. "
-                             "You can find more information about scikit-learn "
-                             "data types in: "
-                             "https://scikit-learn.org/stable/modules/multiclass.html"
-                             "".format(
-                                    target_type,
-                                    supported_types
-                                )
-                             )
+            raise ValueError(
+                "Regression with data of type {} is "
+                "not supported. Supported types are {}. "
+                "You can find more information about scikit-learn "
+                "data types in: "
+                "https://scikit-learn.org/stable/modules/multiclass.html"
+                "".format(target_type, supported_types)
+            )
 
         # Fit is supposed to be idempotent!
         # But not if we use share_mode.
@@ -838,4 +844,3 @@ class AutoSklearnRegressor(AutoSklearnEstimator, RegressorMixin):
 
     def _get_automl_class(self):
         return AutoMLRegressor
-

@@ -161,14 +161,14 @@ print(y_test.shape)
 
 class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
     def __init__(
-            self,
-            num_units,
-            alpha,
-            learning_rate_init,
-            max_iter,
-            tol,
-            activation,
-            random_state=None,
+        self,
+        num_units,
+        alpha,
+        learning_rate_init,
+        max_iter,
+        tol,
+        activation,
+        random_state=None,
     ):
         self.num_units = num_units
         self.hidden_layer_sizes = (num_units,)
@@ -369,7 +369,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-            1 - np.mean(solution == prediction)
+        1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
@@ -419,6 +419,15 @@ print(disparate_impact(data_orig_test, predictions, "sex"))
 print(statistical_parity_difference(data_orig_test, predictions, "sex"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "sex"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "sex"))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_mlp_spd_sex_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)
 
 """
 [(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'weighting', 'classifier:__choice__': 'CustomMLPClassifier', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'no_encoding', 

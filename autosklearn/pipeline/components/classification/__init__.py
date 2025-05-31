@@ -1,17 +1,21 @@
-__author__ = 'feurerm'
+__author__ = "feurerm"
 
 from collections import OrderedDict
 import os
 
-from ..base import AutoSklearnClassificationAlgorithm, find_components, \
-    ThirdPartyComponents, AutoSklearnChoice
+from ..base import (
+    AutoSklearnClassificationAlgorithm,
+    find_components,
+    ThirdPartyComponents,
+    AutoSklearnChoice,
+)
 from ConfigSpace.configuration_space import ConfigurationSpace
 from ConfigSpace.hyperparameters import CategoricalHyperparameter
 
 classifier_directory = os.path.split(__file__)[0]
-_classifiers = find_components(__package__,
-                               classifier_directory,
-                               AutoSklearnClassificationAlgorithm)
+_classifiers = find_components(
+    __package__, classifier_directory, AutoSklearnClassificationAlgorithm
+)
 _addons = ThirdPartyComponents(AutoSklearnClassificationAlgorithm)
 
 
@@ -28,9 +32,9 @@ class ClassifierChoice(AutoSklearnChoice):
         components.update(_addons.components)
         return components
 
-    def get_available_components(cls, dataset_properties=None,
-                                 include=None,
-                                 exclude=None):
+    def get_available_components(
+        cls, dataset_properties=None, include=None, exclude=None
+    ):
         if dataset_properties is None:
             dataset_properties = {}
 
@@ -38,13 +42,16 @@ class ClassifierChoice(AutoSklearnChoice):
         components_dict = OrderedDict()
 
         if include is not None and exclude is not None:
-            raise ValueError("The argument include and exclude cannot be used together.")
+            raise ValueError(
+                "The argument include and exclude cannot be used together."
+            )
 
         if include is not None:
             for incl in include:
                 if incl not in available_comp:
-                    raise ValueError("Trying to include unknown component: "
-                                     "%s" % incl)
+                    raise ValueError(
+                        "Trying to include unknown component: " "%s" % incl
+                    )
 
         for name in available_comp:
             if include is not None and name not in include:
@@ -58,43 +65,48 @@ class ClassifierChoice(AutoSklearnChoice):
             if entry == ClassifierChoice:
                 continue
 
-            if entry.get_properties()['handles_classification'] is False:
+            if entry.get_properties()["handles_classification"] is False:
                 continue
-            if dataset_properties.get('multiclass') is True and \
-               entry.get_properties()['handles_multiclass'] is False:
+            if (
+                dataset_properties.get("multiclass") is True
+                and entry.get_properties()["handles_multiclass"] is False
+            ):
                 continue
-            if dataset_properties.get('multilabel') is True and \
-               available_comp[name].get_properties()['handles_multilabel'] is False:
+            if (
+                dataset_properties.get("multilabel") is True
+                and available_comp[name].get_properties()["handles_multilabel"] is False
+            ):
                 continue
             components_dict[name] = entry
 
         return components_dict
 
-    def get_hyperparameter_search_space(self, dataset_properties=None,
-                                        default=None,
-                                        include=None,
-                                        exclude=None):
+    def get_hyperparameter_search_space(
+        self, dataset_properties=None, default=None, include=None, exclude=None
+    ):
         if dataset_properties is None:
             dataset_properties = {}
 
         if include is not None and exclude is not None:
-            raise ValueError("The arguments include_estimators and "
-                             "exclude_estimators cannot be used together.")
+            raise ValueError(
+                "The arguments include_estimators and "
+                "exclude_estimators cannot be used together."
+            )
 
         cs = ConfigurationSpace()
 
         # Compile a list of all estimator objects for this problem
         available_estimators = self.get_available_components(
-            dataset_properties=dataset_properties,
-            include=include,
-            exclude=exclude)
+            dataset_properties=dataset_properties, include=include, exclude=exclude
+        )
 
         if len(available_estimators) == 0:
             raise ValueError("No classifiers found")
 
         if default is None:
-            defaults = ['random_forest', 'liblinear_svc', 'sgd',
-                        'libsvm_svc'] + list(available_estimators.keys())
+            defaults = ["random_forest", "liblinear_svc", "sgd", "libsvm_svc"] + list(
+                available_estimators.keys()
+            )
             for default_ in defaults:
                 if default_ in available_estimators:
                     if include is not None and default_ not in include:
@@ -104,18 +116,20 @@ class ClassifierChoice(AutoSklearnChoice):
                     default = default_
                     break
 
-        estimator = CategoricalHyperparameter('__choice__',
-                                              list(available_estimators.keys()),
-                                              default_value=default)
+        estimator = CategoricalHyperparameter(
+            "__choice__", list(available_estimators.keys()), default_value=default
+        )
         cs.add_hyperparameter(estimator)
         for estimator_name in available_estimators.keys():
-            estimator_configuration_space = available_estimators[estimator_name].\
-                get_hyperparameter_search_space(dataset_properties)
-            parent_hyperparameter = {'parent': estimator,
-                                     'value': estimator_name}
-            cs.add_configuration_space(estimator_name,
-                                       estimator_configuration_space,
-                                       parent_hyperparameter=parent_hyperparameter)
+            estimator_configuration_space = available_estimators[
+                estimator_name
+            ].get_hyperparameter_search_space(dataset_properties)
+            parent_hyperparameter = {"parent": estimator, "value": estimator_name}
+            cs.add_configuration_space(
+                estimator_name,
+                estimator_configuration_space,
+                parent_hyperparameter=parent_hyperparameter,
+            )
 
         self.configuration_space = cs
         self.dataset_properties = dataset_properties
@@ -125,7 +139,7 @@ class ClassifierChoice(AutoSklearnChoice):
         return self.choice.predict_proba(X)
 
     def estimator_supports_iterative_fit(self):
-        return hasattr(self.choice, 'iterative_fit')
+        return hasattr(self.choice, "iterative_fit")
 
     def get_max_iter(self):
         if self.estimator_supports_iterative_fit():

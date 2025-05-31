@@ -18,32 +18,34 @@ import autosklearn.experimental.selector
 from autosklearn.metrics import Scorer
 
 this_directory = pathlib.Path(__file__).resolve().parent
-training_data_file = this_directory / 'askl2_training_data.json'
+training_data_file = this_directory / "askl2_training_data.json"
 with open(training_data_file) as fh:
     training_data = json.load(fh)
     fh.seek(0)
     m = hashlib.md5()
-    m.update(fh.read().encode('utf8'))
+    m.update(fh.read().encode("utf8"))
 training_data_hash = m.hexdigest()[:10]
 selector_filename = "askl2_selector_%s_%s_%s.pkl" % (
     autosklearn.__version__,
     sklearn.__version__,
-    training_data_hash
+    training_data_hash,
 )
-selector_directory = os.environ.get('XDG_CACHE_HOME')
+selector_directory = os.environ.get("XDG_CACHE_HOME")
 if selector_directory is None:
     selector_directory = pathlib.Path.home()
-selector_directory = pathlib.Path(selector_directory).joinpath('auto-sklearn').expanduser()
+selector_directory = (
+    pathlib.Path(selector_directory).joinpath("auto-sklearn").expanduser()
+)
 selector_file = selector_directory / selector_filename
-metafeatures = pd.DataFrame(training_data['metafeatures'])
-y_values = np.array(training_data['y_values'])
-strategies = training_data['strategies']
-minima_for_methods = training_data['minima_for_methods']
-maxima_for_methods = training_data['maxima_for_methods']
+metafeatures = pd.DataFrame(training_data["metafeatures"])
+y_values = np.array(training_data["y_values"])
+strategies = training_data["strategies"]
+minima_for_methods = training_data["minima_for_methods"]
+maxima_for_methods = training_data["maxima_for_methods"]
 if not selector_file.exists():
     selector = autosklearn.experimental.selector.OneVSOneSelector(
-        configuration=training_data['configuration'],
-        default_strategy_idx=strategies.index('RF_SH-eta4-i_holdout_iterative_es_if'),
+        configuration=training_data["configuration"],
+        default_strategy_idx=strategies.index("RF_SH-eta4-i_holdout_iterative_es_if"),
         rng=1,
     )
     selector.fit(
@@ -55,12 +57,14 @@ if not selector_file.exists():
     )
     selector_file.parent.mkdir(exist_ok=True, parents=True)
     try:
-        with open(selector_file, 'wb') as fh:
+        with open(selector_file, "wb") as fh:
             pickle.dump(selector, fh)
     except Exception as e:
-        print("AutoSklearn2Classifier needs to create a selector file under "
-              "the user's home directory or XDG_CACHE_HOME. Nevertheless "
-              "the path {} is not writable.".format(selector_file))
+        print(
+            "AutoSklearn2Classifier needs to create a selector file under "
+            "the user's home directory or XDG_CACHE_HOME. Nevertheless "
+            "the path {} is not writable.".format(selector_file)
+        )
         raise e
 
 
@@ -87,7 +91,8 @@ class SmacObjectCallback:
 
         initial_configurations = [
             Configuration(configuration_space=scenario.cs, values=member)
-            for member in self.portfolio.values()]
+            for member in self.portfolio.values()
+        ]
 
         rh2EPM = RunHistory2EPM4LogCost
         return SMAC4AC(
@@ -129,10 +134,11 @@ class SHObjectCallback:
         scenario = Scenario(scenario_dict)
         initial_configurations = [
             Configuration(configuration_space=scenario.cs, values=member)
-            for member in self.portfolio.values()]
+            for member in self.portfolio.values()
+        ]
 
         rh2EPM = RunHistory2EPM4LogCost
-        ta_kwargs['budget_type'] = self.budget_type
+        ta_kwargs["budget_type"] = self.budget_type
 
         smac4ac = SMAC4AC(
             scenario=scenario,
@@ -144,10 +150,10 @@ class SHObjectCallback:
             run_id=seed,
             intensifier=SuccessiveHalving,
             intensifier_kwargs={
-                'initial_budget': self.initial_budget,
-                'max_budget': 100,
-                'eta': self.eta,
-                'min_chall': 1,
+                "initial_budget": self.initial_budget,
+                "max_budget": 100,
+                "eta": self.eta,
+                "min_chall": 1,
             },
             dask_client=dask_client,
             n_jobs=n_jobs,
@@ -182,7 +188,6 @@ class AutoSklearn2Classifier(AutoSklearnClassifier):
         scoring_functions: Optional[List[Scorer]] = None,
         load_models: bool = True,
     ):
-
         """
         Parameters
         ----------
@@ -305,7 +310,12 @@ class AutoSklearn2Classifier(AutoSklearnClassifier):
         """  # noqa (links are too long)
 
         include_estimators = [
-            'extra_trees', 'passive_aggressive', 'random_forest', 'sgd', 'gradient_boosting', 'mlp',
+            "extra_trees",
+            "passive_aggressive",
+            "random_forest",
+            "sgd",
+            "gradient_boosting",
+            "mlp",
         ]
         include_preprocessors = ["no_preprocessing"]
         super().__init__(
@@ -339,14 +349,18 @@ class AutoSklearn2Classifier(AutoSklearnClassifier):
             load_models=load_models,
         )
 
-    def fit(self, X, y,
-            X_test=None,
-            y_test=None,
-            metric=None,
-            feat_type=None,
-            dataset_name=None):
+    def fit(
+        self,
+        X,
+        y,
+        X_test=None,
+        y_test=None,
+        metric=None,
+        feat_type=None,
+        dataset_name=None,
+    ):
 
-        with open(selector_file, 'rb') as fh:
+        with open(selector_file, "rb") as fh:
             selector = pickle.load(fh)
 
         metafeatures = np.array([len(np.unique(y)), X.shape[1], X.shape[0]])
@@ -354,59 +368,61 @@ class AutoSklearn2Classifier(AutoSklearnClassifier):
         automl_policy = strategies[selection]
 
         setting = {
-            'RF_None_holdout_iterative_es_if': {
-                'resampling_strategy': 'holdout-iterative-fit',
-                'fidelity': None,
+            "RF_None_holdout_iterative_es_if": {
+                "resampling_strategy": "holdout-iterative-fit",
+                "fidelity": None,
             },
-            'RF_None_3CV_iterative_es_if': {
-                'resampling_strategy': 'cv-iterative-fit',
-                'folds': 3,
-                'fidelity': None,
+            "RF_None_3CV_iterative_es_if": {
+                "resampling_strategy": "cv-iterative-fit",
+                "folds": 3,
+                "fidelity": None,
             },
-            'RF_None_5CV_iterative_es_if': {
-                'resampling_strategy': 'cv-iterative-fit',
-                'folds': 5,
-                'fidelity': None,
+            "RF_None_5CV_iterative_es_if": {
+                "resampling_strategy": "cv-iterative-fit",
+                "folds": 5,
+                "fidelity": None,
             },
-            'RF_None_10CV_iterative_es_if': {
-                'resampling_strategy': 'cv-iterative-fit',
-                'folds': 10,
-                'fidelity': None,
+            "RF_None_10CV_iterative_es_if": {
+                "resampling_strategy": "cv-iterative-fit",
+                "folds": 10,
+                "fidelity": None,
             },
-            'RF_SH-eta4-i_holdout_iterative_es_if': {
-                'resampling_strategy': 'holdout-iterative-fit',
-                'fidelity': 'SH',
+            "RF_SH-eta4-i_holdout_iterative_es_if": {
+                "resampling_strategy": "holdout-iterative-fit",
+                "fidelity": "SH",
             },
-            'RF_SH-eta4-i_3CV_iterative_es_if': {
-                'resampling_strategy': 'cv-iterative-fit',
-                'folds': 3,
-                'fidelity': 'SH',
+            "RF_SH-eta4-i_3CV_iterative_es_if": {
+                "resampling_strategy": "cv-iterative-fit",
+                "folds": 3,
+                "fidelity": "SH",
             },
-            'RF_SH-eta4-i_5CV_iterative_es_if': {
-                'resampling_strategy': 'cv-iterative-fit',
-                'folds': 5,
-                'fidelity': 'SH',
+            "RF_SH-eta4-i_5CV_iterative_es_if": {
+                "resampling_strategy": "cv-iterative-fit",
+                "folds": 5,
+                "fidelity": "SH",
             },
-            'RF_SH-eta4-i_10CV_iterative_es_if': {
-                'resampling_strategy': 'cv-iterative-fit',
-                'folds': 10,
-                'fidelity': 'SH',
-            }
+            "RF_SH-eta4-i_10CV_iterative_es_if": {
+                "resampling_strategy": "cv-iterative-fit",
+                "folds": 10,
+                "fidelity": "SH",
+            },
         }[automl_policy]
 
-        resampling_strategy = setting['resampling_strategy']
-        if resampling_strategy == 'cv-iterative-fit':
-            resampling_strategy_kwargs = {'folds': setting['folds']}
+        resampling_strategy = setting["resampling_strategy"]
+        if resampling_strategy == "cv-iterative-fit":
+            resampling_strategy_kwargs = {"folds": setting["folds"]}
         else:
             resampling_strategy_kwargs = None
 
-        portfolio_file = this_directory / 'askl2_portfolios' / ('%s.json' % automl_policy)
+        portfolio_file = (
+            this_directory / "askl2_portfolios" / ("%s.json" % automl_policy)
+        )
         with open(portfolio_file) as fh:
             portfolio_json = json.load(fh)
-        portfolio = portfolio_json['portfolio']
+        portfolio = portfolio_json["portfolio"]
 
-        if setting['fidelity'] == 'SH':
-            smac_callback = SHObjectCallback('iterations', 4, 5.0, portfolio)
+        if setting["fidelity"] == "SH":
+            smac_callback = SHObjectCallback("iterations", 4, 5.0, portfolio)
         else:
             smac_callback = SmacObjectCallback(portfolio)
 

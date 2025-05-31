@@ -39,6 +39,7 @@ train_list = "data_orig_train_adult.pkl"
 test_list = "data_orig_test_adult.pkl"
 protected_attribute = "race"
 
+
 def custom_preprocessing(df):
     def group_race(x):
         if x == "White":

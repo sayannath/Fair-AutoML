@@ -35,6 +35,7 @@ class InputValidator(BaseEstimator):
             A TargetValidator instance used to validate and encode (in case of classification)
             the target values
     """
+
     def __init__(
         self,
         feat_type: typing.Optional[typing.List[str]] = None,
@@ -46,16 +47,18 @@ class InputValidator(BaseEstimator):
         self.logger_port = logger_port
         if self.logger_port is not None:
             self.logger = get_named_client_logger(
-                name='Validation',
+                name="Validation",
                 port=self.logger_port,
             )
         else:
-            self.logger = logging.getLogger('Validation')
+            self.logger = logging.getLogger("Validation")
 
-        self.feature_validator = FeatureValidator(feat_type=self.feat_type,
-                                                  logger=self.logger)
-        self.target_validator = TargetValidator(is_classification=self.is_classification,
-                                                logger=self.logger)
+        self.feature_validator = FeatureValidator(
+            feat_type=self.feat_type, logger=self.logger
+        )
+        self.target_validator = TargetValidator(
+            is_classification=self.is_classification, logger=self.logger
+        )
         self._is_fitted = False
 
     def fit(
@@ -98,17 +101,21 @@ class InputValidator(BaseEstimator):
         """
         # Check that the data is valid
         if np.shape(X_train)[0] != np.shape(y_train)[0]:
-            raise ValueError("Inconsistent number of train datapoints for features and targets,"
-                             " {} for features and {} for targets".format(
-                                 np.shape(X_train)[0],
-                                 np.shape(y_train)[0],
-                             ))
+            raise ValueError(
+                "Inconsistent number of train datapoints for features and targets,"
+                " {} for features and {} for targets".format(
+                    np.shape(X_train)[0],
+                    np.shape(y_train)[0],
+                )
+            )
         if X_test is not None and np.shape(X_test)[0] != np.shape(y_test)[0]:
-            raise ValueError("Inconsistent number of test datapoints for features and targets,"
-                             " {} for features and {} for targets".format(
-                                 np.shape(X_test)[0],
-                                 np.shape(y_test)[0],
-                             ))
+            raise ValueError(
+                "Inconsistent number of test datapoints for features and targets,"
+                " {} for features and {} for targets".format(
+                    np.shape(X_test)[0],
+                    np.shape(y_test)[0],
+                )
+            )
 
         self.feature_validator.fit(X_train, X_test)
         self.target_validator.fit(y_train, y_test)
@@ -139,7 +146,9 @@ class InputValidator(BaseEstimator):
                 The transformed targets array
         """
         if not self._is_fitted:
-            raise NotFittedError("Cannot call transform on a validator that is not fitted")
+            raise NotFittedError(
+                "Cannot call transform on a validator that is not fitted"
+            )
         X_transformed = self.feature_validator.transform(X)
         if y is not None:
             return X_transformed, self.target_validator.transform(y)

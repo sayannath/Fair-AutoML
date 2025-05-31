@@ -17,8 +17,11 @@ from smac.stats.stats import Stats
 from smac.tae import StatusType, TAEAbortException
 from smac.tae.execute_func import AbstractTAFunc
 
-from sklearn.model_selection._split import _RepeatedSplits, BaseShuffleSplit,\
-    BaseCrossValidator
+from sklearn.model_selection._split import (
+    _RepeatedSplits,
+    BaseShuffleSplit,
+    BaseCrossValidator,
+)
 from autosklearn.metrics import Scorer
 
 import autosklearn.evaluation.train_evaluator
@@ -31,10 +34,8 @@ from autosklearn.util.parallel import preload_modules
 
 
 def fit_predict_try_except_decorator(
-        ta: Callable,
-        queue: multiprocessing.Queue,
-        cost_for_crash: float,
-        **kwargs: Any) -> None:
+    ta: Callable, queue: multiprocessing.Queue, cost_for_crash: float, **kwargs: Any
+) -> None:
 
     try:
         return ta(queue=queue, **kwargs)
@@ -62,14 +63,23 @@ def fit_predict_try_except_decorator(
         #     self._thread.start()
         #     File "miniconda/3-4.5.4/envs/autosklearn/lib/python3.7/threading.py", line 847, in start  # noqa E501
         #     RuntimeError: can't start new thread
-        print("Exception handling in `fit_predict_try_except_decorator`: "
-              "traceback: %s \nerror message: %s" % (exception_traceback, error_message))
+        print(
+            "Exception handling in `fit_predict_try_except_decorator`: "
+            "traceback: %s \nerror message: %s" % (exception_traceback, error_message)
+        )
 
-        queue.put({'loss': cost_for_crash,
-                   'additional_run_info': {'traceback': exception_traceback,
-                                           'error': error_message},
-                   'status': StatusType.CRASHED,
-                   'final_queue_element': True}, block=True)
+        queue.put(
+            {
+                "loss": cost_for_crash,
+                "additional_run_info": {
+                    "traceback": exception_traceback,
+                    "error": error_message,
+                },
+                "status": StatusType.CRASHED,
+                "final_queue_element": True,
+            },
+            block=True,
+        )
         queue.close()
 
 
@@ -92,8 +102,9 @@ def get_cost_of_crash(metric: Scorer) -> float:
     return worst_possible_result
 
 
-def _encode_exit_status(exit_status: Union[str, int, Type[BaseException]]
-                        ) -> Union[str, int]:
+def _encode_exit_status(
+    exit_status: Union[str, int, Type[BaseException]]
+) -> Union[str, int]:
     try:
         # If it can be dumped, then it is int
         exit_status = cast(int, exit_status)
@@ -111,7 +122,9 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
         self,
         backend: Backend,
         autosklearn_seed: int,
-        resampling_strategy: Union[str, BaseCrossValidator, _RepeatedSplits, BaseShuffleSplit],
+        resampling_strategy: Union[
+            str, BaseCrossValidator, _RepeatedSplits, BaseShuffleSplit
+        ],
         metric: Scorer,
         cost_for_crash: float,
         abort_on_first_run_crash: bool,
@@ -119,7 +132,7 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
         pynisher_context: str,
         initial_num_run: int = 1,
         stats: Optional[Stats] = None,
-        run_obj: str = 'quality',
+        run_obj: str = "quality",
         par_factor: int = 1,
         scoring_functions: Optional[List[Scorer]] = None,
         output_y_hat_optimization: bool = True,
@@ -133,30 +146,34 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
         **resampling_strategy_args: Any,
     ):
 
-        if resampling_strategy == 'holdout':
+        if resampling_strategy == "holdout":
             eval_function = autosklearn.evaluation.train_evaluator.eval_holdout
-        elif resampling_strategy == 'holdout-iterative-fit':
-            eval_function = autosklearn.evaluation.train_evaluator.eval_iterative_holdout
-        elif resampling_strategy == 'cv-iterative-fit':
+        elif resampling_strategy == "holdout-iterative-fit":
+            eval_function = (
+                autosklearn.evaluation.train_evaluator.eval_iterative_holdout
+            )
+        elif resampling_strategy == "cv-iterative-fit":
             eval_function = autosklearn.evaluation.train_evaluator.eval_iterative_cv
-        elif resampling_strategy == 'cv' or (
-             isinstance(resampling_strategy, type) and (
-                issubclass(resampling_strategy, BaseCrossValidator) or
-                issubclass(resampling_strategy, _RepeatedSplits) or
-                issubclass(resampling_strategy, BaseShuffleSplit)
-                )
-             ):
+        elif resampling_strategy == "cv" or (
+            isinstance(resampling_strategy, type)
+            and (
+                issubclass(resampling_strategy, BaseCrossValidator)
+                or issubclass(resampling_strategy, _RepeatedSplits)
+                or issubclass(resampling_strategy, BaseShuffleSplit)
+            )
+        ):
             eval_function = autosklearn.evaluation.train_evaluator.eval_cv
-        elif resampling_strategy == 'partial-cv':
+        elif resampling_strategy == "partial-cv":
             eval_function = autosklearn.evaluation.train_evaluator.eval_partial_cv
-        elif resampling_strategy == 'partial-cv-iterative-fit':
-            eval_function = autosklearn.evaluation.train_evaluator.eval_partial_cv_iterative
-        elif resampling_strategy == 'test':
+        elif resampling_strategy == "partial-cv-iterative-fit":
+            eval_function = (
+                autosklearn.evaluation.train_evaluator.eval_partial_cv_iterative
+            )
+        elif resampling_strategy == "test":
             eval_function = autosklearn.evaluation.test_evaluator.eval_t
             output_y_hat_optimization = False
         else:
-            raise ValueError('Unknown resampling strategy %s' %
-                             resampling_strategy)
+            raise ValueError("Unknown resampling strategy %s" % resampling_strategy)
 
         self.worst_possible_result = cost_for_crash
 
@@ -196,11 +213,11 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
         self.memory_limit = memory_limit
 
         dm = self.backend.load_datamanager()
-        if 'X_valid' in dm.data and 'Y_valid' in dm.data:
+        if "X_valid" in dm.data and "Y_valid" in dm.data:
             self._get_validation_loss = True
         else:
             self._get_validation_loss = False
-        if 'X_test' in dm.data and 'Y_test' in dm.data:
+        if "X_test" in dm.data and "Y_test" in dm.data:
             self._get_test_loss = True
         else:
             self._get_test_loss = False
@@ -208,7 +225,9 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
         self.port = port
         self.pynisher_context = pynisher_context
         if self.port is None:
-            self.logger: Union[logging.Logger, PickableLoggerAdapter] = logging.getLogger("TAE")
+            self.logger: Union[logging.Logger, PickableLoggerAdapter] = (
+                logging.getLogger("TAE")
+            )
         else:
             self.logger = get_named_client_logger(
                 name="TAE",
@@ -238,18 +257,23 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
         if self.budget_type is None:
             if run_info.budget != 0:
                 raise ValueError(
-                    'If budget_type is None, budget must be.0, but is %f' % run_info.budget
+                    "If budget_type is None, budget must be.0, but is %f"
+                    % run_info.budget
                 )
         else:
             if run_info.budget == 0:
                 run_info = run_info._replace(budget=100)
             elif run_info.budget <= 0 or run_info.budget > 100:
-                raise ValueError('Illegal value for budget, must be >0 and <=100, but is %f' %
-                                 run_info.budget)
-            if self.budget_type not in ('subsample', 'iterations', 'mixed'):
-                raise ValueError("Illegal value for budget type, must be one of "
-                                 "('subsample', 'iterations', 'mixed'), but is : %s" %
-                                 self.budget_type)
+                raise ValueError(
+                    "Illegal value for budget, must be >0 and <=100, but is %f"
+                    % run_info.budget
+                )
+            if self.budget_type not in ("subsample", "iterations", "mixed"):
+                raise ValueError(
+                    "Illegal value for budget type, must be one of "
+                    "('subsample', 'iterations', 'mixed'), but is : %s"
+                    % self.budget_type
+                )
 
         remaining_time = self.stats.get_remaing_time_budget()
 
@@ -257,11 +281,15 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
             run_info = run_info._replace(cutoff=int(remaining_time - 5))
 
         config_id = (
-            run_info.config if isinstance(run_info.config, int) else run_info.config.config_id
+            run_info.config
+            if isinstance(run_info.config, int)
+            else run_info.config.config_id
         )
 
         if run_info.cutoff < 1.0:
-            self.logger.info("Not starting configuration %d because time is up" % config_id)
+            self.logger.info(
+                "Not starting configuration %d because time is up" % config_id
+            )
             return run_info, RunValue(
                 status=StatusType.STOP,
                 cost=self.worst_possible_result,
@@ -270,9 +298,8 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
                 starttime=time.time(),
                 endtime=time.time(),
             )
-        elif (
-            run_info.cutoff != int(np.ceil(run_info.cutoff))
-            and not isinstance(run_info.cutoff, int)
+        elif run_info.cutoff != int(np.ceil(run_info.cutoff)) and not isinstance(
+            run_info.cutoff, int
         ):
             run_info = run_info._replace(cutoff=int(np.ceil(run_info.cutoff)))
 
@@ -287,7 +314,9 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
         seed: int = 12345,
         budget: float = 0.0,
         instance_specific: Optional[str] = None,
-    ) -> Tuple[StatusType, float, float, Dict[str, Union[int, float, str, Dict, List, Tuple]]]:
+    ) -> Tuple[
+        StatusType, float, float, Dict[str, Union[int, float, str, Dict, List, Tuple]]
+    ]:
 
         # Additional information of each of the tae executions
         # Defined upfront for mypy
@@ -297,14 +326,16 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
         preload_modules(context)
         queue = context.Queue()
 
-        if not (instance_specific is None or instance_specific == '0'):
+        if not (instance_specific is None or instance_specific == "0"):
             raise ValueError(instance_specific)
-        init_params = {'instance': instance}
+        init_params = {"instance": instance}
         if self.init_params is not None:
             init_params.update(self.init_params)
 
         if self.port is None:
-            logger: Union[logging.Logger, PickableLoggerAdapter] = logging.getLogger("pynisher")
+            logger: Union[logging.Logger, PickableLoggerAdapter] = logging.getLogger(
+                "pynisher"
+            )
         else:
             logger = get_named_client_logger(
                 name="pynisher",
@@ -342,9 +373,9 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
             budget_type=self.budget_type,
         )
 
-        if self.resampling_strategy != 'test':
-            obj_kwargs['resampling_strategy'] = self.resampling_strategy
-            obj_kwargs['resampling_strategy_args'] = self.resampling_strategy_args
+        if self.resampling_strategy != "test":
+            obj_kwargs["resampling_strategy"] = self.resampling_strategy
+            obj_kwargs["resampling_strategy_args"] = self.resampling_strategy_args
 
         try:
             obj = pynisher.enforce_limits(**arguments)(self.ta)
@@ -352,31 +383,38 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
         except Exception as e:
             exception_traceback = traceback.format_exc()
             error_message = repr(e)
-            additional_run_info.update({
-                'traceback': exception_traceback,
-                'error': error_message
-            })
-            return StatusType.CRASHED, self.worst_possible_result, 0.0, additional_run_info
+            additional_run_info.update(
+                {"traceback": exception_traceback, "error": error_message}
+            )
+            return (
+                StatusType.CRASHED,
+                self.worst_possible_result,
+                0.0,
+                additional_run_info,
+            )
 
-        if obj.exit_status in (pynisher.TimeoutException, pynisher.MemorylimitException):
+        if obj.exit_status in (
+            pynisher.TimeoutException,
+            pynisher.MemorylimitException,
+        ):
             # Even if the pynisher thinks that a timeout or memout occured,
             # it can be that the target algorithm wrote something into the queue
             #  - then we treat it as a succesful run
             try:
                 info = autosklearn.evaluation.util.read_queue(queue)
-                result = info[-1]['loss']
-                status = info[-1]['status']
-                additional_run_info = info[-1]['additional_run_info']
+                result = info[-1]["loss"]
+                status = info[-1]["status"]
+                additional_run_info = info[-1]["additional_run_info"]
 
                 if obj.stdout:
-                    additional_run_info['subprocess_stdout'] = obj.stdout
+                    additional_run_info["subprocess_stdout"] = obj.stdout
                 if obj.stderr:
-                    additional_run_info['subprocess_stderr'] = obj.stderr
+                    additional_run_info["subprocess_stderr"] = obj.stderr
 
                 if obj.exit_status is pynisher.TimeoutException:
-                    additional_run_info['info'] = 'Run stopped because of timeout.'
+                    additional_run_info["info"] = "Run stopped because of timeout."
                 elif obj.exit_status is pynisher.MemorylimitException:
-                    additional_run_info['info'] = 'Run stopped because of memout.'
+                    additional_run_info["info"] = "Run stopped because of memout."
 
                 if status in [StatusType.SUCCESS, StatusType.DONOTADVANCE]:
                     cost = result
@@ -387,11 +425,13 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
                 info = None
                 if obj.exit_status is pynisher.TimeoutException:
                     status = StatusType.TIMEOUT
-                    additional_run_info = {'error': 'Timeout'}
+                    additional_run_info = {"error": "Timeout"}
                 elif obj.exit_status is pynisher.MemorylimitException:
                     status = StatusType.MEMOUT
                     additional_run_info = {
-                        "error": "Memout (used more than {} MB).".format(self.memory_limit)
+                        "error": "Memout (used more than {} MB).".format(
+                            self.memory_limit
+                        )
                     }
                 else:
                     raise ValueError(obj.exit_status)
@@ -401,99 +441,111 @@ class ExecuteTaFuncWithQueue(AbstractTAFunc):
             info = None
             status = StatusType.ABORT
             cost = self.worst_possible_result
-            additional_run_info = {'error': 'Your configuration of '
-                                            'auto-sklearn does not work!',
-                                   'exit_status': _encode_exit_status(obj.exit_status),
-                                   'subprocess_stdout': obj.stdout,
-                                   'subprocess_stderr': obj.stderr,
-                                   }
+            additional_run_info = {
+                "error": "Your configuration of " "auto-sklearn does not work!",
+                "exit_status": _encode_exit_status(obj.exit_status),
+                "subprocess_stdout": obj.stdout,
+                "subprocess_stderr": obj.stderr,
+            }
 
         else:
             try:
                 info = autosklearn.evaluation.util.read_queue(queue)
-                result = info[-1]['loss']
-                status = info[-1]['status']
-                additional_run_info = info[-1]['additional_run_info']
+                result = info[-1]["loss"]
+                status = info[-1]["status"]
+                additional_run_info = info[-1]["additional_run_info"]
 
                 if obj.exit_status == 0:
                     cost = result
                 else:
                     status = StatusType.CRASHED
                     cost = self.worst_possible_result
-                    additional_run_info['info'] = 'Run treated as crashed ' \
-                                                  'because the pynisher exit ' \
-                                                  'status %s is unknown.' % \
-                                                  str(obj.exit_status)
-                    additional_run_info['exit_status'] = _encode_exit_status(obj.exit_status)
-                    additional_run_info['subprocess_stdout'] = obj.stdout
-                    additional_run_info['subprocess_stderr'] = obj.stderr
+                    additional_run_info["info"] = (
+                        "Run treated as crashed "
+                        "because the pynisher exit "
+                        "status %s is unknown." % str(obj.exit_status)
+                    )
+                    additional_run_info["exit_status"] = _encode_exit_status(
+                        obj.exit_status
+                    )
+                    additional_run_info["subprocess_stdout"] = obj.stdout
+                    additional_run_info["subprocess_stderr"] = obj.stderr
             except Empty:
                 info = None
                 additional_run_info = {
-                    'error': 'Result queue is empty',
-                    'exit_status': _encode_exit_status(obj.exit_status),
-                    'subprocess_stdout': obj.stdout,
-                    'subprocess_stderr': obj.stderr,
-                    'exitcode': obj.exitcode
+                    "error": "Result queue is empty",
+                    "exit_status": _encode_exit_status(obj.exit_status),
+                    "subprocess_stdout": obj.stdout,
+                    "subprocess_stderr": obj.stderr,
+                    "exitcode": obj.exitcode,
                 }
                 status = StatusType.CRASHED
                 cost = self.worst_possible_result
 
         if (
-            (self.budget_type is None or budget == 0)
-            and status == StatusType.DONOTADVANCE
-        ):
+            self.budget_type is None or budget == 0
+        ) and status == StatusType.DONOTADVANCE:
             status = StatusType.SUCCESS
 
         if not isinstance(additional_run_info, dict):
-            additional_run_info = {'message': additional_run_info}
+            additional_run_info = {"message": additional_run_info}
 
         if (
             info is not None
-            and self.resampling_strategy in ('holdout-iterative-fit', 'cv-iterative-fit')
+            and self.resampling_strategy
+            in ("holdout-iterative-fit", "cv-iterative-fit")
             and status != StatusType.CRASHED
         ):
             learning_curve = autosklearn.evaluation.util.extract_learning_curve(info)
             learning_curve_runtime = autosklearn.evaluation.util.extract_learning_curve(
-                info, 'duration'
+                info, "duration"
             )
             if len(learning_curve) > 1:
-                additional_run_info['learning_curve'] = learning_curve
-                additional_run_info['learning_curve_runtime'] = learning_curve_runtime
+                additional_run_info["learning_curve"] = learning_curve
+                additional_run_info["learning_curve_runtime"] = learning_curve_runtime
 
             train_learning_curve = autosklearn.evaluation.util.extract_learning_curve(
-                info, 'train_loss'
+                info, "train_loss"
             )
             if len(train_learning_curve) > 1:
-                additional_run_info['train_learning_curve'] = train_learning_curve
-                additional_run_info['learning_curve_runtime'] = learning_curve_runtime
+                additional_run_info["train_learning_curve"] = train_learning_curve
+                additional_run_info["learning_curve_runtime"] = learning_curve_runtime
 
             if self._get_validation_loss:
-                validation_learning_curve = autosklearn.evaluation.util.extract_learning_curve(
-                    info, 'validation_loss',
+                validation_learning_curve = (
+                    autosklearn.evaluation.util.extract_learning_curve(
+                        info,
+                        "validation_loss",
+                    )
                 )
                 if len(validation_learning_curve) > 1:
-                    additional_run_info['validation_learning_curve'] = \
+                    additional_run_info["validation_learning_curve"] = (
                         validation_learning_curve
-                    additional_run_info[
-                        'learning_curve_runtime'] = learning_curve_runtime
+                    )
+                    additional_run_info["learning_curve_runtime"] = (
+                        learning_curve_runtime
+                    )
 
             if self._get_test_loss:
-                test_learning_curve = autosklearn.evaluation.util.extract_learning_curve(
-                    info, 'test_loss',
+                test_learning_curve = (
+                    autosklearn.evaluation.util.extract_learning_curve(
+                        info,
+                        "test_loss",
+                    )
                 )
                 if len(test_learning_curve) > 1:
-                    additional_run_info['test_learning_curve'] = test_learning_curve
-                    additional_run_info[
-                        'learning_curve_runtime'] = learning_curve_runtime
+                    additional_run_info["test_learning_curve"] = test_learning_curve
+                    additional_run_info["learning_curve_runtime"] = (
+                        learning_curve_runtime
+                    )
 
         if isinstance(config, int):
-            origin = 'DUMMY'
+            origin = "DUMMY"
             config_id = config
         else:
-            origin = getattr(config, 'origin', 'UNKNOWN')
+            origin = getattr(config, "origin", "UNKNOWN")
             config_id = config.config_id
-        additional_run_info['configuration_origin'] = origin
+        additional_run_info["configuration_origin"] = origin
 
         runtime = float(obj.wall_clock_time)
 

@@ -40,7 +40,8 @@ class OneVSOneSelector:
                     n_zeros = int(np.ceil(len(y_i_j) / 2))
                     n_ones = int(np.floor(len(y_i_j) / 2))
                     base_model = sklearn.dummy.DummyClassifier(
-                        strategy='constant', constant=y_i_j[0],
+                        strategy="constant",
+                        constant=y_i_j[0],
                     )
                     base_model.fit(
                         X.values,
@@ -53,9 +54,11 @@ class OneVSOneSelector:
                         n_estimators=500,
                         oob_score=True,
                         bootstrap=True,
-                        min_samples_split=self.configuration['min_samples_split'],
-                        min_samples_leaf=self.configuration['min_samples_leaf'],
-                        max_features=int(np.rint(X.shape[1] ** self.configuration['max_features'])),
+                        min_samples_split=self.configuration["min_samples_split"],
+                        min_samples_leaf=self.configuration["min_samples_leaf"],
+                        max_features=int(
+                            np.rint(X.shape[1] ** self.configuration["max_features"])
+                        ),
                     )
                     base_model.fit(X.values, y_i_j, sample_weight=weights_i_j)
                 models[i][j] = base_model
@@ -80,11 +83,14 @@ class OneVSOneSelector:
                 use_prediction = True
 
             if not use_prediction:
-                print('Using Backup selector')
+                print("Using Backup selector")
                 return np.array(
-                    [1 if i == self.default_strategy_idx else 0 for i in self.target_indices]
+                    [
+                        1 if i == self.default_strategy_idx else 0
+                        for i in self.target_indices
+                    ]
                 )
-            print('Using no backup selector')
+            print("Using no backup selector")
 
         X = X.reshape((1, -1))
 
