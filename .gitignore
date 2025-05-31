@@ -1,0 +1,10 @@
+.idea/
+.DS_Store
+evaluation/adult/*.pkl
+evaluation/adult/*.txt
+evaluation/bank/*.pkl
+evaluation/bank/*.txt
+evaluation/german/*.pkl
+evaluation/german/*.txt
+evaluation/titanic/*.pkl
+evaluation/titanic/*.txt

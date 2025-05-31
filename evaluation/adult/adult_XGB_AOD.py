@@ -14,18 +14,28 @@ import sys
 import os
 
 # Get the directory path containing autosklearn
-package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), '../..'))
+package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
 # Add the directory to sys.path
 sys.path.append(package_dir)
 from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import CategoricalHyperparameter, UniformFloatHyperparameter, \
-    UniformIntegerHyperparameter
+from ConfigSpace.hyperparameters import (
+    CategoricalHyperparameter,
+    UniformFloatHyperparameter,
+    UniformIntegerHyperparameter,
+)
 from xgboost import XGBClassifier
 
 import autosklearn.pipeline.components.classification
-from autosklearn.pipeline.components.classification \
-    import AutoSklearnClassificationAlgorithm
-from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE, SIGNED_DATA
+from autosklearn.pipeline.components.classification import (
+    AutoSklearnClassificationAlgorithm,
+)
+from autosklearn.pipeline.constants import (
+    DENSE,
+    UNSIGNED_DATA,
+    PREDICTIONS,
+    SPARSE,
+    SIGNED_DATA,
+)
 import datetime
 import json
 
@@ -41,7 +51,7 @@ import autosklearn.classification
 import autosklearn.metrics
 import warnings
 
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 from aif360.datasets import AdultDataset
 from sklearn.preprocessing import StandardScaler
 import os
@@ -49,14 +59,26 @@ import numpy as np
 
 import sklearn.metrics
 import autosklearn.classification
-from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
-    average_odds_difference
+from autosklearn.upgrade.metric import (
+    disparate_impact,
+    statistical_parity_difference,
+    equal_opportunity_difference,
+    average_odds_difference,
+)
 from autosklearn.Fairea.utility import get_data, write_to_file
-from autosklearn.Fairea.fairea import create_baseline, normalize, get_classifier, classify_region, compute_area
+from autosklearn.Fairea.fairea import (
+    create_baseline,
+    normalize,
+    get_classifier,
+    classify_region,
+    compute_area,
+)
 
 
 train_list = "data_orig_train_adult.pkl"
 test_list = "data_orig_test_adult.pkl"
+
+
 def custom_preprocessing(df):
     def group_race(x):
         if x == "White":
@@ -65,8 +87,8 @@ def custom_preprocessing(df):
             return 0.0
 
     # Recode sex and race
-    df['sex'] = df['sex'].replace({'Female': 0.0, 'Male': 1.0})
-    df['race'] = df['race'].apply(lambda x: group_race(x))
+    df["sex"] = df["sex"].replace({"Female": 0.0, "Male": 1.0})
+    df["race"] = df["race"].apply(lambda x: group_race(x))
     return df
 
 
@@ -102,38 +124,61 @@ from aif360.datasets import GermanDataset, StandardDataset
 
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
-na_values=['?']
+na_values = ["?"]
 default_mappings = {
-    'label_maps': [{1.0: '>50K', 0.0: '<=50K'}],
-    'protected_attribute_maps': [{1.0: 'White', 0.0: 'Non-white'},
-                                 {1.0: 'Male', 0.0: 'Female'}]
+    "label_maps": [{1.0: ">50K", 0.0: "<=50K"}],
+    "protected_attribute_maps": [
+        {1.0: "White", 0.0: "Non-white"},
+        {1.0: "Male", 0.0: "Female"},
+    ],
 }
 
 
+data_orig_train = StandardDataset(
+    df=train,
+    label_name="income-per-year",
+    favorable_classes=[">50K", ">50K."],
+    protected_attribute_names=["race"],
+    privileged_classes=[[1]],
+    instance_weights_name=None,
+    categorical_features=[
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "native-country",
+    ],
+    features_to_keep=[],
+    features_to_drop=["income", "native-country", "hours-per-week"],
+    na_values=na_values,
+    custom_preprocessing=custom_preprocessing,
+    metadata=default_mappings,
+)
+data_orig_test = StandardDataset(
+    df=test,
+    label_name="income-per-year",
+    favorable_classes=[">50K", ">50K."],
+    protected_attribute_names=["race"],
+    privileged_classes=[[1]],
+    instance_weights_name=None,
+    categorical_features=[
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "native-country",
+    ],
+    features_to_keep=[],
+    features_to_drop=["income", "native-country", "hours-per-week"],
+    na_values=na_values,
+    custom_preprocessing=custom_preprocessing,
+    metadata=default_mappings,
+)
 
-data_orig_train = StandardDataset(df=train, label_name='income-per-year',
-            favorable_classes=['>50K', '>50K.'],
-            protected_attribute_names=['race'],
-            privileged_classes=[[1]],
-            instance_weights_name=None,
-            categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                  'relationship', 'native-country'],
-            features_to_keep=[],
-            features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-            custom_preprocessing=custom_preprocessing, metadata=default_mappings)
-data_orig_test = StandardDataset(df=test, label_name='income-per-year',
-            favorable_classes=['>50K', '>50K.'],
-            protected_attribute_names=['race'],
-            privileged_classes=[[1]],
-            instance_weights_name=None,
-            categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                  'relationship', 'native-country'],
-            features_to_keep=[],
-            features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-            custom_preprocessing=custom_preprocessing, metadata=default_mappings)
-
-privileged_groups = [{'race': 1}]
-unprivileged_groups = [{'race': 0}]
+privileged_groups = [{"race": 1}]
+unprivileged_groups = [{"race": 0}]
 
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
@@ -146,17 +191,19 @@ y_test = data_orig_test.labels.ravel()
 # X_test = scaler.transform(X_test)
 # data_orig_test.features = X_test
 
+
 class CustomXGBoost(AutoSklearnClassificationAlgorithm):
-    def __init__(self,
-                 n_estimators,
-                 max_depth,
-                 learning_rate,
-                 subsample,
-                 min_child_weight,
-                 n_jobs = 1,
-                 verbosity = 0,
-                 random_state = None,
-                 ):
+    def __init__(
+        self,
+        n_estimators,
+        max_depth,
+        learning_rate,
+        subsample,
+        min_child_weight,
+        n_jobs=1,
+        verbosity=0,
+        random_state=None,
+    ):
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.learning_rate = learning_rate
@@ -165,8 +212,10 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
         self.n_jobs = n_jobs
         self.verbosity = verbosity
         self.random_state = random_state
+
     def fit(self, X, y):
         from xgboost import XGBClassifier
+
         self.estimator = XGBClassifier(
             n_estimators=self.n_estimators,
             max_depth=self.max_depth,
@@ -175,7 +224,7 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
             min_child_weight=self.min_child_weight,
             n_jobs=self.n_jobs,
             verbosity=self.verbosity,
-            random_state = self.random_state,
+            random_state=self.random_state,
         )
         self.estimator.fit(X, y)
         return self
@@ -192,17 +241,19 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
 
     @staticmethod
     def get_properties(dataset_properties=None):
-        return {'shortname': 'XG',
-                'name': 'XGBoost Classifier',
-                'handles_regression': False,
-                'handles_classification': True,
-                'handles_multiclass': True,
-                'handles_multilabel': False,
-                'handles_multioutput': False,
-                'is_deterministic': False,
-                # Both input and output must be tuple(iterable)
-                'input': [DENSE, SIGNED_DATA, UNSIGNED_DATA],
-                'output': [PREDICTIONS]}
+        return {
+            "shortname": "XG",
+            "name": "XGBoost Classifier",
+            "handles_regression": False,
+            "handles_classification": True,
+            "handles_multiclass": True,
+            "handles_multilabel": False,
+            "handles_multioutput": False,
+            "is_deterministic": False,
+            # Both input and output must be tuple(iterable)
+            "input": [DENSE, SIGNED_DATA, UNSIGNED_DATA],
+            "output": [PREDICTIONS],
+        }
 
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):
@@ -212,20 +263,24 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
         # m is the total number of features, and max_features is the hyperparameter specified below.
         # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
         # corresponds with Geurts' heuristic.
-        n_estimators = UniformIntegerHyperparameter("n_estimators", 116, 622, default_value=200)
-        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9,
-                                                         default_value=6)
-        learning_rate = UniformFloatHyperparameter("learning_rate", 0.19155, 0.74642,
-                                                        default_value=0.35)
-        subsample = UniformFloatHyperparameter("subsample", 0.46672, 0.83995,
-                                                  default_value=0.83995)
+        n_estimators = UniformIntegerHyperparameter(
+            "n_estimators", 116, 622, default_value=200
+        )
+        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9, default_value=6)
+        learning_rate = UniformFloatHyperparameter(
+            "learning_rate", 0.19155, 0.74642, default_value=0.35
+        )
+        subsample = UniformFloatHyperparameter(
+            "subsample", 0.46672, 0.83995, default_value=0.83995
+        )
 
-        min_child_weight = UniformIntegerHyperparameter("min_child_weight", 5, 15,
-                                                         default_value=5)
+        min_child_weight = UniformIntegerHyperparameter(
+            "min_child_weight", 5, 15, default_value=5
+        )
 
-
-        cs.add_hyperparameters([n_estimators, max_depth, learning_rate, subsample,
-                                min_child_weight])
+        cs.add_hyperparameters(
+            [n_estimators, max_depth, learning_rate, subsample, min_child_weight]
+        )
         return cs
 
 
@@ -238,10 +293,11 @@ print(cs)
 # Custom metrics definition
 # =========================
 
+
 def accuracy(solution, prediction):
     metric_id = 4
-    protected_attr = 'race'
-    with open('test_split.txt') as f:
+    protected_attr = "race"
+    with open("test_split.txt") as f:
         first_line = f.read().splitlines()
         last_line = first_line[-1]
         split = list(last_line.split(","))
@@ -252,17 +308,45 @@ def accuracy(solution, prediction):
 
     if os.stat("beta.txt").st_size == 0:
 
-        default = XGBClassifier(learning_rate = 0.35, n_estimator = 200, max_depth=6, subsample=1, min_child_weight=1)
+        default = XGBClassifier(
+            learning_rate=0.35,
+            n_estimator=200,
+            max_depth=6,
+            subsample=1,
+            min_child_weight=1,
+        )
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
         dataset_orig = subset_data_orig_train
-        res = create_baseline(default, dataset_orig, privileged_groups, unprivileged_groups,
-                              data_splits=10, repetitions=10, odds=mutation_strategies, options=[0, 1],
-                              degrees=degrees)
-        acc0 = np.array([np.mean([row[0] for row in res["0"][degree]]) for degree in degrees])
-        acc1 = np.array([np.mean([row[0] for row in res["1"][degree]]) for degree in degrees])
-        fair0 = np.array([np.mean([row[metric_id] for row in res["0"][degree]]) for degree in degrees])
-        fair1 = np.array([np.mean([row[metric_id] for row in res["1"][degree]]) for degree in degrees])
+        res = create_baseline(
+            default,
+            dataset_orig,
+            privileged_groups,
+            unprivileged_groups,
+            data_splits=10,
+            repetitions=10,
+            odds=mutation_strategies,
+            options=[0, 1],
+            degrees=degrees,
+        )
+        acc0 = np.array(
+            [np.mean([row[0] for row in res["0"][degree]]) for degree in degrees]
+        )
+        acc1 = np.array(
+            [np.mean([row[0] for row in res["1"][degree]]) for degree in degrees]
+        )
+        fair0 = np.array(
+            [
+                np.mean([row[metric_id] for row in res["0"][degree]])
+                for degree in degrees
+            ]
+        )
+        fair1 = np.array(
+            [
+                np.mean([row[metric_id] for row in res["1"][degree]])
+                for degree in degrees
+            ]
+        )
 
         if min(acc0) > min(acc1):
             beta = (max(acc0) - min(acc0)) / (max(acc0) - min(acc0) + max(fair0))
@@ -283,7 +367,7 @@ def accuracy(solution, prediction):
         beta = 1.0
 
     try:
-        num_keys = sum(1 for line in open('num_keys.txt'))
+        num_keys = sum(1 for line in open("num_keys.txt"))
         print(num_keys)
         beta -= 0.050 * int(int(num_keys) / 10)
         if beta < 0.0:
@@ -293,16 +377,31 @@ def accuracy(solution, prediction):
         f.close()
     except FileNotFoundError:
         pass
-    fairness_metrics = [1 - np.mean(solution == prediction),
-                        disparate_impact(subset_data_orig_train, prediction, protected_attr),
-                        statistical_parity_difference(subset_data_orig_train, prediction, protected_attr),
-                        equal_opportunity_difference(subset_data_orig_train, prediction, solution, protected_attr),
-                        average_odds_difference(subset_data_orig_train, prediction, solution, protected_attr)]
+    fairness_metrics = [
+        1 - np.mean(solution == prediction),
+        disparate_impact(subset_data_orig_train, prediction, protected_attr),
+        statistical_parity_difference(
+            subset_data_orig_train, prediction, protected_attr
+        ),
+        equal_opportunity_difference(
+            subset_data_orig_train, prediction, solution, protected_attr
+        ),
+        average_odds_difference(
+            subset_data_orig_train, prediction, solution, protected_attr
+        ),
+    ]
 
-    print(fairness_metrics[metric_id], 1 - np.mean(solution == prediction),
-          fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta), beta)
+    print(
+        fairness_metrics[metric_id],
+        1 - np.mean(solution == prediction),
+        fairness_metrics[metric_id] * beta
+        + (1 - np.mean(solution == prediction)) * (1 - beta),
+        beta,
+    )
 
-    return fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta)
+    return fairness_metrics[metric_id] * beta + (
+        1 - np.mean(solution == prediction)
+    ) * (1 - beta)
 
 
 ############################################################################
@@ -326,12 +425,16 @@ automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
     # per_run_time_limit=500,
     memory_limit=10000000,
-    include_estimators=['CustomXGBoost'],
+    include_estimators=["CustomXGBoost"],
     ensemble_size=1,
-    include_preprocessors=['liblinear_svc_preprocessor', 'extra_trees_preproc_for_classification', 'select_percentile_classification'],
+    include_preprocessors=[
+        "liblinear_svc_preprocessor",
+        "extra_trees_preproc_for_classification",
+        "select_percentile_classification",
+    ],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
-    metric=accuracy_scorer
+    metric=accuracy_scorer,
 )
 automl.fit(X_train, y_train)
 
@@ -354,7 +457,7 @@ predictions = automl.predict(X_test)
 print(predictions)
 print(y_test, len(predictions))
 print("AOD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-print(disparate_impact(data_orig_test, predictions, 'race'))
-print(statistical_parity_difference(data_orig_test, predictions, 'race'))
-print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'race'))
-print(average_odds_difference(data_orig_test, predictions, y_test, 'race'))
+print(disparate_impact(data_orig_test, predictions, "race"))
+print(statistical_parity_difference(data_orig_test, predictions, "race"))
+print(equal_opportunity_difference(data_orig_test, predictions, y_test, "race"))
+print(average_odds_difference(data_orig_test, predictions, y_test, "race"))

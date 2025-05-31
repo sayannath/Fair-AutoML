@@ -2,13 +2,18 @@ import os
 import sys
 
 # Get the directory path containing autosklearn
-package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), '../..'))
+package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
 # Add the directory to sys.path
 sys.path.append(package_dir)
 from sklearn.neural_network import MLPClassifier
 
 import autosklearn.pipeline.components.classification
-from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SIGNED_DATA
+from autosklearn.pipeline.constants import (
+    DENSE,
+    UNSIGNED_DATA,
+    PREDICTIONS,
+    SIGNED_DATA,
+)
 import datetime
 
 import pickle
@@ -17,13 +22,17 @@ import autosklearn.classification
 import autosklearn.metrics
 import warnings
 
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 import os
 
 import sklearn.metrics
 import autosklearn.classification
-from autosklearn.upgrade.metric import disparate_impact, statistical_parity_difference, equal_opportunity_difference, \
-    average_odds_difference
+from autosklearn.upgrade.metric import (
+    disparate_impact,
+    statistical_parity_difference,
+    equal_opportunity_difference,
+    average_odds_difference,
+)
 from autosklearn.Fairea.fairea import create_baseline
 
 train_list = "data_orig_train_adult.pkl"
@@ -38,8 +47,8 @@ def custom_preprocessing(df):
             return 0.0
 
     # Recode sex and race
-    df['sex'] = df['sex'].replace({'Female': 0.0, 'Male': 1.0})
-    df['race'] = df['race'].apply(lambda x: group_race(x))
+    df["sex"] = df["sex"].replace({"Female": 0.0, "Male": 1.0})
+    df["race"] = df["race"].apply(lambda x: group_race(x))
     return df
 
 
@@ -74,36 +83,60 @@ from aif360.datasets import StandardDataset
 
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
-na_values = ['?']
+na_values = ["?"]
 default_mappings = {
-    'label_maps': [{1.0: '>50K', 0.0: '<=50K'}],
-    'protected_attribute_maps': [{1.0: 'White', 0.0: 'Non-white'},
-                                 {1.0: 'Male', 0.0: 'Female'}]
+    "label_maps": [{1.0: ">50K", 0.0: "<=50K"}],
+    "protected_attribute_maps": [
+        {1.0: "White", 0.0: "Non-white"},
+        {1.0: "Male", 0.0: "Female"},
+    ],
 }
 
-data_orig_train = StandardDataset(df=train, label_name='income-per-year',
-                                  favorable_classes=['>50K', '>50K.'],
-                                  protected_attribute_names=['race'],
-                                  privileged_classes=[[1]],
-                                  instance_weights_name=None,
-                                  categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                        'relationship', 'native-country'],
-                                  features_to_keep=[],
-                                  features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-                                  custom_preprocessing=custom_preprocessing, metadata=default_mappings)
-data_orig_test = StandardDataset(df=test, label_name='income-per-year',
-                                 favorable_classes=['>50K', '>50K.'],
-                                 protected_attribute_names=['race'],
-                                 privileged_classes=[[1]],
-                                 instance_weights_name=None,
-                                 categorical_features=['workclass', 'education', 'marital-status', 'occupation',
-                                                       'relationship', 'native-country'],
-                                 features_to_keep=[],
-                                 features_to_drop=['income', 'native-country', 'hours-per-week'], na_values=na_values,
-                                 custom_preprocessing=custom_preprocessing, metadata=default_mappings)
+data_orig_train = StandardDataset(
+    df=train,
+    label_name="income-per-year",
+    favorable_classes=[">50K", ">50K."],
+    protected_attribute_names=["race"],
+    privileged_classes=[[1]],
+    instance_weights_name=None,
+    categorical_features=[
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "native-country",
+    ],
+    features_to_keep=[],
+    features_to_drop=["income", "native-country", "hours-per-week"],
+    na_values=na_values,
+    custom_preprocessing=custom_preprocessing,
+    metadata=default_mappings,
+)
+data_orig_test = StandardDataset(
+    df=test,
+    label_name="income-per-year",
+    favorable_classes=[">50K", ">50K."],
+    protected_attribute_names=["race"],
+    privileged_classes=[[1]],
+    instance_weights_name=None,
+    categorical_features=[
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "native-country",
+    ],
+    features_to_keep=[],
+    features_to_drop=["income", "native-country", "hours-per-week"],
+    na_values=na_values,
+    custom_preprocessing=custom_preprocessing,
+    metadata=default_mappings,
+)
 
-privileged_groups = [{'race': 1}]
-unprivileged_groups = [{'race': 0}]
+privileged_groups = [{"race": 1}]
+unprivileged_groups = [{"race": 0}]
 
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
@@ -123,14 +156,14 @@ from ConfigSpace.hyperparameters import (
 
 class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
     def __init__(
-            self,
-            num_units,
-            alpha,
-            learning_rate_init,
-            max_iter,
-            tol,
-            activation,
-            random_state=None,
+        self,
+        num_units,
+        alpha,
+        learning_rate_init,
+        max_iter,
+        tol,
+        activation,
+        random_state=None,
     ):
         self.num_units = num_units
         self.hidden_layer_sizes = (num_units,)
@@ -170,16 +203,16 @@ class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
     @staticmethod
     def get_properties(dataset_properties=None):
         return {
-            'shortname': 'MLP',
-            'name': 'Multi-Layer Perceptron Classifier',
-            'handles_regression': False,
-            'handles_classification': True,
-            'handles_multiclass': True,
-            'handles_multilabel': False,
-            'handles_multioutput': False,
-            'is_deterministic': False,
-            'input': [DENSE, SIGNED_DATA, UNSIGNED_DATA],
-            'output': [PREDICTIONS],
+            "shortname": "MLP",
+            "name": "Multi-Layer Perceptron Classifier",
+            "handles_regression": False,
+            "handles_classification": True,
+            "handles_multiclass": True,
+            "handles_multilabel": False,
+            "handles_multioutput": False,
+            "is_deterministic": False,
+            "input": [DENSE, SIGNED_DATA, UNSIGNED_DATA],
+            "output": [PREDICTIONS],
         }
 
     @staticmethod
@@ -187,32 +220,32 @@ class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
         cs = ConfigurationSpace()
 
         num_units = UniformIntegerHyperparameter(
-            'num_units', 50, 500, default_value=100
+            "num_units", 50, 500, default_value=100
         )
         alpha = UniformFloatHyperparameter(
-            'alpha', 1e-6, 1e-1, log=True, default_value=1e-4
+            "alpha", 1e-6, 1e-1, log=True, default_value=1e-4
         )
         learning_rate_init = UniformFloatHyperparameter(
-            'learning_rate_init', 1e-4, 1.0, log=True, default_value=0.001
+            "learning_rate_init", 1e-4, 1.0, log=True, default_value=0.001
         )
-        max_iter = UniformIntegerHyperparameter(
-            'max_iter', 100, 500, default_value=300
-        )
+        max_iter = UniformIntegerHyperparameter("max_iter", 100, 500, default_value=300)
         tol = UniformFloatHyperparameter(
-            'tol', 1e-5, 1e-2, log=True, default_value=1e-4
+            "tol", 1e-5, 1e-2, log=True, default_value=1e-4
         )
         activation = CategoricalHyperparameter(
-            'activation', ['identity', 'logistic', 'tanh', 'relu'], default_value='relu'
+            "activation", ["identity", "logistic", "tanh", "relu"], default_value="relu"
         )
 
-        cs.add_hyperparameters([
-            num_units,
-            alpha,
-            learning_rate_init,
-            max_iter,
-            tol,
-            activation,
-        ])
+        cs.add_hyperparameters(
+            [
+                num_units,
+                alpha,
+                learning_rate_init,
+                max_iter,
+                tol,
+                activation,
+            ]
+        )
         return cs
 
 
@@ -223,8 +256,8 @@ print(cs)
 
 def accuracy(solution, prediction):
     metric_id = 4
-    protected_attr = 'race'
-    with open('test_split.txt') as f:
+    protected_attr = "race"
+    with open("test_split.txt") as f:
         first_line = f.read().splitlines()
         last_line = first_line[-1]
         split = list(last_line.split(","))
@@ -236,24 +269,48 @@ def accuracy(solution, prediction):
     if os.stat("beta.txt").st_size == 0:
 
         default = MLPClassifier(
-            hidden_layer_sizes=(100,),  # analogous to n_estimators=200 → 1 hidden layer of 100 units
+            hidden_layer_sizes=(
+                100,
+            ),  # analogous to n_estimators=200 → 1 hidden layer of 100 units
             alpha=1e-4,  # L2 penalty (default small value)
             learning_rate_init=0.001,  # analogous to learning_rate=0.35
-            max_iter=300,  # analogous to max_depth=6 → more iterations 
+            max_iter=300,  # analogous to max_depth=6 → more iterations
             tol=1e-4,  # convergence tolerance
-            activation='relu',  # common default
-            random_state=None
+            activation="relu",  # common default
+            random_state=None,
         )
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
         dataset_orig = subset_data_orig_train
-        res = create_baseline(default, dataset_orig, privileged_groups, unprivileged_groups,
-                              data_splits=10, repetitions=10, odds=mutation_strategies, options=[0, 1],
-                              degrees=degrees)
-        acc0 = np.array([np.mean([row[0] for row in res["0"][degree]]) for degree in degrees])
-        acc1 = np.array([np.mean([row[0] for row in res["1"][degree]]) for degree in degrees])
-        fair0 = np.array([np.mean([row[metric_id] for row in res["0"][degree]]) for degree in degrees])
-        fair1 = np.array([np.mean([row[metric_id] for row in res["1"][degree]]) for degree in degrees])
+        res = create_baseline(
+            default,
+            dataset_orig,
+            privileged_groups,
+            unprivileged_groups,
+            data_splits=10,
+            repetitions=10,
+            odds=mutation_strategies,
+            options=[0, 1],
+            degrees=degrees,
+        )
+        acc0 = np.array(
+            [np.mean([row[0] for row in res["0"][degree]]) for degree in degrees]
+        )
+        acc1 = np.array(
+            [np.mean([row[0] for row in res["1"][degree]]) for degree in degrees]
+        )
+        fair0 = np.array(
+            [
+                np.mean([row[metric_id] for row in res["0"][degree]])
+                for degree in degrees
+            ]
+        )
+        fair1 = np.array(
+            [
+                np.mean([row[metric_id] for row in res["1"][degree]])
+                for degree in degrees
+            ]
+        )
 
         if min(acc0) > min(acc1):
             beta = (max(acc0) - min(acc0)) / (max(acc0) - min(acc0) + max(fair0))
@@ -274,7 +331,7 @@ def accuracy(solution, prediction):
         beta = 1.0
 
     try:
-        num_keys = sum(1 for line in open('num_keys.txt'))
+        num_keys = sum(1 for line in open("num_keys.txt"))
         print(num_keys)
         beta -= 0.050 * int(int(num_keys) / 10)
         if beta < 0.0:
@@ -284,16 +341,31 @@ def accuracy(solution, prediction):
         f.close()
     except FileNotFoundError:
         pass
-    fairness_metrics = [1 - np.mean(solution == prediction),
-                        disparate_impact(subset_data_orig_train, prediction, protected_attr),
-                        statistical_parity_difference(subset_data_orig_train, prediction, protected_attr),
-                        equal_opportunity_difference(subset_data_orig_train, prediction, solution, protected_attr),
-                        average_odds_difference(subset_data_orig_train, prediction, solution, protected_attr)]
+    fairness_metrics = [
+        1 - np.mean(solution == prediction),
+        disparate_impact(subset_data_orig_train, prediction, protected_attr),
+        statistical_parity_difference(
+            subset_data_orig_train, prediction, protected_attr
+        ),
+        equal_opportunity_difference(
+            subset_data_orig_train, prediction, solution, protected_attr
+        ),
+        average_odds_difference(
+            subset_data_orig_train, prediction, solution, protected_attr
+        ),
+    ]
 
-    print(fairness_metrics[metric_id], 1 - np.mean(solution == prediction),
-          fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta), beta)
+    print(
+        fairness_metrics[metric_id],
+        1 - np.mean(solution == prediction),
+        fairness_metrics[metric_id] * beta
+        + (1 - np.mean(solution == prediction)) * (1 - beta),
+        beta,
+    )
 
-    return fairness_metrics[metric_id] * beta + (1 - np.mean(solution == prediction)) * (1 - beta)
+    return fairness_metrics[metric_id] * beta + (
+        1 - np.mean(solution == prediction)
+    ) * (1 - beta)
 
 
 print("#" * 80)
@@ -310,13 +382,16 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
     memory_limit=10000000,
-    include_estimators=['CustomMLPClassifier'],
+    include_estimators=["CustomMLPClassifier"],
     ensemble_size=1,
-    include_preprocessors=['select_percentile_classification', 'extra_trees_preproc_for_classification',
-                           'select_rates_classification'],
+    include_preprocessors=[
+        "select_percentile_classification",
+        "extra_trees_preproc_for_classification",
+        "select_rates_classification",
+    ],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
-    metric=accuracy_scorer
+    metric=accuracy_scorer,
 )
 automl.fit(X_train, y_train)
 
@@ -335,10 +410,26 @@ predictions = automl.predict(X_test)
 print(predictions)
 print(y_test, len(predictions))
 print("AOD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-print(disparate_impact(data_orig_test, predictions, 'race'))
-print(statistical_parity_difference(data_orig_test, predictions, 'race'))
-print(equal_opportunity_difference(data_orig_test, predictions, y_test, 'race'))
-print(average_odds_difference(data_orig_test, predictions, y_test, 'race'))
+print(disparate_impact(data_orig_test, predictions, "race"))
+print(statistical_parity_difference(data_orig_test, predictions, "race"))
+print(equal_opportunity_difference(data_orig_test, predictions, y_test, "race"))
+print(average_odds_difference(data_orig_test, predictions, y_test, "race"))
 
 """
+[(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'none', 'classifier:__choice__': 'CustomMLPClassifier', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'noo_encoding', 'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'minority_coalescer', 'data_preprocessing:numerical_transformer:imputation:strategy': 'median', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'standardize', 'feature_preprocessor:__choice__': 'extra_trees_preproc_for_classification', 'classifier:CustomMLPClassifier:activation': 'logistic', 'classifier:CustomMLPClassifier:alpha': 1.3428073512448679e-05, 'classifier:CustomMLPClassifier:learning_rate_init': 0.22872481258152838, 'classifier:CustomMLPClassifier:max_iter': 335, 'classifier:CustomMLPClassifier:num_units': 63, 'classifier:CustomMLPClassifier:tol': 3.1389463917880484e-05, 'data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction': 0.006849871512432156, 'feature_preprocessor:extra_trees_preproc_for_classification:bootstrap': 'True', 'feature_preprocessor:extra_trees_preproc_for_classification:criterion': 'entropy', 'feature_preprocessor:extra_trees_preproc_for_classification:max_depth': 'None', 'feature_preprocessor:extra_trees_preproc_for_classification:max_features': 0.3699450387418677, 'feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes': 'None', 'feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease': 0.0, 'feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf': 1, 'feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split': 16, 'feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf': 0.0, 'feature_preprocessor:extra_trees_preproc_for_classification:n_estimators': 100},
+dataset_properties={
+  'task': 1,
+  'sparse': False,
+  'multilabel': False,
+  'multiclass': False,
+  'target_type': 'classification',
+  'signed': False})),
+]
+[0. 0. 1. ... 0. 0. 0.]
+[0. 0. 0. ... 0. 0. 1.] 13803
+AOD-Accuracy score: 0.8448163442729841
+0.3844067527213605
+0.060070966078173665
+0.005964079294006774
+0.009894175969620937
 """
