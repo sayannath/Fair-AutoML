@@ -1,0 +1,597 @@
+[
+    {
+        "config_id": 1,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "extra_trees_preproc_for_classification",
+            "classifier:CustomSVM:C": 1.0,
+            "classifier:CustomSVM:gamma": 0.1,
+            "classifier:CustomSVM:kernel": "rbf",
+            "classifier:CustomSVM:shrinking": true,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.01,
+            "feature_preprocessor:extra_trees_preproc_for_classification:bootstrap": "False",
+            "feature_preprocessor:extra_trees_preproc_for_classification:criterion": "gini",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_depth": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_features": 0.5,
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf": 1,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split": 2,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:n_estimators": 100
+        },
+        "cost": 1.153183674329612,
+        "time": 38.981881856918335,
+        "additional_info": {
+            "duration": 38.931391954422,
+            "num_run": 2,
+            "train_loss": 1.0746671998780997,
+            "configuration_origin": "Default"
+        }
+    },
+    {
+        "config_id": 2,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "extra_trees_preproc_for_classification",
+            "classifier:CustomSVM:C": 10517.152375806469,
+            "classifier:CustomSVM:gamma": 0.016058409541057476,
+            "classifier:CustomSVM:kernel": "rbf",
+            "classifier:CustomSVM:shrinking": true,
+            "feature_preprocessor:extra_trees_preproc_for_classification:bootstrap": "True",
+            "feature_preprocessor:extra_trees_preproc_for_classification:criterion": "gini",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_depth": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_features": 0.789002635114752,
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf": 6,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split": 2,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:n_estimators": 100
+        },
+        "cost": 0.0,
+        "time": 360.0074188709259,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 3,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomSVM:C": 28.340655986015275,
+            "classifier:CustomSVM:gamma": 0.012097025724754672,
+            "classifier:CustomSVM:kernel": "poly",
+            "classifier:CustomSVM:shrinking": true,
+            "feature_preprocessor:feature_agglomeration:affinity": "cosine",
+            "feature_preprocessor:feature_agglomeration:linkage": "complete",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 116,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "max"
+        },
+        "cost": 1.1692273145329666,
+        "time": 48.51900601387024,
+        "additional_info": {
+            "duration": 48.50158405303955,
+            "num_run": 4,
+            "train_loss": 1.0613582810264472,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 4,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "extra_trees_preproc_for_classification",
+            "classifier:CustomSVM:C": 16971.729252849378,
+            "classifier:CustomSVM:gamma": 0.2834422853308911,
+            "classifier:CustomSVM:kernel": "sigmoid",
+            "classifier:CustomSVM:shrinking": false,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 528,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "normal",
+            "feature_preprocessor:extra_trees_preproc_for_classification:bootstrap": "False",
+            "feature_preprocessor:extra_trees_preproc_for_classification:criterion": "entropy",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_depth": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_features": 0.2748856331760209,
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf": 16,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split": 6,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:n_estimators": 100
+        },
+        "cost": 1.112246010171091,
+        "time": 26.96558904647827,
+        "additional_info": {
+            "duration": 26.948293209075928,
+            "num_run": 5,
+            "train_loss": 1.1117035261814536,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 5,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomSVM:C": 62.071535042388085,
+            "classifier:CustomSVM:gamma": 0.01123032706052459,
+            "classifier:CustomSVM:kernel": "rbf",
+            "classifier:CustomSVM:shrinking": false,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.04122084051477762,
+            "feature_preprocessor:feature_agglomeration:affinity": "euclidean",
+            "feature_preprocessor:feature_agglomeration:linkage": "ward",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 197,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "max"
+        },
+        "cost": 1.1544590025674712,
+        "time": 74.02273988723755,
+        "additional_info": {
+            "duration": 74.00258612632751,
+            "num_run": 6,
+            "train_loss": 1.0712465436978913,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 6,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "nystroem_sampler",
+            "classifier:CustomSVM:C": 0.13685672456755535,
+            "classifier:CustomSVM:gamma": 3.1102991784123972,
+            "classifier:CustomSVM:kernel": "sigmoid",
+            "classifier:CustomSVM:shrinking": false,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0006261374123007486,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.777756367375742,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.08450732415102441,
+            "feature_preprocessor:nystroem_sampler:kernel": "cosine",
+            "feature_preprocessor:nystroem_sampler:n_components": 1283
+        },
+        "cost": 0.0,
+        "time": 359.9925129413605,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 7,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomSVM:C": 0.2609870921691387,
+            "classifier:CustomSVM:gamma": 0.07284839662856082,
+            "classifier:CustomSVM:kernel": "sigmoid",
+            "classifier:CustomSVM:shrinking": false,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.00021733887863650386,
+            "feature_preprocessor:feature_agglomeration:affinity": "cosine",
+            "feature_preprocessor:feature_agglomeration:linkage": "complete",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 307,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "max"
+        },
+        "cost": 1.1322452459674806,
+        "time": 41.50999402999878,
+        "additional_info": {
+            "duration": 41.497122049331665,
+            "num_run": 8,
+            "train_loss": 1.1125155853784252,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 8,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomSVM:C": 18784.08473137364,
+            "classifier:CustomSVM:gamma": 0.09275700896796038,
+            "classifier:CustomSVM:kernel": "poly",
+            "classifier:CustomSVM:shrinking": true,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0051843978317161,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.7245999737178369,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.1020928193518898,
+            "feature_preprocessor:feature_agglomeration:affinity": "cosine",
+            "feature_preprocessor:feature_agglomeration:linkage": "average",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 359,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "max"
+        },
+        "cost": 0.0,
+        "time": 360.003066778183,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 9,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "extra_trees_preproc_for_classification",
+            "classifier:CustomSVM:C": 5.980985437097802,
+            "classifier:CustomSVM:gamma": 0.08611993570169053,
+            "classifier:CustomSVM:kernel": "sigmoid",
+            "classifier:CustomSVM:shrinking": true,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0020512667774022163,
+            "feature_preprocessor:extra_trees_preproc_for_classification:bootstrap": "False",
+            "feature_preprocessor:extra_trees_preproc_for_classification:criterion": "gini",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_depth": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_features": 0.051398400839168024,
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf": 11,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split": 6,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:n_estimators": 100
+        },
+        "cost": 1.1410561074109875,
+        "time": 24.394365787506104,
+        "additional_info": {
+            "duration": 24.382087230682373,
+            "num_run": 10,
+            "train_loss": 1.1164406149519683,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 10,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomSVM:C": 2029.293379804704,
+            "classifier:CustomSVM:gamma": 0.002267678988484654,
+            "classifier:CustomSVM:kernel": "sigmoid",
+            "classifier:CustomSVM:shrinking": true,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.4513167513523681,
+            "feature_preprocessor:feature_agglomeration:affinity": "euclidean",
+            "feature_preprocessor:feature_agglomeration:linkage": "complete",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 222,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "mean"
+        },
+        "cost": 1.1112105163051234,
+        "time": 40.3277051448822,
+        "additional_info": {
+            "duration": 40.315260887145996,
+            "num_run": 11,
+            "train_loss": 1.1112139653061957,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 11,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "extra_trees_preproc_for_classification",
+            "classifier:CustomSVM:C": 8031.89237999001,
+            "classifier:CustomSVM:gamma": 2.8251043767190227,
+            "classifier:CustomSVM:kernel": "sigmoid",
+            "classifier:CustomSVM:shrinking": false,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.36812831934336065,
+            "feature_preprocessor:extra_trees_preproc_for_classification:bootstrap": "True",
+            "feature_preprocessor:extra_trees_preproc_for_classification:criterion": "entropy",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_depth": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_features": 0.6468192528951926,
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf": 15,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split": 3,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:n_estimators": 100
+        },
+        "cost": 1.124283020920274,
+        "time": 30.254218101501465,
+        "additional_info": {
+            "duration": 30.236611127853394,
+            "num_run": 12,
+            "train_loss": 1.1235964348610266,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 12,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "extra_trees_preproc_for_classification",
+            "classifier:CustomSVM:C": 1122.3666698317638,
+            "classifier:CustomSVM:gamma": 0.061558590786443886,
+            "classifier:CustomSVM:kernel": "sigmoid",
+            "classifier:CustomSVM:shrinking": false,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.17631077627208205,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.9330962935756162,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.27636989904361964,
+            "feature_preprocessor:extra_trees_preproc_for_classification:bootstrap": "False",
+            "feature_preprocessor:extra_trees_preproc_for_classification:criterion": "entropy",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_depth": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_features": 0.9743246880817704,
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf": 19,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split": 20,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:n_estimators": 100
+        },
+        "cost": 1.1263885592498817,
+        "time": 27.952224016189575,
+        "additional_info": {
+            "duration": 27.935781717300415,
+            "num_run": 13,
+            "train_loss": 1.1248250213888056,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 13,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomSVM:C": 2.145531296018052,
+            "classifier:CustomSVM:gamma": 0.0760491851349445,
+            "classifier:CustomSVM:kernel": "sigmoid",
+            "classifier:CustomSVM:shrinking": false,
+            "feature_preprocessor:feature_agglomeration:affinity": "cosine",
+            "feature_preprocessor:feature_agglomeration:linkage": "average",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 371,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "median"
+        },
+        "cost": 1.1408707166188077,
+        "time": 46.7212860584259,
+        "additional_info": {
+            "duration": 46.70940589904785,
+            "num_run": 14,
+            "train_loss": 1.1161772603833517,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 14,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomSVM:C": 20073.017828258347,
+            "classifier:CustomSVM:gamma": 0.006636317051201519,
+            "classifier:CustomSVM:kernel": "poly",
+            "classifier:CustomSVM:shrinking": false,
+            "feature_preprocessor:feature_agglomeration:affinity": "euclidean",
+            "feature_preprocessor:feature_agglomeration:linkage": "complete",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 68,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "median"
+        },
+        "cost": 0.0,
+        "time": 360.00455594062805,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 15,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "extra_trees_preproc_for_classification",
+            "classifier:CustomSVM:C": 12373.226241084101,
+            "classifier:CustomSVM:gamma": 0.038172419655499265,
+            "classifier:CustomSVM:kernel": "linear",
+            "classifier:CustomSVM:shrinking": false,
+            "feature_preprocessor:extra_trees_preproc_for_classification:bootstrap": "False",
+            "feature_preprocessor:extra_trees_preproc_for_classification:criterion": "gini",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_depth": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_features": 0.46871095664593154,
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf": 8,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split": 8,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:n_estimators": 100
+        },
+        "cost": 0.0,
+        "time": 360.0040910243988,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 16,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "nystroem_sampler",
+            "classifier:CustomSVM:C": 1007.3288202208101,
+            "classifier:CustomSVM:gamma": 8.319568139745206e-05,
+            "classifier:CustomSVM:kernel": "sigmoid",
+            "classifier:CustomSVM:shrinking": true,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0001698727637948735,
+            "feature_preprocessor:nystroem_sampler:kernel": "sigmoid",
+            "feature_preprocessor:nystroem_sampler:n_components": 2805,
+            "feature_preprocessor:nystroem_sampler:coef0": 0.20849575143641474,
+            "feature_preprocessor:nystroem_sampler:gamma": 0.003461749762616503
+        },
+        "cost": 0.0,
+        "time": 360.00571608543396,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 17,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomSVM:C": 31651.699152811358,
+            "classifier:CustomSVM:gamma": 0.0049169004815913155,
+            "classifier:CustomSVM:kernel": "poly",
+            "classifier:CustomSVM:shrinking": false,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0001387564160659432,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.8145218262609533,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.07320314509676586,
+            "feature_preprocessor:feature_agglomeration:affinity": "cosine",
+            "feature_preprocessor:feature_agglomeration:linkage": "average",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 342,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "max"
+        },
+        "cost": 0.0,
+        "time": 360.00449681282043,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 18,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "nystroem_sampler",
+            "classifier:CustomSVM:C": 41.45990199365338,
+            "classifier:CustomSVM:gamma": 4.1511278999898105e-05,
+            "classifier:CustomSVM:kernel": "poly",
+            "classifier:CustomSVM:shrinking": false,
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.022796946519237127,
+            "feature_preprocessor:nystroem_sampler:kernel": "rbf",
+            "feature_preprocessor:nystroem_sampler:n_components": 2986,
+            "feature_preprocessor:nystroem_sampler:gamma": 0.0070078444963204934
+        },
+        "cost": 0.0,
+        "time": 360.00484895706177,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 19,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "nystroem_sampler",
+            "classifier:CustomSVM:C": 21949.82152803218,
+            "classifier:CustomSVM:gamma": 0.7352638435825306,
+            "classifier:CustomSVM:kernel": "poly",
+            "classifier:CustomSVM:shrinking": false,
+            "feature_preprocessor:nystroem_sampler:kernel": "cosine",
+            "feature_preprocessor:nystroem_sampler:n_components": 776
+        },
+        "cost": 0.0,
+        "time": 281.00423407554626,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 20,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomSVM",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "nystroem_sampler",
+            "classifier:CustomSVM:C": 17401.836038317215,
+            "classifier:CustomSVM:gamma": 6.277593125704913,
+            "classifier:CustomSVM:kernel": "linear",
+            "classifier:CustomSVM:shrinking": true,
+            "feature_preprocessor:nystroem_sampler:kernel": "rbf",
+            "feature_preprocessor:nystroem_sampler:n_components": 6859,
+            "feature_preprocessor:nystroem_sampler:gamma": 5.506380000033406e-05
+        },
+        "cost": 0.0,
+        "time": 0.0,
+        "additional_info": {}
+    }
+]

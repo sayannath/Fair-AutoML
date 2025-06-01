@@ -31,9 +31,36 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-from sklearn.neural_network import MLPClassifier
+# from sklearn.neural_network import MLPClassifier
+#
+# clf = MLPClassifier(hidden_layer_sizes=(100,), max_iter=300, random_state=42)
+# clf.fit(X_train, y_train)
+#
+# from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+#
+# y_pred = clf.predict(X_test)
+#
+# print("Accuracy:", accuracy_score(y_test, y_pred))
+# print("\nClassification Report:\n", classification_report(y_test, y_pred))
+#
+# """
+# Accuracy: 0.8363189681646023
+#
+# Classification Report:
+#                precision    recall  f1-score   support
+#
+#            0       0.88      0.90      0.89      7479
+#            1       0.66      0.61      0.64      2290
+#
+#     accuracy                           0.84      9769
+#    macro avg       0.77      0.76      0.77      9769
+# weighted avg       0.83      0.84      0.83      9769
+# """
 
-clf = MLPClassifier(hidden_layer_sizes=(100,), max_iter=300, random_state=42)
+# SVM classifier
+from sklearn.svm import SVC
+
+clf = SVC(kernel="rbf", C=1.0, gamma="scale", probability=True, random_state=42)
 clf.fit(X_train, y_train)
 
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
@@ -42,17 +69,3 @@ y_pred = clf.predict(X_test)
 
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n", classification_report(y_test, y_pred))
-
-"""
-Accuracy: 0.8363189681646023
-
-Classification Report:
-               precision    recall  f1-score   support
-
-           0       0.88      0.90      0.89      7479
-           1       0.66      0.61      0.64      2290
-
-    accuracy                           0.84      9769
-   macro avg       0.77      0.76      0.77      9769
-weighted avg       0.83      0.84      0.83      9769
-"""
