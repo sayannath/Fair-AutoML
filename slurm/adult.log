@@ -1,0 +1,52 @@
+/var/spool/slurmd/job35170160/slurm_script: line 12: /home/sayan.nath/anaconda3/etc/profile.d/conda.sh: No such file or directory
+
+CondaError: Run 'conda init' before 'conda activate'
+
+Running MLP SPD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_mlp_SPD_race.py': [Errno 2] No such file or directory
+Running MLP EOD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_mlp_EOD_race.py': [Errno 2] No such file or directory
+Running MLP AOD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_mlp_AOD_race.py': [Errno 2] No such file or directory
+Running MLP SPD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_mlp_SPD_sex.py': [Errno 2] No such file or directory
+Running MLP EOD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_mlp_EOD_sex.py': [Errno 2] No such file or directory
+Running MLP AOD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_mlp_AOD_sex.py': [Errno 2] No such file or directory
+Running XGB SPD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_xgb_SPD_race.py': [Errno 2] No such file or directory
+Running XGB EOD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_xgb_EOD_race.py': [Errno 2] No such file or directory
+Running XGB AOD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_xgb_AOD_race.py': [Errno 2] No such file or directory
+Running XGB SPD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_xgb_SPD_sex.py': [Errno 2] No such file or directory
+Running XGB EOD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_xgb_EOD_sex.py': [Errno 2] No such file or directory
+Running XGB AOD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_xgb_AOD_sex.py': [Errno 2] No such file or directory
+Running LRG SPD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_lrg_SPD_race.py': [Errno 2] No such file or directory
+Running LRG EOD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_lrg_EOD_race.py': [Errno 2] No such file or directory
+Running LRG AOD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_lrg_AOD_race.py': [Errno 2] No such file or directory
+Running LRG SPD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_lrg_SPD_sex.py': [Errno 2] No such file or directory
+Running LRG EOD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_lrg_EOD_sex.py': [Errno 2] No such file or directory
+Running LRG AOD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_lrg_AOD_sex.py': [Errno 2] No such file or directory
+Running GBC SPD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_gbc_SPD_race.py': [Errno 2] No such file or directory
+Running GBC EOD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_gbc_EOD_race.py': [Errno 2] No such file or directory
+Running GBC AOD RACE
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_gbc_AOD_race.py': [Errno 2] No such file or directory
+Running GBC SPD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_gbc_SPD_sex.py': [Errno 2] No such file or directory
+Running GBC EOD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_gbc_EOD_sex.py': [Errno 2] No such file or directory
+Running GBC AOD SEX
+python: can't open file '/home/sayan.nath/Fair-AutoML/evaluation/adult/adult_gbc_AOD_sex.py': [Errno 2] No such file or directory
