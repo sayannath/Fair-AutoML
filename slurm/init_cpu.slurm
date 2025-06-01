@@ -9,8 +9,8 @@
 #SBATCH --output=adult.log   # Standard output and error log
 
 ####### Load necessary modules #############
-source ~/anaconda3/etc/profile.d/conda.sh
-conda activate fairness-autosklearn
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate faml
 
 ####### Run the script #############
 cd ..
