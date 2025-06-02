@@ -1,38 +1,17 @@
-# -*- encoding: utf-8 -*-
-"""
-=======
-Metrics
-=======
-
-*Auto-sklearn* supports various built-in metrics, which can be found in the
-:ref:`metrics section in the API <api:Built-in Metrics>`. However, it is also
-possible to define your own metric and use it to fit and evaluate your model.
-The following examples show how to use built-in and self-defined metrics for a
-classification problem.
-"""
-import sys
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
 # Add the directory to sys.path
 sys.path.append(package_dir)
-import datetime
-import pickle
-
 from ConfigSpace.configuration_space import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
-    UniformFloatHyperparameter,
-    UniformIntegerHyperparameter,
-    UnParametrizedHyperparameter,
 )
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
+from sklearn.linear_model import LogisticRegression
 
 import autosklearn.pipeline.components.classification
-from autosklearn.Fairea.fairea import create_baseline
-from autosklearn.pipeline.components.base import IterativeComponentWithSampleWeight
 from autosklearn.pipeline.components.classification import (
     AutoSklearnClassificationAlgorithm,
 )
@@ -40,17 +19,17 @@ from autosklearn.pipeline.constants import (
     DENSE,
     UNSIGNED_DATA,
     PREDICTIONS,
-    SPARSE,
     SIGNED_DATA,
 )
-import shutil
+import datetime
+
+import pickle
+
 import autosklearn.classification
 import autosklearn.metrics
 import warnings
 
 warnings.filterwarnings("ignore")
-from aif360.datasets import AdultDataset, BankDataset
-from sklearn.preprocessing import StandardScaler
 import os
 import numpy as np
 
@@ -62,8 +41,10 @@ from autosklearn.upgrade.metric import (
     equal_opportunity_difference,
     average_odds_difference,
 )
-from autosklearn.util.common import check_for_bool, check_none
-
+from autosklearn.Fairea.fairea import (
+    create_baseline,
+)
+from sklearn.preprocessing import StandardScaler
 
 train_list = "data_orig_train_bank.pkl"
 test_list = "data_orig_test_bank.pkl"
@@ -88,7 +69,7 @@ def custom_preprocessing(df):
 # ============
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "bank_gbc_spd" + str(now)
+temp_path = "bank_xgb_spd" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -211,7 +192,6 @@ data_orig_test = StandardDataset(
 privileged_groups = [{"age": 1}]
 unprivileged_groups = [{"age": 0}]
 
-
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
 
@@ -223,69 +203,21 @@ X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.transform(X_test)
 
 
-class CustomGBC(IterativeComponentWithSampleWeight, AutoSklearnClassificationAlgorithm):
-    def __init__(
-        self,
-        loss,
-        learning_rate,
-        n_estimators,
-        max_features,
-        min_samples_split,
-        min_samples_leaf,
-        min_weight_fraction_leaf,
-        max_leaf_nodes,
-        min_impurity_decrease,
-        max_depth,
-        random_state=20,
-    ):
-        self.loss = loss
-        self.learning_rate = learning_rate
-        self.n_estimators = n_estimators
-        self.max_features = max_features
-        self.max_depth = max_depth
-        self.min_samples_split = min_samples_split
-        self.min_samples_leaf = min_samples_leaf
-        self.min_weight_fraction_leaf = min_weight_fraction_leaf
-        self.max_leaf_nodes = max_leaf_nodes
-        self.min_impurity_decrease = min_impurity_decrease
+class CustomLRG(AutoSklearnClassificationAlgorithm):
+    def __init__(self, penalty, C, dual, random_state=None):
+        self.penalty = penalty
+        self.C = C
+        self.dual = dual
         self.random_state = random_state
-        self.estimator = None
 
     def fit(self, X, y):
-        from sklearn.ensemble import GradientBoostingClassifier
+        from sklearn.linear_model import LogisticRegression
 
-        self.n_estimators = int(self.n_estimators)
-
-        self.min_samples_split = int(self.min_samples_split)
-        self.min_samples_leaf = int(self.min_samples_leaf)
-        self.min_weight_fraction_leaf = float(self.min_weight_fraction_leaf)
-
-        if self.max_features not in ("sqrt", "log2", "auto"):
-            max_features = int(X.shape[1] ** float(self.max_features))
-        else:
-            max_features = self.max_features
-
-        if check_none(self.max_leaf_nodes):
-            self.max_leaf_nodes = None
-        else:
-            self.max_leaf_nodes = int(self.max_leaf_nodes)
-
-        self.min_impurity_decrease = float(self.min_impurity_decrease)
-
-        # initial fit of only increment trees
-        self.estimator = GradientBoostingClassifier(
-            loss=self.loss,
-            learning_rate=self.learning_rate,
-            n_estimators=self.n_estimators,
-            max_features=max_features,
-            max_depth=self.max_depth,
-            min_samples_split=self.min_samples_split,
-            min_samples_leaf=self.min_samples_leaf,
-            min_weight_fraction_leaf=self.min_weight_fraction_leaf,
-            max_leaf_nodes=self.max_leaf_nodes,
+        self.estimator = LogisticRegression(
+            penalty=self.penalty,
+            C=self.C,
+            dual=self.dual,
             random_state=self.random_state,
-            min_impurity_decrease=self.min_impurity_decrease,
-            warm_start=True,
         )
         self.estimator.fit(X, y)
         return self
@@ -303,77 +235,49 @@ class CustomGBC(IterativeComponentWithSampleWeight, AutoSklearnClassificationAlg
     @staticmethod
     def get_properties(dataset_properties=None):
         return {
-            "shortname": "GB",
-            "name": "Gradient Boosting Classifier",
+            "shortname": "LRG",
+            "name": "LRG Classifier",
             "handles_regression": False,
             "handles_classification": True,
             "handles_multiclass": True,
             "handles_multilabel": False,
             "handles_multioutput": False,
-            "is_deterministic": True,
-            "input": (DENSE, UNSIGNED_DATA),
-            "output": (PREDICTIONS,),
+            "is_deterministic": False,
+            # Both input and output must be tuple(iterable)
+            "input": [DENSE, SIGNED_DATA, UNSIGNED_DATA],
+            "output": [PREDICTIONS],
         }
 
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        # 'n_estimators': [100],
-        # 'learning_rate': [1e-3, 1e-2, 1e-1, 0.5, 1.],
-        # 'max_depth': range(1, 11),
-        # 'min_samples_split': range(2, 21),
-        # 'min_samples_leaf': range(1, 21),
-        # 'subsample': np.arange(0.05, 1.01, 0.05),
-        # 'max_features': np.arange(0.05, 1.01, 0.05)
-        n_estimators = UniformIntegerHyperparameter(
-            "n_estimators", 206, 749, default_value=206
+        # The maximum number of features used in the forest is calculated as m^max_features, where
+        # m is the total number of features, and max_features is the hyperparameter specified below.
+        # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
+        # corresponds with Geurts' heuristic.
+
+        penalty = CategoricalHyperparameter(
+            name="penalty", choices=["l2"], default_value="l2"
         )
-        loss = CategoricalHyperparameter(
-            "loss", ["deviance", "exponential"], default_value="deviance"
+        C = CategoricalHyperparameter(
+            name="C",
+            choices=[1e-4, 1e-3, 1e-2, 1e-1, 0.5, 1.0, 5.0, 10.0, 15.0],
+            default_value=1.0,
         )
-        learning_rate = UniformFloatHyperparameter(
-            "learning_rate", 0.26779, 0.79811, default_value=0.26779
-        )
-        max_features = UniformFloatHyperparameter(
-            "max_features", 0.21431, 0.79214, default_value=0.5
+        dual = CategoricalHyperparameter(
+            name="dual", choices=[False], default_value=False
         )
 
-        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9, default_value=3)
-        min_samples_split = UniformIntegerHyperparameter(
-            "min_samples_split", 6, 16, default_value=6
-        )
-        min_samples_leaf = UniformIntegerHyperparameter(
-            "min_samples_leaf", 5, 16, default_value=5
-        )
-        min_weight_fraction_leaf = UnParametrizedHyperparameter(
-            "min_weight_fraction_leaf", 0.0
-        )
-        max_leaf_nodes = UnParametrizedHyperparameter("max_leaf_nodes", "None")
-        min_impurity_decrease = UnParametrizedHyperparameter(
-            "min_impurity_decrease", 0.0
-        )
-
-        cs.add_hyperparameters(
-            [
-                n_estimators,
-                loss,
-                learning_rate,
-                max_features,
-                max_depth,
-                min_samples_split,
-                min_samples_leaf,
-                min_weight_fraction_leaf,
-                max_leaf_nodes,
-                min_impurity_decrease,
-            ]
-        )
+        cs.add_hyperparameters([penalty, C, dual])
         return cs
 
 
-autosklearn.pipeline.components.classification.add_classifier(CustomGBC)
-cs = CustomGBC.get_hyperparameter_search_space()
+autosklearn.pipeline.components.classification.add_classifier(CustomLRG)
+cs = CustomLRG.get_hyperparameter_search_space()
 print(cs)
+
+
 ############################################################################
 # Custom metrics definition
 # =========================
@@ -392,9 +296,8 @@ def accuracy(solution, prediction):
     subset_data_orig_train = data_orig_train.subset(split)
 
     if os.stat("beta.txt").st_size == 0:
-        from sklearn.ensemble import GradientBoostingClassifier
 
-        default = GradientBoostingClassifier()
+        default = LogisticRegression()
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
         dataset_orig = subset_data_orig_train
@@ -442,13 +345,16 @@ def accuracy(solution, prediction):
         f.close()
         # print('yyyy')
     # print(beta)
-    beta += 0.1
+    beta += 0.2
     if beta > 1.0:
         beta = 1.0
+
     try:
         num_keys = sum(1 for line in open("num_keys.txt"))
         print(num_keys)
         beta -= 0.050 * int(int(num_keys) / 10)
+        if beta < 0.0:
+            beta = 0
         if int(num_keys) % 10 == 0:
             os.remove(temp_path + "/.auto-sklearn/ensemble_read_losses.pkl")
         f.close()
@@ -487,7 +393,7 @@ def accuracy(solution, prediction):
 print("#" * 80)
 print("Use self defined accuracy metric")
 accuracy_scorer = autosklearn.metrics.make_scorer(
-    name="accu",
+    name="fair+acc",
     score_func=accuracy,
     optimum=1,
     greater_is_better=False,
@@ -495,21 +401,14 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_threshold=False,
 )
 
-
 ############################################################################
 # Build and fit a classifier
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
-    # per_run_time_limit=500,
     memory_limit=10000000,
-    include_estimators=["CustomGBC"],
+    include_estimators=["CustomLRG"],
     ensemble_size=1,
-    include_preprocessors=[
-        "nystroem_sampler",
-        "select_rates_classification",
-        "select_percentile_classification",
-    ],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer,
@@ -522,17 +421,16 @@ automl.fit(X_train, y_train)
 
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
-print(cs)
-predictions = automl.predict(X_test)
 
-a_file = open("bank_gbc_spd" + str(now) + "60sp.pkl", "wb")
+a_file = open("adult_lrg_spd_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
 
-a_file1 = open("automl_bank_gbc_spd" + str(now) + "60sp.pkl", "wb")
+a_file1 = open("automl_adult_lrg_spd_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
 
+predictions = automl.predict(X_test)
 print(predictions)
 print(y_test, len(predictions))
 print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
@@ -540,3 +438,18 @@ print(disparate_impact(data_orig_test, predictions, "age"))
 print(statistical_parity_difference(data_orig_test, predictions, "age"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "age"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "age"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_lrg_spd_age_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)

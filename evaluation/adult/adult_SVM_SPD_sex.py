@@ -2,11 +2,6 @@ import os
 import resource
 import sys
 
-from ConfigSpace import EqualsCondition, InCondition
-
-from autosklearn.pipeline.implementations.util import softmax
-from autosklearn.util.common import check_for_bool, check_none
-
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
 # Add the directory to sys.path
@@ -35,6 +30,10 @@ from autosklearn.upgrade.metric import (
     average_odds_difference,
 )
 from autosklearn.Fairea.fairea import create_baseline
+from ConfigSpace import EqualsCondition, InCondition
+
+from autosklearn.pipeline.implementations.util import softmax
+from autosklearn.util.common import check_for_bool, check_none
 
 train_list = "data_orig_train_adult.pkl"
 test_list = "data_orig_test_adult.pkl"
@@ -147,9 +146,19 @@ y_test = data_orig_test.labels.ravel()
 
 from autosklearn.pipeline.components.base import AutoSklearnClassificationAlgorithm
 from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import UniformFloatHyperparameter, CategoricalHyperparameter, \
-    UniformIntegerHyperparameter, UnParametrizedHyperparameter
-from autosklearn.pipeline.constants import DENSE, SPARSE, SIGNED_DATA, UNSIGNED_DATA, PREDICTIONS
+from ConfigSpace.hyperparameters import (
+    UniformFloatHyperparameter,
+    CategoricalHyperparameter,
+    UniformIntegerHyperparameter,
+    UnParametrizedHyperparameter,
+)
+from autosklearn.pipeline.constants import (
+    DENSE,
+    SPARSE,
+    SIGNED_DATA,
+    UNSIGNED_DATA,
+    PREDICTIONS,
+)
 
 
 # class CustomSVM(AutoSklearnClassificationAlgorithm):
@@ -219,6 +228,7 @@ from autosklearn.pipeline.constants import DENSE, SPARSE, SIGNED_DATA, UNSIGNED_
 #
 #         cs.add_hyperparameters([C, kernel, gamma, shrinking])
 #         return cs
+
 
 class CustomSVC(AutoSklearnClassificationAlgorithm):
     def __init__(
@@ -499,7 +509,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-            1 - np.mean(solution == prediction)
+        1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 

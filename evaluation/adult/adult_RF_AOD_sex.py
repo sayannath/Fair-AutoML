@@ -163,20 +163,20 @@ y_test = data_orig_test.labels.ravel()
 
 class CustomRandomForest(AutoSklearnClassificationAlgorithm):
     def __init__(
-            self,
-            n_estimators,
-            criterion,
-            max_features,
-            min_samples_split,
-            min_samples_leaf,
-            min_weight_fraction_leaf,
-            bootstrap,
-            max_leaf_nodes,
-            min_impurity_decrease,
-            max_depth=10,
-            random_state=20,
-            n_jobs=1,
-            class_weight=None,
+        self,
+        n_estimators,
+        criterion,
+        max_features,
+        min_samples_split,
+        min_samples_leaf,
+        min_weight_fraction_leaf,
+        bootstrap,
+        max_leaf_nodes,
+        min_impurity_decrease,
+        max_depth=10,
+        random_state=20,
+        n_jobs=1,
+        class_weight=None,
     ):
         self.n_estimators = n_estimators
         self.criterion = criterion
@@ -430,7 +430,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-            1 - np.mean(solution == prediction)
+        1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 

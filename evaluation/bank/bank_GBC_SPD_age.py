@@ -32,6 +32,7 @@ from xgboost import XGBClassifier
 
 import autosklearn.pipeline.components.classification
 from autosklearn.Fairea.fairea import create_baseline
+from autosklearn.pipeline.components.base import IterativeComponentWithSampleWeight
 from autosklearn.pipeline.components.classification import (
     AutoSklearnClassificationAlgorithm,
 )
@@ -87,7 +88,7 @@ def custom_preprocessing(df):
 # ============
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "bank_xgb_spd" + str(now)
+temp_path = "bank_gbc_spd" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -210,6 +211,7 @@ data_orig_test = StandardDataset(
 privileged_groups = [{"age": 1}]
 unprivileged_groups = [{"age": 0}]
 
+
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
 
@@ -221,33 +223,69 @@ X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.transform(X_test)
 
 
-class CustomXGBoost(AutoSklearnClassificationAlgorithm):
+class CustomGBC(IterativeComponentWithSampleWeight, AutoSklearnClassificationAlgorithm):
     def __init__(
         self,
-        n_estimators,
-        max_depth,
+        loss,
         learning_rate,
-        subsample,
-        min_child_weight,
-        random_state=None,
+        n_estimators,
+        max_features,
+        min_samples_split,
+        min_samples_leaf,
+        min_weight_fraction_leaf,
+        max_leaf_nodes,
+        min_impurity_decrease,
+        max_depth,
+        random_state=20,
     ):
-        self.n_estimators = n_estimators
-        self.max_depth = max_depth
+        self.loss = loss
         self.learning_rate = learning_rate
-        self.subsample = subsample
-        self.min_child_weight = min_child_weight
+        self.n_estimators = n_estimators
+        self.max_features = max_features
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.min_samples_leaf = min_samples_leaf
+        self.min_weight_fraction_leaf = min_weight_fraction_leaf
+        self.max_leaf_nodes = max_leaf_nodes
+        self.min_impurity_decrease = min_impurity_decrease
         self.random_state = random_state
+        self.estimator = None
 
     def fit(self, X, y):
-        from xgboost import XGBClassifier
+        from sklearn.ensemble import GradientBoostingClassifier
 
-        self.estimator = XGBClassifier(
-            n_estimators=self.n_estimators,
-            max_depth=self.max_depth,
+        self.n_estimators = int(self.n_estimators)
+
+        self.min_samples_split = int(self.min_samples_split)
+        self.min_samples_leaf = int(self.min_samples_leaf)
+        self.min_weight_fraction_leaf = float(self.min_weight_fraction_leaf)
+
+        if self.max_features not in ("sqrt", "log2", "auto"):
+            max_features = int(X.shape[1] ** float(self.max_features))
+        else:
+            max_features = self.max_features
+
+        if check_none(self.max_leaf_nodes):
+            self.max_leaf_nodes = None
+        else:
+            self.max_leaf_nodes = int(self.max_leaf_nodes)
+
+        self.min_impurity_decrease = float(self.min_impurity_decrease)
+
+        # initial fit of only increment trees
+        self.estimator = GradientBoostingClassifier(
+            loss=self.loss,
             learning_rate=self.learning_rate,
-            subsample=self.subsample,
-            min_child_weight=self.min_child_weight,
+            n_estimators=self.n_estimators,
+            max_features=max_features,
+            max_depth=self.max_depth,
+            min_samples_split=self.min_samples_split,
+            min_samples_leaf=self.min_samples_leaf,
+            min_weight_fraction_leaf=self.min_weight_fraction_leaf,
+            max_leaf_nodes=self.max_leaf_nodes,
             random_state=self.random_state,
+            min_impurity_decrease=self.min_impurity_decrease,
+            warm_start=True,
         )
         self.estimator.fit(X, y)
         return self
@@ -265,52 +303,77 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
     @staticmethod
     def get_properties(dataset_properties=None):
         return {
-            "shortname": "XG",
-            "name": "XGBoost Classifier",
+            "shortname": "GB",
+            "name": "Gradient Boosting Classifier",
             "handles_regression": False,
             "handles_classification": True,
             "handles_multiclass": True,
             "handles_multilabel": False,
             "handles_multioutput": False,
-            "is_deterministic": False,
-            # Both input and output must be tuple(iterable)
-            "input": [DENSE, SIGNED_DATA, UNSIGNED_DATA],
-            "output": [PREDICTIONS],
+            "is_deterministic": True,
+            "input": (DENSE, UNSIGNED_DATA),
+            "output": (PREDICTIONS,),
         }
 
     @staticmethod
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        # The maximum number of features used in the forest is calculated as m^max_features, where
-        # m is the total number of features, and max_features is the hyperparameter specified below.
-        # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
-        # corresponds with Geurts' heuristic.
+        # 'n_estimators': [100],
+        # 'learning_rate': [1e-3, 1e-2, 1e-1, 0.5, 1.],
+        # 'max_depth': range(1, 11),
+        # 'min_samples_split': range(2, 21),
+        # 'min_samples_leaf': range(1, 21),
+        # 'subsample': np.arange(0.05, 1.01, 0.05),
+        # 'max_features': np.arange(0.05, 1.01, 0.05)
         n_estimators = UniformIntegerHyperparameter(
-            "n_estimators", 200, 761, default_value=200
+            "n_estimators", 206, 749, default_value=206
         )
-        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9, default_value=7)
+        loss = CategoricalHyperparameter(
+            "loss", ["deviance", "exponential"], default_value="deviance"
+        )
         learning_rate = UniformFloatHyperparameter(
-            "learning_rate", 0.18411, 0.61907, default_value=0.18411
+            "learning_rate", 0.26779, 0.79811, default_value=0.26779
         )
-        subsample = UniformFloatHyperparameter(
-            "subsample", 0.32629, 0.75605, default_value=0.75
+        max_features = UniformFloatHyperparameter(
+            "max_features", 0.21431, 0.79214, default_value=0.5
         )
 
-        min_child_weight = UniformIntegerHyperparameter(
-            "min_child_weight", 6, 17, default_value=6
+        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9, default_value=3)
+        min_samples_split = UniformIntegerHyperparameter(
+            "min_samples_split", 6, 16, default_value=6
+        )
+        min_samples_leaf = UniformIntegerHyperparameter(
+            "min_samples_leaf", 5, 16, default_value=5
+        )
+        min_weight_fraction_leaf = UnParametrizedHyperparameter(
+            "min_weight_fraction_leaf", 0.0
+        )
+        max_leaf_nodes = UnParametrizedHyperparameter("max_leaf_nodes", "None")
+        min_impurity_decrease = UnParametrizedHyperparameter(
+            "min_impurity_decrease", 0.0
         )
 
         cs.add_hyperparameters(
-            [n_estimators, max_depth, learning_rate, subsample, min_child_weight]
+            [
+                n_estimators,
+                loss,
+                learning_rate,
+                max_features,
+                max_depth,
+                min_samples_split,
+                min_samples_leaf,
+                min_weight_fraction_leaf,
+                max_leaf_nodes,
+                min_impurity_decrease,
+            ]
         )
         return cs
 
 
-autosklearn.pipeline.components.classification.add_classifier(CustomXGBoost)
-cs = CustomXGBoost.get_hyperparameter_search_space()
+autosklearn.pipeline.components.classification.add_classifier(CustomGBC)
+cs = CustomGBC.get_hyperparameter_search_space()
 print(cs)
-
 ############################################################################
 # Custom metrics definition
 # =========================
@@ -329,8 +392,9 @@ def accuracy(solution, prediction):
     subset_data_orig_train = data_orig_train.subset(split)
 
     if os.stat("beta.txt").st_size == 0:
+        from sklearn.ensemble import GradientBoostingClassifier
 
-        default = XGBClassifier()
+        default = GradientBoostingClassifier()
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
         dataset_orig = subset_data_orig_train
@@ -378,7 +442,7 @@ def accuracy(solution, prediction):
         f.close()
         # print('yyyy')
     # print(beta)
-    beta += 0.2
+    beta += 0.1
     if beta > 1.0:
         beta = 1.0
     try:
@@ -439,12 +503,12 @@ automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
     # per_run_time_limit=500,
     memory_limit=10000000,
-    include_estimators=["CustomXGBoost"],
+    include_estimators=["CustomGBC"],
     ensemble_size=1,
     include_preprocessors=[
-        "select_percentile_classification",
+        "nystroem_sampler",
         "select_rates_classification",
-        "fast_ica",
+        "select_percentile_classification",
     ],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
@@ -461,11 +525,11 @@ cs = automl.get_configuration_space(X_train, y_train)
 print(cs)
 predictions = automl.predict(X_test)
 
-a_file = open("bank_xgb_spd" + str(now) + "60sp.pkl", "wb")
+a_file = open("bank_gbc_spd" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
 
-a_file1 = open("automl_bank_xgb_spd" + str(now) + "60sp.pkl", "wb")
+a_file1 = open("automl_bank_gbc_spd" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
 
@@ -476,3 +540,18 @@ print(disparate_impact(data_orig_test, predictions, "age"))
 print(statistical_parity_difference(data_orig_test, predictions, "age"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "age"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "age"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/bank_gbc_spd_age_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)

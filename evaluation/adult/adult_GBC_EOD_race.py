@@ -156,18 +156,18 @@ import autosklearn.pipeline.components.classification
 
 class CustomGBC(IterativeComponentWithSampleWeight, AutoSklearnClassificationAlgorithm):
     def __init__(
-            self,
-            loss,
-            learning_rate,
-            n_estimators,
-            max_features,
-            min_samples_split,
-            min_samples_leaf,
-            min_weight_fraction_leaf,
-            max_leaf_nodes,
-            min_impurity_decrease,
-            max_depth,
-            random_state=20,
+        self,
+        loss,
+        learning_rate,
+        n_estimators,
+        max_features,
+        min_samples_split,
+        min_samples_leaf,
+        min_weight_fraction_leaf,
+        max_leaf_nodes,
+        min_impurity_decrease,
+        max_depth,
+        random_state=20,
     ):
         self.loss = loss
         self.learning_rate = learning_rate
@@ -411,7 +411,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-            1 - np.mean(solution == prediction)
+        1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 

@@ -28,20 +28,13 @@ from ConfigSpace.hyperparameters import (
     UnParametrizedHyperparameter,
 )
 from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
 
 import autosklearn.pipeline.components.classification
 from autosklearn.Fairea.fairea import create_baseline
 from autosklearn.pipeline.components.classification import (
     AutoSklearnClassificationAlgorithm,
 )
-from autosklearn.pipeline.constants import (
-    DENSE,
-    UNSIGNED_DATA,
-    PREDICTIONS,
-    SPARSE,
-    SIGNED_DATA,
-)
+from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
 import shutil
 import autosklearn.classification
 import autosklearn.metrics
@@ -62,7 +55,6 @@ from autosklearn.upgrade.metric import (
     average_odds_difference,
 )
 from autosklearn.util.common import check_for_bool, check_none
-
 
 train_list = "data_orig_train_bank.pkl"
 test_list = "data_orig_test_bank.pkl"
@@ -87,7 +79,7 @@ def custom_preprocessing(df):
 # ============
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "bank_xgb_eod" + str(now)
+temp_path = "bank_rf_eod" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -216,38 +208,88 @@ y_train = data_orig_train.labels.ravel()
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
 
-sc_X = StandardScaler()
-X_train = sc_X.fit_transform(X_train)
-X_test = sc_X.transform(X_test)
+
+# sc_X = StandardScaler()
+# X_train = sc_X.fit_transform(X_train)
+# X_test = sc_X.transform(X_test)
 
 
-class CustomXGBoost(AutoSklearnClassificationAlgorithm):
+class CustomRandomForest(AutoSklearnClassificationAlgorithm):
     def __init__(
         self,
         n_estimators,
-        max_depth,
-        learning_rate,
-        subsample,
-        min_child_weight,
-        random_state=None,
+        criterion,
+        max_features,
+        min_samples_split,
+        min_samples_leaf,
+        min_weight_fraction_leaf,
+        bootstrap,
+        max_leaf_nodes,
+        min_impurity_decrease,
+        max_depth=9,
+        random_state=1,
+        n_jobs=1,
+        class_weight=None,
     ):
         self.n_estimators = n_estimators
+        self.criterion = criterion
+        self.max_features = max_features
         self.max_depth = max_depth
-        self.learning_rate = learning_rate
-        self.subsample = subsample
-        self.min_child_weight = min_child_weight
+        self.min_samples_split = min_samples_split
+        self.min_samples_leaf = min_samples_leaf
+        self.min_weight_fraction_leaf = min_weight_fraction_leaf
+        self.bootstrap = bootstrap
+        self.max_leaf_nodes = max_leaf_nodes
+        self.min_impurity_decrease = min_impurity_decrease
         self.random_state = random_state
+        self.n_jobs = n_jobs
+        self.class_weight = class_weight
+        self.estimator = None
 
     def fit(self, X, y):
-        from xgboost import XGBClassifier
+        from sklearn.ensemble import RandomForestClassifier
 
-        self.estimator = XGBClassifier(
+        self.n_estimators = int(self.n_estimators)
+
+        if check_none(self.max_depth):
+            self.max_depth = 9
+        else:
+            self.max_depth = int(self.max_depth)
+
+        self.min_samples_split = int(self.min_samples_split)
+        self.min_samples_leaf = int(self.min_samples_leaf)
+        self.min_weight_fraction_leaf = float(self.min_weight_fraction_leaf)
+
+        if self.max_features not in ("sqrt", "log2", "auto"):
+            max_features = int(X.shape[1] ** float(self.max_features))
+        else:
+            max_features = self.max_features
+
+        self.bootstrap = check_for_bool(self.bootstrap)
+
+        if check_none(self.max_leaf_nodes):
+            self.max_leaf_nodes = None
+        else:
+            self.max_leaf_nodes = int(self.max_leaf_nodes)
+
+        self.min_impurity_decrease = float(self.min_impurity_decrease)
+
+        # initial fit of only increment trees
+        self.estimator = RandomForestClassifier(
             n_estimators=self.n_estimators,
+            criterion=self.criterion,
+            max_features=max_features,
             max_depth=self.max_depth,
-            learning_rate=self.learning_rate,
-            subsample=self.subsample,
-            min_child_weight=self.min_child_weight,
+            min_samples_split=self.min_samples_split,
+            min_samples_leaf=self.min_samples_leaf,
+            min_weight_fraction_leaf=self.min_weight_fraction_leaf,
+            bootstrap=self.bootstrap,
+            max_leaf_nodes=self.max_leaf_nodes,
+            min_impurity_decrease=self.min_impurity_decrease,
             random_state=self.random_state,
+            n_jobs=self.n_jobs,
+            class_weight=self.class_weight,
+            warm_start=True,
         )
         self.estimator.fit(X, y)
         return self
@@ -265,17 +307,16 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
     @staticmethod
     def get_properties(dataset_properties=None):
         return {
-            "shortname": "XG",
-            "name": "XGBoost Classifier",
+            "shortname": "RF",
+            "name": "Random Forest Classifier",
             "handles_regression": False,
             "handles_classification": True,
             "handles_multiclass": True,
-            "handles_multilabel": False,
+            "handles_multilabel": True,
             "handles_multioutput": False,
-            "is_deterministic": False,
-            # Both input and output must be tuple(iterable)
-            "input": [DENSE, SIGNED_DATA, UNSIGNED_DATA],
-            "output": [PREDICTIONS],
+            "is_deterministic": True,
+            "input": (DENSE, SPARSE, UNSIGNED_DATA),
+            "output": (PREDICTIONS,),
         }
 
     @staticmethod
@@ -287,29 +328,59 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
         # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
         # corresponds with Geurts' heuristic.
         n_estimators = UniformIntegerHyperparameter(
-            "n_estimators", 212, 772, default_value=212
+            "n_estimators", 240, 773, default_value=240
         )
-        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9, default_value=6)
-        learning_rate = UniformFloatHyperparameter(
-            "learning_rate", 0.20693, 0.72593, default_value=0.3
-        )
-        subsample = UniformFloatHyperparameter(
-            "subsample", 0.18777, 0.77637, default_value=0.77637
+        criterion = CategoricalHyperparameter(
+            "criterion", ["gini", "entropy"], default_value="entropy"
         )
 
-        min_child_weight = UniformIntegerHyperparameter(
-            "min_child_weight", 5, 17, default_value=5
+        # The maximum number of features used in the forest is calculated as m^max_features, where
+        # m is the total number of features, and max_features is the hyperparameter specified below.
+        # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
+        # corresponds with Geurts' heuristic.
+        max_features = UniformFloatHyperparameter(
+            "max_features", 0.17405, 0.75252, default_value=0.5
         )
 
+        max_depth = UnParametrizedHyperparameter("max_depth", 9)
+        min_samples_split = UniformIntegerHyperparameter(
+            "min_samples_split", 6, 16, default_value=6
+        )
+        min_samples_leaf = UniformIntegerHyperparameter(
+            "min_samples_leaf", 5, 16, default_value=5
+        )
+        min_weight_fraction_leaf = UnParametrizedHyperparameter(
+            "min_weight_fraction_leaf", 0.0
+        )
+        max_leaf_nodes = UnParametrizedHyperparameter("max_leaf_nodes", "None")
+        min_impurity_decrease = UnParametrizedHyperparameter(
+            "min_impurity_decrease", 0.0
+        )
+        bootstrap = CategoricalHyperparameter(
+            "bootstrap", ["True", "False"], default_value="True"
+        )
         cs.add_hyperparameters(
-            [n_estimators, max_depth, learning_rate, subsample, min_child_weight]
+            [
+                n_estimators,
+                criterion,
+                max_features,
+                max_depth,
+                min_samples_split,
+                min_samples_leaf,
+                min_weight_fraction_leaf,
+                max_leaf_nodes,
+                bootstrap,
+                min_impurity_decrease,
+            ]
         )
         return cs
 
 
-autosklearn.pipeline.components.classification.add_classifier(CustomXGBoost)
-cs = CustomXGBoost.get_hyperparameter_search_space()
+# Add custom random forest classifier component to auto-sklearn.
+autosklearn.pipeline.components.classification.add_classifier(CustomRandomForest)
+cs = CustomRandomForest.get_hyperparameter_search_space()
 print(cs)
+
 
 ############################################################################
 # Custom metrics definition
@@ -330,7 +401,18 @@ def accuracy(solution, prediction):
 
     if os.stat("beta.txt").st_size == 0:
 
-        default = XGBClassifier()
+        default = RandomForestClassifier(
+            n_estimators=50,
+            criterion="entropy",
+            max_features=0.5,
+            min_samples_split=2,
+            min_samples_leaf=1,
+            min_weight_fraction_leaf=0.0,
+            max_leaf_nodes=None,
+            min_impurity_decrease=0.0,
+            bootstrap=True,
+            max_depth=9,
+        )
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
         dataset_orig = subset_data_orig_train
@@ -439,14 +521,14 @@ automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
     # per_run_time_limit=500,
     memory_limit=10000000,
-    include_estimators=["CustomXGBoost"],
+    include_estimators=["CustomRandomForest"],
     ensemble_size=1,
+    tmp_folder=temp_path,
     include_preprocessors=[
-        "select_percentile_classification",
-        "fast_ica",
+        "select_rates_classification",
+        "pca",
         "extra_trees_preproc_for_classification",
     ],
-    tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer,
 )
@@ -456,23 +538,40 @@ automl.fit(X_train, y_train)
 # Get the Score of the final ensemble
 # ===================================
 
+
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
 print(cs)
 predictions = automl.predict(X_test)
+print(predictions)
+print(y_test, len(predictions))
 
-a_file = open("bank_xgb_eod" + str(now) + "60sp.pkl", "wb")
+a_file = open("bank_rf_eod" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
 
-a_file1 = open("automl_bank_xgb_eod" + str(now) + "60sp.pkl", "wb")
+a_file1 = open("automl_bank_rf_eod" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
 
-print(predictions)
-print(y_test, len(predictions))
+
 print("EOD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
 print(disparate_impact(data_orig_test, predictions, "age"))
 print(statistical_parity_difference(data_orig_test, predictions, "age"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "age"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "age"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/bank_rf_eod_age_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)

@@ -146,20 +146,14 @@ data_orig_test = StandardDataset(
     metadata=default_mappings,
 )
 
-privileged_groups = [{"race": 1}]
-unprivileged_groups = [{"race": 0}]
+privileged_groups = [{"sex": 1}]
+unprivileged_groups = [{"sex": 0}]
 
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
 
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
-
-
-# scaler = StandardScaler()
-# X_train = scaler.fit_transform(X_train)
-# X_test = scaler.transform(X_test)
-# data_orig_test.features = X_test
 
 
 class CustomLRG(AutoSklearnClassificationAlgorithm):

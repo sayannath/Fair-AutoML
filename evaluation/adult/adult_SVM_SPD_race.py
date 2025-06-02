@@ -141,19 +141,28 @@ y_test = data_orig_test.labels.ravel()
 
 from autosklearn.pipeline.components.base import AutoSklearnClassificationAlgorithm
 from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.hyperparameters import UniformFloatHyperparameter, CategoricalHyperparameter
-from autosklearn.pipeline.constants import DENSE, SPARSE, SIGNED_DATA, UNSIGNED_DATA, PREDICTIONS
+from ConfigSpace.hyperparameters import (
+    UniformFloatHyperparameter,
+    CategoricalHyperparameter,
+)
+from autosklearn.pipeline.constants import (
+    DENSE,
+    SPARSE,
+    SIGNED_DATA,
+    UNSIGNED_DATA,
+    PREDICTIONS,
+)
 
 
 class CustomSVM(AutoSklearnClassificationAlgorithm):
     def __init__(
-            self,
-            C,
-            kernel,
-            gamma,
-            shrinking,
-            probability=True,
-            random_state=None,
+        self,
+        C,
+        kernel,
+        gamma,
+        shrinking,
+        probability=True,
+        random_state=None,
     ):
         self.C = C
         self.kernel = kernel
@@ -205,10 +214,18 @@ class CustomSVM(AutoSklearnClassificationAlgorithm):
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        C = UniformFloatHyperparameter("C", lower=0.03125, upper=32768.0, log=True, default_value=1.0)
-        kernel = CategoricalHyperparameter("kernel", ["linear", "rbf", "poly", "sigmoid"], default_value="rbf")
-        gamma = UniformFloatHyperparameter("gamma", lower=3.0517578125e-05, upper=8, log=True, default_value=0.1)
-        shrinking = CategoricalHyperparameter("shrinking", [True, False], default_value=True)
+        C = UniformFloatHyperparameter(
+            "C", lower=0.03125, upper=32768.0, log=True, default_value=1.0
+        )
+        kernel = CategoricalHyperparameter(
+            "kernel", ["linear", "rbf", "poly", "sigmoid"], default_value="rbf"
+        )
+        gamma = UniformFloatHyperparameter(
+            "gamma", lower=3.0517578125e-05, upper=8, log=True, default_value=0.1
+        )
+        shrinking = CategoricalHyperparameter(
+            "shrinking", [True, False], default_value=True
+        )
 
         cs.add_hyperparameters([C, kernel, gamma, shrinking])
         return cs
@@ -330,7 +347,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-            1 - np.mean(solution == prediction)
+        1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 

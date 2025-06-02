@@ -1,17 +1,5 @@
-# -*- encoding: utf-8 -*-
-"""
-=======
-Metrics
-=======
-
-*Auto-sklearn* supports various built-in metrics, which can be found in the
-:ref:`metrics section in the API <api:Built-in Metrics>`. However, it is also
-possible to define your own metric and use it to fit and evaluate your model.
-The following examples show how to use built-in and self-defined metrics for a
-classification problem.
-"""
-import sys
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
@@ -22,14 +10,11 @@ import pickle
 
 from ConfigSpace.configuration_space import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
-    CategoricalHyperparameter,
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
-    UnParametrizedHyperparameter,
+    CategoricalHyperparameter,
 )
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
-
+from sklearn.neural_network import MLPClassifier
 import autosklearn.pipeline.components.classification
 from autosklearn.Fairea.fairea import create_baseline
 from autosklearn.pipeline.components.classification import (
@@ -39,16 +24,13 @@ from autosklearn.pipeline.constants import (
     DENSE,
     UNSIGNED_DATA,
     PREDICTIONS,
-    SPARSE,
     SIGNED_DATA,
 )
-import shutil
 import autosklearn.classification
 import autosklearn.metrics
 import warnings
 
 warnings.filterwarnings("ignore")
-from aif360.datasets import AdultDataset, BankDataset
 from sklearn.preprocessing import StandardScaler
 import os
 import numpy as np
@@ -61,8 +43,6 @@ from autosklearn.upgrade.metric import (
     equal_opportunity_difference,
     average_odds_difference,
 )
-from autosklearn.util.common import check_for_bool, check_none
-
 
 train_list = "data_orig_train_bank.pkl"
 test_list = "data_orig_test_bank.pkl"
@@ -87,7 +67,7 @@ def custom_preprocessing(df):
 # ============
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "bank_xgb_aod" + str(now)
+temp_path = "bank_xgb_spd" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -221,32 +201,37 @@ X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.transform(X_test)
 
 
-class CustomXGBoost(AutoSklearnClassificationAlgorithm):
+class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
     def __init__(
         self,
-        n_estimators,
-        max_depth,
-        learning_rate,
-        subsample,
-        min_child_weight,
+        num_units,
+        alpha,
+        learning_rate_init,
+        max_iter,
+        tol,
+        activation,
         random_state=None,
     ):
-        self.n_estimators = n_estimators
-        self.max_depth = max_depth
-        self.learning_rate = learning_rate
-        self.subsample = subsample
-        self.min_child_weight = min_child_weight
+        self.num_units = num_units
+        self.hidden_layer_sizes = (num_units,)
+        self.alpha = alpha
+        self.learning_rate_init = learning_rate_init
+        self.max_iter = max_iter
+        self.tol = tol
+        self.activation = activation
         self.random_state = random_state
+        self.estimator = None
 
     def fit(self, X, y):
-        from xgboost import XGBClassifier
+        from sklearn.neural_network import MLPClassifier
 
-        self.estimator = XGBClassifier(
-            n_estimators=self.n_estimators,
-            max_depth=self.max_depth,
-            learning_rate=self.learning_rate,
-            subsample=self.subsample,
-            min_child_weight=self.min_child_weight,
+        self.estimator = MLPClassifier(
+            hidden_layer_sizes=self.hidden_layer_sizes,
+            alpha=self.alpha,
+            learning_rate_init=self.learning_rate_init,
+            max_iter=self.max_iter,
+            tol=self.tol,
+            activation=self.activation,
             random_state=self.random_state,
         )
         self.estimator.fit(X, y)
@@ -265,15 +250,14 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
     @staticmethod
     def get_properties(dataset_properties=None):
         return {
-            "shortname": "XG",
-            "name": "XGBoost Classifier",
+            "shortname": "MLP",
+            "name": "Multi-Layer Perceptron Classifier",
             "handles_regression": False,
             "handles_classification": True,
             "handles_multiclass": True,
             "handles_multilabel": False,
             "handles_multioutput": False,
             "is_deterministic": False,
-            # Both input and output must be tuple(iterable)
             "input": [DENSE, SIGNED_DATA, UNSIGNED_DATA],
             "output": [PREDICTIONS],
         }
@@ -282,34 +266,40 @@ class CustomXGBoost(AutoSklearnClassificationAlgorithm):
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        # The maximum number of features used in the forest is calculated as m^max_features, where
-        # m is the total number of features, and max_features is the hyperparameter specified below.
-        # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
-        # corresponds with Geurts' heuristic.
-        n_estimators = UniformIntegerHyperparameter(
-            "n_estimators", 210, 767, default_value=210
+        num_units = UniformIntegerHyperparameter(
+            "num_units", 50, 500, default_value=100
         )
-        max_depth = UniformIntegerHyperparameter("max_depth", 3, 9, default_value=7)
-        learning_rate = UniformFloatHyperparameter(
-            "learning_rate", 0.17415, 0.73086, default_value=0.17415
+        alpha = UniformFloatHyperparameter(
+            "alpha", 1e-6, 1e-1, log=True, default_value=1e-4
         )
-        subsample = UniformFloatHyperparameter(
-            "subsample", 0.24078, 0.76294, default_value=0.75
+        learning_rate_init = UniformFloatHyperparameter(
+            "learning_rate_init", 1e-4, 1.0, log=True, default_value=0.001
         )
-
-        min_child_weight = UniformIntegerHyperparameter(
-            "min_child_weight", 6, 17, default_value=6
+        max_iter = UniformIntegerHyperparameter("max_iter", 100, 500, default_value=300)
+        tol = UniformFloatHyperparameter(
+            "tol", 1e-5, 1e-2, log=True, default_value=1e-4
+        )
+        activation = CategoricalHyperparameter(
+            "activation", ["identity", "logistic", "tanh", "relu"], default_value="relu"
         )
 
         cs.add_hyperparameters(
-            [n_estimators, max_depth, learning_rate, subsample, min_child_weight]
+            [
+                num_units,
+                alpha,
+                learning_rate_init,
+                max_iter,
+                tol,
+                activation,
+            ]
         )
         return cs
 
 
-autosklearn.pipeline.components.classification.add_classifier(CustomXGBoost)
-cs = CustomXGBoost.get_hyperparameter_search_space()
+autosklearn.pipeline.components.classification.add_classifier(CustomMLPClassifier)
+cs = CustomMLPClassifier.get_hyperparameter_search_space()
 print(cs)
+
 
 ############################################################################
 # Custom metrics definition
@@ -317,7 +307,7 @@ print(cs)
 
 
 def accuracy(solution, prediction):
-    metric_id = 4
+    metric_id = 2
     protected_attr = "age"
     with open("test_split.txt") as f:
         first_line = f.read().splitlines()
@@ -330,7 +320,17 @@ def accuracy(solution, prediction):
 
     if os.stat("beta.txt").st_size == 0:
 
-        default = XGBClassifier()
+        default = MLPClassifier(
+            hidden_layer_sizes=(
+                100,
+            ),  # analogous to n_estimators=200 → 1 hidden layer of 100 units
+            alpha=1e-4,  # L2 penalty (default small value)
+            learning_rate_init=0.001,  # analogous to learning_rate=0.35
+            max_iter=300,  # analogous to max_depth=6 → more iterations
+            tol=1e-4,  # convergence tolerance
+            activation="relu",  # common default
+            random_state=None,
+        )
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
         dataset_orig = subset_data_orig_train
@@ -385,6 +385,8 @@ def accuracy(solution, prediction):
         num_keys = sum(1 for line in open("num_keys.txt"))
         print(num_keys)
         beta -= 0.050 * int(int(num_keys) / 10)
+        if beta < 0.0:
+            beta = 0
         if int(num_keys) % 10 == 0:
             os.remove(temp_path + "/.auto-sklearn/ensemble_read_losses.pkl")
         f.close()
@@ -431,20 +433,18 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_threshold=False,
 )
 
-
 ############################################################################
 # Build and fit a classifier
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
-    # per_run_time_limit=500,
     memory_limit=10000000,
-    include_estimators=["CustomXGBoost"],
+    include_estimators=["CustomMLPClassifier"],
     ensemble_size=1,
     include_preprocessors=[
         "select_percentile_classification",
-        "liblinear_svc_preprocessor",
         "select_rates_classification",
+        "fast_ica",
     ],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
@@ -461,18 +461,33 @@ cs = automl.get_configuration_space(X_train, y_train)
 print(cs)
 predictions = automl.predict(X_test)
 
-a_file = open("bank_xgb_aod" + str(now) + "60sp.pkl", "wb")
+a_file = open("bank_xgb_spd" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
 
-a_file1 = open("automl_bank_xgb_aod" + str(now) + "60sp.pkl", "wb")
+a_file1 = open("automl_bank_xgb_spd" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl, a_file1)
 a_file1.close()
 
 print(predictions)
 print(y_test, len(predictions))
-print("AOD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
+print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
 print(disparate_impact(data_orig_test, predictions, "age"))
 print(statistical_parity_difference(data_orig_test, predictions, "age"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "age"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "age"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/bank_mlp_spd_age_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)
