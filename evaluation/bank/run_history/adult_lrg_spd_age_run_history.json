@@ -1,0 +1,1959 @@
+[
+    {
+        "config_id": 1,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "no_preprocessing",
+            "classifier:CustomLRG:C": 1.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.01
+        },
+        "cost": 1.101216782598718,
+        "time": 5.896308898925781,
+        "additional_info": {
+            "duration": 5.886538982391357,
+            "num_run": 2,
+            "train_loss": 1.0646993069340152,
+            "configuration_origin": "Default"
+        }
+    },
+    {
+        "config_id": 2,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.06943546983792238,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 193,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "uniform",
+            "feature_preprocessor:feature_agglomeration:affinity": "euclidean",
+            "feature_preprocessor:feature_agglomeration:linkage": "average",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 318,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "max"
+        },
+        "cost": 1.1037697746209376,
+        "time": 2.1456620693206787,
+        "additional_info": {
+            "duration": 2.1355719566345215,
+            "num_run": 3,
+            "train_loss": 1.0671322380537833,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 3,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 0.0001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.19744241073972732,
+            "feature_preprocessor:kitchen_sinks:gamma": 0.008038493427960746,
+            "feature_preprocessor:kitchen_sinks:n_components": 50
+        },
+        "cost": 0.0,
+        "time": 0.16717886924743652,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 4,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "select_percentile_classification",
+            "classifier:CustomLRG:C": 0.001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0005914257872015065,
+            "feature_preprocessor:select_percentile_classification:percentile": 57.378373122989764,
+            "feature_preprocessor:select_percentile_classification:score_func": "f_classif"
+        },
+        "cost": 1.0827965114422442,
+        "time": 1.6568100452423096,
+        "additional_info": {
+            "duration": 1.6473448276519775,
+            "num_run": 5,
+            "train_loss": 1.0828515043903164,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 5,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "polynomial",
+            "classifier:CustomLRG:C": 5.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:polynomial:degree": 2,
+            "feature_preprocessor:polynomial:include_bias": "True",
+            "feature_preprocessor:polynomial:interaction_only": "True"
+        },
+        "cost": 1.121732007713963,
+        "time": 2.963595151901245,
+        "additional_info": {
+            "duration": 2.9536709785461426,
+            "num_run": 6,
+            "train_loss": 1.0568500767295719,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 6,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "pca",
+            "classifier:CustomLRG:C": 10.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.002836249135958794,
+            "feature_preprocessor:pca:keep_variance": 0.5554331431994848,
+            "feature_preprocessor:pca:whiten": "False"
+        },
+        "cost": 0.0,
+        "time": 1.128687858581543,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 613, in fit_predict_and_loss\n    optimization_loss = self._loss(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 344, in _loss\n    return calculate_loss(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/metrics/__init__.py\", line 484, in calculate_loss\n    score = calculate_score(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/metrics/__init__.py\", line 449, in calculate_score\n    return _compute_scorer(metric, prediction, solution, task_type)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/metrics/__init__.py\", line 573, in _compute_scorer\n    score = metric(solution, prediction)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/metrics/__init__.py\", line 104, in __call__\n    return self._sign * self._score_func(y_true, y_pred, **self._kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/evaluation/bank/bank_lrg_AOD_age.py\", line 365, in accuracy\n    disparate_impact(subset_data_orig_train, prediction, protected_attr),\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/upgrade/metric.py\", line 27, in disparate_impact\n    math.log(\nValueError: math domain error\n",
+            "error": "ValueError('math domain error')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 7,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "pca",
+            "classifier:CustomLRG:C": 5.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0002119388709440359,
+            "feature_preprocessor:pca:keep_variance": 0.8778885047995537,
+            "feature_preprocessor:pca:whiten": "True"
+        },
+        "cost": 1.105925007267166,
+        "time": 1.7452549934387207,
+        "additional_info": {
+            "duration": 1.7354650497436523,
+            "num_run": 8,
+            "train_loss": 1.0679012053800276,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 8,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "liblinear_svc_preprocessor",
+            "classifier:CustomLRG:C": 0.5,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.01885721793297807,
+            "feature_preprocessor:liblinear_svc_preprocessor:C": 495.1165435342211,
+            "feature_preprocessor:liblinear_svc_preprocessor:dual": "False",
+            "feature_preprocessor:liblinear_svc_preprocessor:fit_intercept": "True",
+            "feature_preprocessor:liblinear_svc_preprocessor:intercept_scaling": 1,
+            "feature_preprocessor:liblinear_svc_preprocessor:loss": "squared_hinge",
+            "feature_preprocessor:liblinear_svc_preprocessor:multi_class": "ovr",
+            "feature_preprocessor:liblinear_svc_preprocessor:penalty": "l1",
+            "feature_preprocessor:liblinear_svc_preprocessor:tol": 0.02874497201376828
+        },
+        "cost": 1.0934789609897269,
+        "time": 2.22248911857605,
+        "additional_info": {
+            "duration": 2.180370807647705,
+            "num_run": 9,
+            "train_loss": 1.0676046761080054,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 9,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 0.1,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.29499356307409363,
+            "feature_preprocessor:kitchen_sinks:gamma": 1.6375323826658983,
+            "feature_preprocessor:kitchen_sinks:n_components": 450
+        },
+        "cost": 0.0,
+        "time": 0.18301701545715332,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 10,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "pca",
+            "classifier:CustomLRG:C": 0.1,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.05545765975386746,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.8897715423278415,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.07413355867009741,
+            "feature_preprocessor:pca:keep_variance": 0.8763286359025843,
+            "feature_preprocessor:pca:whiten": "True"
+        },
+        "cost": 1.0941938418332855,
+        "time": 1.6772537231445312,
+        "additional_info": {
+            "duration": 1.6667602062225342,
+            "num_run": 11,
+            "train_loss": 1.077391532206319,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 11,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "select_percentile_classification",
+            "classifier:CustomLRG:C": 10.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.08148800245886494,
+            "feature_preprocessor:select_percentile_classification:percentile": 98.39169582815765,
+            "feature_preprocessor:select_percentile_classification:score_func": "mutual_info"
+        },
+        "cost": 1.095362531384822,
+        "time": 3.059741973876953,
+        "additional_info": {
+            "duration": 3.0496129989624023,
+            "num_run": 12,
+            "train_loss": 1.070503394575666,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 12,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 0.0001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.1646814856020464,
+            "feature_preprocessor:kitchen_sinks:gamma": 0.0002922610098921287,
+            "feature_preprocessor:kitchen_sinks:n_components": 253
+        },
+        "cost": 0.0,
+        "time": 0.1501169204711914,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 13,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "no_preprocessing",
+            "classifier:CustomLRG:C": 0.1,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0006033218236282773
+        },
+        "cost": 1.099727154919555,
+        "time": 2.119765043258667,
+        "additional_info": {
+            "duration": 2.1103031635284424,
+            "num_run": 14,
+            "train_loss": 1.0690755746384435,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 14,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.09398951236955168,
+            "feature_preprocessor:kitchen_sinks:gamma": 3.5065154604171274,
+            "feature_preprocessor:kitchen_sinks:n_components": 134
+        },
+        "cost": 0.0,
+        "time": 0.19935107231140137,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 15,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "nystroem_sampler",
+            "classifier:CustomLRG:C": 0.5,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:nystroem_sampler:kernel": "poly",
+            "feature_preprocessor:nystroem_sampler:n_components": 9086,
+            "feature_preprocessor:nystroem_sampler:coef0": -0.5954863648807356,
+            "feature_preprocessor:nystroem_sampler:degree": 5,
+            "feature_preprocessor:nystroem_sampler:gamma": 0.47621437781795667
+        },
+        "cost": 1.1183962740321483,
+        "time": 281.2838571071625,
+        "additional_info": {
+            "duration": 281.1882791519165,
+            "num_run": 16,
+            "train_loss": 1.026798681741357,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 16,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.1612492442684583,
+            "feature_preprocessor:kitchen_sinks:gamma": 0.013143205630394554,
+            "feature_preprocessor:kitchen_sinks:n_components": 4327
+        },
+        "cost": 0.0,
+        "time": 0.4503660202026367,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 17,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:kitchen_sinks:gamma": 0.04179956526950531,
+            "feature_preprocessor:kitchen_sinks:n_components": 58
+        },
+        "cost": 0.0,
+        "time": 0.1661367416381836,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 18,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 0.0001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.015480247143655158,
+            "feature_preprocessor:kitchen_sinks:gamma": 0.00034739342666493644,
+            "feature_preprocessor:kitchen_sinks:n_components": 5307
+        },
+        "cost": 0.0,
+        "time": 0.1633930206298828,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 19,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:kitchen_sinks:gamma": 0.16457130482329357,
+            "feature_preprocessor:kitchen_sinks:n_components": 4343
+        },
+        "cost": 0.0,
+        "time": 0.16654419898986816,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 20,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "pca",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.8256539917118727,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.0715522749516211,
+            "feature_preprocessor:pca:keep_variance": 0.7964159527697572,
+            "feature_preprocessor:pca:whiten": "False"
+        },
+        "cost": 1.0971240913282085,
+        "time": 1.648319959640503,
+        "additional_info": {
+            "duration": 1.6388041973114014,
+            "num_run": 21,
+            "train_loss": 1.082504260343456,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 21,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "polynomial",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:polynomial:degree": 2,
+            "feature_preprocessor:polynomial:include_bias": "False",
+            "feature_preprocessor:polynomial:interaction_only": "False"
+        },
+        "cost": 1.116563294093401,
+        "time": 3.8948311805725098,
+        "additional_info": {
+            "duration": 3.8853859901428223,
+            "num_run": 22,
+            "train_loss": 1.061318023531427,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 22,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 10.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "logcosh",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 1278
+        },
+        "cost": 0.0,
+        "time": 0.48016977310180664,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 23,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "no_preprocessing",
+            "classifier:CustomLRG:C": 0.5,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2"
+        },
+        "cost": 1.099915370983207,
+        "time": 1.9681029319763184,
+        "additional_info": {
+            "duration": 1.9587938785552979,
+            "num_run": 24,
+            "train_loss": 1.0784420703117468,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 24,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:kitchen_sinks:gamma": 3.527693437964291e-05,
+            "feature_preprocessor:kitchen_sinks:n_components": 1106
+        },
+        "cost": 0.0,
+        "time": 0.12451004981994629,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 25,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.9092139697605909,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.263238518463119,
+            "feature_preprocessor:kitchen_sinks:gamma": 0.0006319144839302603,
+            "feature_preprocessor:kitchen_sinks:n_components": 1369
+        },
+        "cost": 0.0,
+        "time": 0.17742705345153809,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 26,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0676473157460758,
+            "feature_preprocessor:kitchen_sinks:gamma": 0.0003491707899430118,
+            "feature_preprocessor:kitchen_sinks:n_components": 1745
+        },
+        "cost": 0.0,
+        "time": 0.15225911140441895,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 27,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "polynomial",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.00018978110595452318,
+            "feature_preprocessor:polynomial:degree": 3,
+            "feature_preprocessor:polynomial:include_bias": "False",
+            "feature_preprocessor:polynomial:interaction_only": "True"
+        },
+        "cost": 1.1229086247555902,
+        "time": 13.521756887435913,
+        "additional_info": {
+            "duration": 13.512425899505615,
+            "num_run": 28,
+            "train_loss": 1.0307319928917957,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 28,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 0.0001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0042815009696424095,
+            "feature_preprocessor:fast_ica:algorithm": "parallel",
+            "feature_preprocessor:fast_ica:fun": "exp",
+            "feature_preprocessor:fast_ica:whiten": "False"
+        },
+        "cost": 1.0990709052216006,
+        "time": 14.99355697631836,
+        "additional_info": {
+            "duration": 14.982394933700562,
+            "num_run": 29,
+            "train_loss": 1.0949079624810771,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 29,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0005868682997370418,
+            "feature_preprocessor:fast_ica:algorithm": "parallel",
+            "feature_preprocessor:fast_ica:fun": "logcosh",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 287
+        },
+        "cost": 0.0,
+        "time": 0.16786623001098633,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 30,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "extra_trees_preproc_for_classification",
+            "classifier:CustomLRG:C": 0.5,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0025092379575144094,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 87,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "normal",
+            "feature_preprocessor:extra_trees_preproc_for_classification:bootstrap": "False",
+            "feature_preprocessor:extra_trees_preproc_for_classification:criterion": "entropy",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_depth": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_features": 0.8096164296354951,
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf": 4,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split": 16,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:n_estimators": 100
+        },
+        "cost": 1.1011774853664866,
+        "time": 3.369440793991089,
+        "additional_info": {
+            "duration": 3.355842113494873,
+            "num_run": 31,
+            "train_loss": 1.0818826231600513,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 31,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 1.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.9811722999269716,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.19562482651876595,
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "cube",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 1198
+        },
+        "cost": 0.0,
+        "time": 0.15110015869140625,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 32,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 1.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.002860417104222096,
+            "feature_preprocessor:kitchen_sinks:gamma": 4.467302632794935e-05,
+            "feature_preprocessor:kitchen_sinks:n_components": 987
+        },
+        "cost": 0.0,
+        "time": 0.15204596519470215,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 33,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 0.1,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "exp",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 1708
+        },
+        "cost": 0.0,
+        "time": 0.16887617111206055,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 34,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 5.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.03479304706963398,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.977024109273492,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.1783237588832909,
+            "feature_preprocessor:kitchen_sinks:gamma": 7.522608442566771e-05,
+            "feature_preprocessor:kitchen_sinks:n_components": 2627
+        },
+        "cost": 0.0,
+        "time": 0.15151095390319824,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 35,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "pca",
+            "classifier:CustomLRG:C": 0.5,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.00024772370261926267,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.9377218226607748,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.13770931660281932,
+            "feature_preprocessor:pca:keep_variance": 0.9047584541285127,
+            "feature_preprocessor:pca:whiten": "False"
+        },
+        "cost": 1.1029845903180542,
+        "time": 1.7083258628845215,
+        "additional_info": {
+            "duration": 1.6986310482025146,
+            "num_run": 36,
+            "train_loss": 1.0927297166177299,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 36,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "cube",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 1432
+        },
+        "cost": 0.0,
+        "time": 0.16533112525939941,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 37,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomLRG:C": 1.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:feature_agglomeration:affinity": "manhattan",
+            "feature_preprocessor:feature_agglomeration:linkage": "average",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 320,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "max"
+        },
+        "cost": 1.0987595057118051,
+        "time": 2.339520215988159,
+        "additional_info": {
+            "duration": 2.330073118209839,
+            "num_run": 38,
+            "train_loss": 1.0795317117359595,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 38,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 1687,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "normal",
+            "feature_preprocessor:fast_ica:algorithm": "parallel",
+            "feature_preprocessor:fast_ica:fun": "exp",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 878
+        },
+        "cost": 0.0,
+        "time": 0.2701711654663086,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 39,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 0.5,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.012616610559771499,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.9429839704240466,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.04955264286739713,
+            "feature_preprocessor:kitchen_sinks:gamma": 2.2290800899047243,
+            "feature_preprocessor:kitchen_sinks:n_components": 209
+        },
+        "cost": 0.0,
+        "time": 0.18116140365600586,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 40,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "extra_trees_preproc_for_classification",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:extra_trees_preproc_for_classification:bootstrap": "False",
+            "feature_preprocessor:extra_trees_preproc_for_classification:criterion": "entropy",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_depth": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_features": 0.37829060177976814,
+            "feature_preprocessor:extra_trees_preproc_for_classification:max_leaf_nodes": "None",
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_impurity_decrease": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_leaf": 8,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_samples_split": 14,
+            "feature_preprocessor:extra_trees_preproc_for_classification:min_weight_fraction_leaf": 0.0,
+            "feature_preprocessor:extra_trees_preproc_for_classification:n_estimators": 100
+        },
+        "cost": 1.0972186768349599,
+        "time": 2.333381175994873,
+        "additional_info": {
+            "duration": 2.3203048706054688,
+            "num_run": 41,
+            "train_loss": 1.085129920659929,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 41,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "select_rates_classification",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.012904052312507488,
+            "feature_preprocessor:select_rates_classification:alpha": 0.23908034213256535,
+            "feature_preprocessor:select_rates_classification:score_func": "mutual_info_classif"
+        },
+        "cost": 1.1030661832737116,
+        "time": 2.643663167953491,
+        "additional_info": {
+            "duration": 2.6327617168426514,
+            "num_run": 42,
+            "train_loss": 1.1039095318873278,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 42,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "polynomial",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0005972685808815755,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 439,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "normal",
+            "feature_preprocessor:polynomial:degree": 3,
+            "feature_preprocessor:polynomial:include_bias": "True",
+            "feature_preprocessor:polynomial:interaction_only": "True"
+        },
+        "cost": 1.111678096550494,
+        "time": 14.029813051223755,
+        "additional_info": {
+            "duration": 14.019532918930054,
+            "num_run": 43,
+            "train_loss": 1.0268473100920872,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 43,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "select_rates_classification",
+            "classifier:CustomLRG:C": 0.5,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.005561657413107099,
+            "feature_preprocessor:select_rates_classification:alpha": 0.3833509245820794,
+            "feature_preprocessor:select_rates_classification:score_func": "chi2",
+            "feature_preprocessor:select_rates_classification:mode": "fdr"
+        },
+        "cost": 1.0957220960626308,
+        "time": 1.8494391441345215,
+        "additional_info": {
+            "duration": 1.838876724243164,
+            "num_run": 44,
+            "train_loss": 1.0907541733871045,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 44,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 1.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.3955756996036574,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 1274,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "uniform",
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "logcosh",
+            "feature_preprocessor:fast_ica:whiten": "False"
+        },
+        "cost": 1.1030095637407893,
+        "time": 77.11155700683594,
+        "additional_info": {
+            "duration": 77.10124397277832,
+            "num_run": 45,
+            "train_loss": 1.0862273565176719,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 45,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 5.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.01959843142723379,
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "cube",
+            "feature_preprocessor:fast_ica:whiten": "False"
+        },
+        "cost": 1.1026171375558869,
+        "time": 14.69906210899353,
+        "additional_info": {
+            "duration": 14.68787407875061,
+            "num_run": 46,
+            "train_loss": 1.0844668233820012,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 46,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 0.0001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:fast_ica:algorithm": "parallel",
+            "feature_preprocessor:fast_ica:fun": "exp",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 871
+        },
+        "cost": 0.0,
+        "time": 0.16803789138793945,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 47,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 0.0001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 651,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "normal",
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "exp",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 1703
+        },
+        "cost": 0.0,
+        "time": 0.26770901679992676,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 48,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "kernel_pca",
+            "classifier:CustomLRG:C": 1.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:kernel_pca:kernel": "rbf",
+            "feature_preprocessor:kernel_pca:n_components": 1643,
+            "feature_preprocessor:kernel_pca:gamma": 0.0021070174890166207
+        },
+        "cost": 0.0,
+        "time": 360.0121500492096,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 49,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "nystroem_sampler",
+            "classifier:CustomLRG:C": 0.5,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 1923,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "normal",
+            "feature_preprocessor:nystroem_sampler:kernel": "poly",
+            "feature_preprocessor:nystroem_sampler:n_components": 957,
+            "feature_preprocessor:nystroem_sampler:coef0": 0.6340862467781838,
+            "feature_preprocessor:nystroem_sampler:degree": 3,
+            "feature_preprocessor:nystroem_sampler:gamma": 3.6977375017168986e-05
+        },
+        "cost": 0.0,
+        "time": 6.688797950744629,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 603, in fit_predict_and_loss\n    train_loss = self._loss(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 344, in _loss\n    return calculate_loss(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/metrics/__init__.py\", line 484, in calculate_loss\n    score = calculate_score(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/metrics/__init__.py\", line 449, in calculate_score\n    return _compute_scorer(metric, prediction, solution, task_type)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/metrics/__init__.py\", line 573, in _compute_scorer\n    score = metric(solution, prediction)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/metrics/__init__.py\", line 104, in __call__\n    return self._sign * self._score_func(y_true, y_pred, **self._kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/evaluation/bank/bank_lrg_AOD_age.py\", line 365, in accuracy\n    disparate_impact(subset_data_orig_train, prediction, protected_attr),\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/upgrade/metric.py\", line 27, in disparate_impact\n    math.log(\nValueError: math domain error\n",
+            "error": "ValueError('math domain error')",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 50,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.11560616556115469,
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "exp",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 1091
+        },
+        "cost": 0.0,
+        "time": 0.1661219596862793,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 51,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "kernel_pca",
+            "classifier:CustomLRG:C": 0.1,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:kernel_pca:kernel": "sigmoid",
+            "feature_preprocessor:kernel_pca:n_components": 1434,
+            "feature_preprocessor:kernel_pca:coef0": 0.22094102469851395
+        },
+        "cost": 0.0,
+        "time": 359.989296913147,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 52,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "kernel_pca",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.15505680643390143,
+            "feature_preprocessor:kernel_pca:kernel": "cosine",
+            "feature_preprocessor:kernel_pca:n_components": 237
+        },
+        "cost": 0.0,
+        "time": 176.3726589679718,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kernel_pca.py\", line 53, in fit\n    if len(self.preprocessor.alphas_ / self.preprocessor.lambdas_) == 0:\nAttributeError: 'KernelPCA' object has no attribute 'alphas_'\n",
+            "error": "AttributeError(\"'KernelPCA' object has no attribute 'alphas_'\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 53,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "polynomial",
+            "classifier:CustomLRG:C": 5.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0001486151988129511,
+            "feature_preprocessor:polynomial:degree": 3,
+            "feature_preprocessor:polynomial:include_bias": "False",
+            "feature_preprocessor:polynomial:interaction_only": "True"
+        },
+        "cost": 1.1371892423768082,
+        "time": 13.145698070526123,
+        "additional_info": {
+            "duration": 13.137049198150635,
+            "num_run": 54,
+            "train_loss": 1.0051692198507576,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 54,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 10.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.009135346423299303,
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "logcosh",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 13
+        },
+        "cost": 0.0,
+        "time": 0.488250732421875,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 55,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 947,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "uniform",
+            "feature_preprocessor:fast_ica:algorithm": "parallel",
+            "feature_preprocessor:fast_ica:fun": "cube",
+            "feature_preprocessor:fast_ica:whiten": "False"
+        },
+        "cost": 1.104920699773252,
+        "time": 7.887006998062134,
+        "additional_info": {
+            "duration": 7.8770411014556885,
+            "num_run": 56,
+            "train_loss": 1.0969665125966803,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 56,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "kernel_pca",
+            "classifier:CustomLRG:C": 0.0001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:kernel_pca:kernel": "cosine",
+            "feature_preprocessor:kernel_pca:n_components": 974
+        },
+        "cost": 0.0,
+        "time": 360.009428024292,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 57,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "select_percentile_classification",
+            "classifier:CustomLRG:C": 0.1,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0034043285926651577,
+            "feature_preprocessor:select_percentile_classification:percentile": 44.4599233175617,
+            "feature_preprocessor:select_percentile_classification:score_func": "mutual_info"
+        },
+        "cost": 1.1007016599110075,
+        "time": 2.895949602127075,
+        "additional_info": {
+            "duration": 2.885721206665039,
+            "num_run": 58,
+            "train_loss": 1.0867540581189485,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 58,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "kernel_pca",
+            "classifier:CustomLRG:C": 5.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.4208051127716537,
+            "feature_preprocessor:kernel_pca:kernel": "rbf",
+            "feature_preprocessor:kernel_pca:n_components": 1654,
+            "feature_preprocessor:kernel_pca:gamma": 0.003998735789190982
+        },
+        "cost": 0.0,
+        "time": 359.9240691661835,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 59,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "kernel_pca",
+            "classifier:CustomLRG:C": 0.0001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.7909137564160875,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.18326152010405936,
+            "feature_preprocessor:kernel_pca:kernel": "sigmoid",
+            "feature_preprocessor:kernel_pca:n_components": 1921,
+            "feature_preprocessor:kernel_pca:coef0": 0.3233667173778958
+        },
+        "cost": 0.0,
+        "time": 360.00219798088074,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 60,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "robust_scaler",
+            "feature_preprocessor:__choice__": "select_rates_classification",
+            "classifier:CustomLRG:C": 10.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max": 0.734794257749571,
+            "data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min": 0.029946423399539433,
+            "feature_preprocessor:select_rates_classification:alpha": 0.22389600090982195,
+            "feature_preprocessor:select_rates_classification:score_func": "f_classif",
+            "feature_preprocessor:select_rates_classification:mode": "fwe"
+        },
+        "cost": 1.1060573005706182,
+        "time": 2.108617067337036,
+        "additional_info": {
+            "duration": 2.0992228984832764,
+            "num_run": 61,
+            "train_loss": 1.0889473440748685,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 61,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "select_rates_classification",
+            "classifier:CustomLRG:C": 5.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.09692959803246365,
+            "feature_preprocessor:select_rates_classification:alpha": 0.3969007868375379,
+            "feature_preprocessor:select_rates_classification:score_func": "mutual_info_classif"
+        },
+        "cost": 1.10465461704947,
+        "time": 3.0249810218811035,
+        "additional_info": {
+            "duration": 3.014983892440796,
+            "num_run": 62,
+            "train_loss": 1.104654357357977,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 62,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "normalize",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 5.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:kitchen_sinks:gamma": 4.9325448475308105e-05,
+            "feature_preprocessor:kitchen_sinks:n_components": 5516
+        },
+        "cost": 0.0,
+        "time": 0.15668511390686035,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 63,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 15.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.03510652965200921,
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "exp",
+            "feature_preprocessor:fast_ica:whiten": "False"
+        },
+        "cost": 1.1025728676167166,
+        "time": 17.236973762512207,
+        "additional_info": {
+            "duration": 17.226474046707153,
+            "num_run": 64,
+            "train_loss": 1.0843477194113893,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 64,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "kernel_pca",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.07464487707531779,
+            "feature_preprocessor:kernel_pca:kernel": "poly",
+            "feature_preprocessor:kernel_pca:n_components": 1788,
+            "feature_preprocessor:kernel_pca:coef0": -0.547392525615475,
+            "feature_preprocessor:kernel_pca:degree": 3,
+            "feature_preprocessor:kernel_pca:gamma": 0.0007657786557487749
+        },
+        "cost": 0.0,
+        "time": 352.12759280204773,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kernel_pca.py\", line 53, in fit\n    if len(self.preprocessor.alphas_ / self.preprocessor.lambdas_) == 0:\nAttributeError: 'KernelPCA' object has no attribute 'alphas_'\n",
+            "error": "AttributeError(\"'KernelPCA' object has no attribute 'alphas_'\")",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 65,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "mean",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "none",
+            "feature_preprocessor:__choice__": "kernel_pca",
+            "classifier:CustomLRG:C": 0.001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:kernel_pca:kernel": "cosine",
+            "feature_preprocessor:kernel_pca:n_components": 1942
+        },
+        "cost": 0.0,
+        "time": 270.65035009384155,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kernel_pca.py\", line 53, in fit\n    if len(self.preprocessor.alphas_ / self.preprocessor.lambdas_) == 0:\nAttributeError: 'KernelPCA' object has no attribute 'alphas_'\n",
+            "error": "AttributeError(\"'KernelPCA' object has no attribute 'alphas_'\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 66,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "no_preprocessing",
+            "classifier:CustomLRG:C": 0.001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2"
+        },
+        "cost": 1.1035305666601432,
+        "time": 1.9926769733428955,
+        "additional_info": {
+            "duration": 1.9828662872314453,
+            "num_run": 67,
+            "train_loss": 1.0950696406348708,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 67,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "feature_agglomeration",
+            "classifier:CustomLRG:C": 1.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 126,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "uniform",
+            "feature_preprocessor:feature_agglomeration:affinity": "cosine",
+            "feature_preprocessor:feature_agglomeration:linkage": "average",
+            "feature_preprocessor:feature_agglomeration:n_clusters": 331,
+            "feature_preprocessor:feature_agglomeration:pooling_func": "mean"
+        },
+        "cost": 0.0,
+        "time": 0.28195905685424805,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/feature_agglomeration.py\", line 43, in fit\n    self.preprocessor.fit(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/base.py\", line 1151, in wrapper\n    return fit_method(estimator, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/cluster/_agglomerative.py\", line 1350, in fit\n    super()._fit(X.T)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/cluster/_agglomerative.py\", line 1070, in _fit\n    out = memory.cache(tree_builder)(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/cluster/_agglomerative.py\", line 692, in _average_linkage\n    return linkage_tree(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/cluster/_agglomerative.py\", line 510, in linkage_tree\n    raise ValueError(\"Cosine affinity cannot be used when X contains zero vectors\")\nValueError: Cosine affinity cannot be used when X contains zero vectors\n",
+            "error": "ValueError('Cosine affinity cannot be used when X contains zero vectors')",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 68,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "nystroem_sampler",
+            "classifier:CustomLRG:C": 0.0001,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.12749203907059345,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 598,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "uniform",
+            "feature_preprocessor:nystroem_sampler:kernel": "sigmoid",
+            "feature_preprocessor:nystroem_sampler:n_components": 261,
+            "feature_preprocessor:nystroem_sampler:coef0": -0.4528913768191598,
+            "feature_preprocessor:nystroem_sampler:gamma": 0.0017301234347392863
+        },
+        "cost": 1.108312672626923,
+        "time": 2.2558109760284424,
+        "additional_info": {
+            "duration": 2.24568510055542,
+            "num_run": 69,
+            "train_loss": 1.1083846132567585,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 69,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "power_transformer",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "logcosh",
+            "feature_preprocessor:fast_ica:whiten": "False"
+        },
+        "cost": 1.100591870155367,
+        "time": 195.99633812904358,
+        "additional_info": {
+            "duration": 195.98592686653137,
+            "num_run": 70,
+            "train_loss": 1.0855585788324082,
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 70,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "select_rates_classification",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0021908586424801363,
+            "feature_preprocessor:select_rates_classification:alpha": 0.47244897720316914,
+            "feature_preprocessor:select_rates_classification:score_func": "f_classif",
+            "feature_preprocessor:select_rates_classification:mode": "fpr"
+        },
+        "cost": 1.1024996563580634,
+        "time": 1.7881841659545898,
+        "additional_info": {
+            "duration": 1.7787058353424072,
+            "num_run": 71,
+            "train_loss": 1.085943072171223,
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 71,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "minmax",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 0.01,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.029105476984329037,
+            "feature_preprocessor:fast_ica:algorithm": "deflation",
+            "feature_preprocessor:fast_ica:fun": "logcosh",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 864
+        },
+        "cost": 0.0,
+        "time": 0.14386630058288574,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/fast_ica.py\", line 59, in transform\n    return self.preprocessor.transform(X)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/_set_output.py\", line 140, in wrapped\n    data_to_wrap = f(self, X, *args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py\", line 741, in transform\n    check_is_fitted(self)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/utils/validation.py\", line 1462, in check_is_fitted\n    raise NotFittedError(msg % {\"name\": type(estimator).__name__})\nsklearn.exceptions.NotFittedError: This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\n",
+            "error": "NotFittedError(\"This FastICA instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.\")",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 72,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "one_hot_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "median",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "standardize",
+            "feature_preprocessor:__choice__": "kitchen_sinks",
+            "classifier:CustomLRG:C": 10.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "feature_preprocessor:kitchen_sinks:gamma": 0.09287240565823042,
+            "feature_preprocessor:kitchen_sinks:n_components": 345
+        },
+        "cost": 0.0,
+        "time": 0.14254283905029297,
+        "additional_info": {
+            "traceback": "Traceback (most recent call last):\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/__init__.py\", line 41, in fit_predict_try_except_decorator\n    return ta(queue=queue, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 1283, in eval_holdout\n    evaluator.fit_predict_and_loss(iterative=iterative)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 558, in fit_predict_and_loss\n    ) = self._partial_fit_and_predict_standard(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/train_evaluator.py\", line 945, in _partial_fit_and_predict_standard\n    _fit_and_suppress_warnings(\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/evaluation/abstract_evaluator.py\", line 174, in _fit_and_suppress_warnings\n    model.fit(X, y)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 104, in fit\n    X, fit_params = self.fit_transformer(X, y, **fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/classification.py\", line 116, in fit_transformer\n    X, fit_params = super().fit_transformer(X, y, fit_params=fit_params)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/base.py\", line 116, in fit_transformer\n    Xt = self._fit(X, y, **fit_params_steps)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 370, in _fit\n    X, fitted_transformer = fit_transform_one_cached(\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/joblib/memory.py\", line 349, in __call__\n    return self.func(*args, **kwargs)\n  File \"/Users/sayannath/miniconda3/envs/fairness-autosklearn/lib/python3.10/site-packages/sklearn/pipeline.py\", line 952, in _fit_transform_one\n    res = transformer.fit(X, y, **fit_params).transform(X)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/base.py\", line 444, in fit\n    return self.choice.fit(X, y, **kwargs)\n  File \"/Users/sayannath/Projects/Fair-AutoML/autosklearn/pipeline/components/feature_preprocessing/kitchen_sinks.py\", line 31, in fit\n    self.preprocessor = sklearn.kernel_approximation.RBFSampler(\nTypeError: RBFSampler.__init__() takes 1 positional argument but 4 were given\n",
+            "error": "TypeError('RBFSampler.__init__() takes 1 positional argument but 4 were given')",
+            "configuration_origin": "Random Search (sorted)"
+        }
+    },
+    {
+        "config_id": 73,
+        "configuration": {
+            "balancing:strategy": "weighting",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "minority_coalescer",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "kernel_pca",
+            "classifier:CustomLRG:C": 10.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction": 0.0003258319308738176,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 766,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "normal",
+            "feature_preprocessor:kernel_pca:kernel": "cosine",
+            "feature_preprocessor:kernel_pca:n_components": 512
+        },
+        "cost": 0.0,
+        "time": 15.005095958709717,
+        "additional_info": {
+            "error": "Timeout",
+            "configuration_origin": "Random Search"
+        }
+    },
+    {
+        "config_id": 74,
+        "configuration": {
+            "balancing:strategy": "none",
+            "classifier:__choice__": "CustomLRG",
+            "data_preprocessing:categorical_transformer:categorical_encoding:__choice__": "no_encoding",
+            "data_preprocessing:categorical_transformer:category_coalescence:__choice__": "no_coalescense",
+            "data_preprocessing:numerical_transformer:imputation:strategy": "most_frequent",
+            "data_preprocessing:numerical_transformer:rescaling:__choice__": "quantile_transformer",
+            "feature_preprocessor:__choice__": "fast_ica",
+            "classifier:CustomLRG:C": 5.0,
+            "classifier:CustomLRG:dual": false,
+            "classifier:CustomLRG:penalty": "l2",
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles": 1756,
+            "data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution": "uniform",
+            "feature_preprocessor:fast_ica:algorithm": "parallel",
+            "feature_preprocessor:fast_ica:fun": "logcosh",
+            "feature_preprocessor:fast_ica:whiten": "True",
+            "feature_preprocessor:fast_ica:n_components": 912
+        },
+        "cost": 0.0,
+        "time": 0.0,
+        "additional_info": {}
+    }
+]

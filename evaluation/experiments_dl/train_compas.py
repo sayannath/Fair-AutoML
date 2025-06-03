@@ -11,13 +11,14 @@ df = df[
     & (df["is_recid"] != -1)
     & (df["c_charge_degree"] != "O")
     & (df["score_text"] != "N/A")
-]
+    ]
 
 # Target variable: whether someone reoffended within 2 years
 y = df["two_year_recid"]
 
 # Selected features
-features = {
+# Instead of a set, use a list of column names:
+features = [
     "age",
     "sex",
     "race",
@@ -26,7 +27,7 @@ features = {
     "juv_other_count",
     "priors_count",
     "c_charge_degree",
-}
+]
 X = df[features]
 
 # One-hot encode categorical features

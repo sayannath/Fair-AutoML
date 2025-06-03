@@ -1,0 +1,727 @@
+Configuration space object:
+  Hyperparameters:
+    activation, Type: Categorical, Choices: {identity, logistic, tanh, relu}, Default: relu
+    alpha, Type: UniformFloat, Range: [1e-06, 0.1], Default: 0.0001, on log-scale
+    learning_rate_init, Type: UniformFloat, Range: [0.0001, 1.0], Default: 0.001, on log-scale
+    max_iter, Type: UniformInteger, Range: [100, 500], Default: 300
+    num_units, Type: UniformInteger, Range: [50, 500], Default: 100
+    tol, Type: UniformFloat, Range: [1e-05, 0.01], Default: 0.0001, on log-scale
+
+################################################################################
+Use self defined accuracy metric
+[WARNING] [2025-06-02 06:44:57,326:Client-AutoMLSMBO(1)::63a3656c-3faf-11f0-aee0-fe576b4fae26] Could not find meta-data directory /Users/sayannath/Projects/Fair-AutoML/autosklearn/metalearning/files/accu_binary.classification_dense
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+[WARNING] [2025-06-02 06:52:04,294:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:09,552:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+0.09242705346601449 0.10052684038160331 0.09861702081823154 0.23578639577494742
+[WARNING] [2025-06-02 06:52:09,559:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:10,260:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+[WARNING] [2025-06-02 06:52:10,267:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:10,267:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:10,398:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+[WARNING] [2025-06-02 06:52:10,404:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:10,404:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+[WARNING] [2025-06-02 06:52:18,944:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:18,945:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.19463653229887 0.10138117613555464 0.1233695204520118 0.23578639577494742
+[WARNING] [2025-06-02 06:52:24,329:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:24,329:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0708382526564344 0.11775594475295459 0.10669339123543736 0.23578639577494742
+[WARNING] [2025-06-02 06:52:34,595:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:34,595:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:35,080:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:35,080:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.1813121942992073 0.1000996725046277 0.11924848031036599 0.23578639577494742
+[WARNING] [2025-06-02 06:52:37,935:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:37,935:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:38,444:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:38,444:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.13779726766739747 0.10209312259718073 0.11051167427751299 0.23578639577494742
+[WARNING] [2025-06-02 06:52:46,476:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:46,476:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:46,966:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:46,966:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:47,435:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:47,435:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.07859672794737727 0.10736152641321373 0.10057917825776141 0.23578639577494742
+[WARNING] [2025-06-02 06:52:51,002:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:51,002:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:51,509:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:51,510:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.10608871647832685 0.09995728321230246 0.10140299176303297 0.23578639577494742
+[WARNING] [2025-06-02 06:52:58,161:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:52:58,161:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.09833024118738404 0.11220276235227111 0.10893181058649071 0.23578639577494742
+[WARNING] [2025-06-02 06:53:01,011:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:53:01,011:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+[WARNING] [2025-06-02 06:54:01,326:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:01,326:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:01,577:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:01,577:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+[WARNING] [2025-06-02 06:54:05,248:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:05,248:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:05,734:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:05,734:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:06,350:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:06,350:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:06,864:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:06,864:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:07,684:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:07,684:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:08,256:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:08,256:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:08,869:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:08,870:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:09,473:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:09,473:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.14184516781919382 0.10337462622810767 0.11244545657338008 0.23578639577494742
+[WARNING] [2025-06-02 06:54:15,739:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:15,739:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.03137122617642099 0.12729602733874412 0.10467826420725147 0.23578639577494742
+[WARNING] [2025-06-02 06:54:27,233:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:27,233:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+[WARNING] [2025-06-02 06:54:32,119:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:32,119:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.07100691516275931 0.10963975509041723 0.10053065700532429 0.23578639577494742
+[WARNING] [2025-06-02 06:54:46,481:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:46,481:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.03558778883454208 0.11718638758365374 0.09794654808431458 0.23578639577494742
+[WARNING] [2025-06-02 06:54:49,234:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:49,234:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:49,910:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:54:49,910:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+[WARNING] [2025-06-02 06:57:57,595:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:57:57,595:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:00,429:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:00,429:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.11418451678191932 0.10408657268973376 0.10646753053196711 0.23578639577494742
+[WARNING] [2025-06-02 06:58:19,791:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:19,791:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+[WARNING] [2025-06-02 06:58:27,535:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:27,535:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.16056670602125145 0.09981489391997722 0.1141393447321335 0.23578639577494742
+[WARNING] [2025-06-02 06:58:30,584:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:30,584:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+[WARNING] [2025-06-02 06:58:42,108:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:42,108:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+[WARNING] [2025-06-02 06:58:47,027:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:47,027:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.1472423680215888 0.15705538943471453 0.15474161248405124 0.23578639577494742
+[WARNING] [2025-06-02 06:58:49,757:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:49,757:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.10052285376960701 0.10807347287483982 0.10629313961014752 0.23578639577494742
+[WARNING] [2025-06-02 06:58:53,261:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:53,261:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:53,550:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:53,551:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.1352673300725249 0.0982486117043998 0.10697712188462787 0.23578639577494742
+[WARNING] [2025-06-02 06:58:58,140:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:58:58,140:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.1676505312868949 0.12743841663106936 0.1369198862122554 0.23578639577494742
+[WARNING] [2025-06-02 06:59:04,463:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:59:04,463:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.13138809242705352 0.13726327780150938 0.13587798901755674 0.23578639577494742
+[WARNING] [2025-06-02 06:59:27,884:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:59:27,884:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.18519143194467874 0.10323223693578243 0.12255710012754614 0.23578639577494742
+[WARNING] [2025-06-02 06:59:49,522:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 06:59:49,522:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.1981784449316917 0.13769044567848499 0.1519526930100363 0.23578639577494742
+[WARNING] [2025-06-02 07:02:52,172:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:02:52,172:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.025805363467701126 0.12701124875409364 0.10314827783120237 0.23578639577494742
+[WARNING] [2025-06-02 07:03:01,449:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:03:01,449:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.09512565356721203 0.1023779011818311 0.1006679198555126 0.23578639577494742
+[WARNING] [2025-06-02 07:03:07,183:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:03:07,183:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.1725417439703154 0.11989178413783286 0.13230592840442967 0.23578639577494742
+[WARNING] [2025-06-02 07:03:15,456:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:03:15,456:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+[WARNING] [2025-06-02 07:06:40,572:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:06:40,572:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.11182324169337149 0.10109639755090416 0.10362564146929613 0.23578639577494742
+[WARNING] [2025-06-02 07:06:52,267:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:06:52,267:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.11485916680721875 0.1117755944752955 0.11250265888155103 0.23578639577494742
+[WARNING] [2025-06-02 07:06:59,892:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:06:59,892:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.054646652049249456 0.11077886942901893 0.09754365620618721 0.23578639577494742
+[WARNING] [2025-06-02 07:07:17,085:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:07:17,085:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.13307471749030186 0.21016659547202055 0.1919893794191891 0.23578639577494742
+[WARNING] [2025-06-02 07:07:28,779:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:07:28,780:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.14184516781919376 0.13555460629360672 0.13703783512312545 0.23578639577494742
+[WARNING] [2025-06-02 07:07:44,572:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:07:44,572:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:07:45,622:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:07:45,622:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.01197503794906396 0.3236508614552186 0.25016194238051376 0.23578639577494742
+[WARNING] [2025-06-02 07:07:56,239:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:07:56,239:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.11907572946533984 0.1099245336750676 0.11208226114748676 0.23578639577494742
+[WARNING] [2025-06-02 07:08:01,395:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:08:01,395:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:08:01,843:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:08:01,843:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+[WARNING] [2025-06-02 07:08:20,123:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:08:20,123:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.12059369202226344 0.10437135127438413 0.10819635853035967 0.23578639577494742
+[WARNING] [2025-06-02 07:10:08,208:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:10:08,208:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.20475628267836055 0.26740709098675775 0.2526348827033336 0.23578639577494742
+[WARNING] [2025-06-02 07:10:18,380:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:10:18,380:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:10:19,096:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:10:19,096:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+[WARNING] [2025-06-02 07:10:27,687:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:10:27,687:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.2648001349300051 0.1347002705396554 0.16537604865506536 0.23578639577494742
+[WARNING] [2025-06-02 07:10:38,203:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:10:38,203:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.06746500252993759 0.27452655560301864 0.22570425830035387 0.23578639577494742
+[WARNING] [2025-06-02 07:10:52,275:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:10:52,275:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:10:52,680:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:10:52,681:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.09006577837746665 0.10081161896625379 0.09827789594425153 0.23578639577494742
+[WARNING] [2025-06-02 07:11:23,649:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:11:23,649:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.03879237645471412 0.16915847928235794 0.13841992576540163 0.23578639577494742
+[WARNING] [2025-06-02 07:11:35,355:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:11:35,355:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.08770450328891888 0.12743841663106936 0.11806970041408961 0.23578639577494742
+[WARNING] [2025-06-02 07:11:43,716:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:11:43,716:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.18654073199527743 0.10451374056670937 0.12385458923191395 0.23578639577494742
+[WARNING] [2025-06-02 07:12:32,404:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:12:32,404:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.04334626412548492 0.12202762352271113 0.10347562937576586 0.23578639577494742
+[WARNING] [2025-06-02 07:16:51,248:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:16:51,248:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.04806881430258053 0.1362665527552328 0.11547072588998045 0.23578639577494742
+[WARNING] [2025-06-02 07:17:02,260:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:17:02,260:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.05886321470737055 0.12444824149223976 0.10898418440983207 0.23578639577494742
+[WARNING] [2025-06-02 07:17:27,380:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:17:27,380:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.02968460111317256 0.0971094973657981 0.08121162409289177 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.02968460111317256 0.0971094973657981 0.08121162409289177 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+[WARNING] [2025-06-02 07:17:49,866:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:17:49,866:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:17:50,687:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:17:50,687:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.19935908247596557 0.10793108358251458 0.12948856191451727 0.23578639577494742
+[WARNING] [2025-06-02 07:17:59,500:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:17:59,500:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.22314049586776852 0.1479424747259006 0.16567314510034994 0.23578639577494742
+[WARNING] [2025-06-02 07:18:21,460:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:18:21,460:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.02968460111317256 0.0971094973657981 0.08121162409289177 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+[WARNING] [2025-06-02 07:18:38,417:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:18:38,417:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.2088041828301569 0.1012387868432294 0.12660124387309202 0.23578639577494742
+[WARNING] [2025-06-02 07:23:13,648:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:23:13,648:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.07471749030190589 0.0966823294888225 0.0915033192231631 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.02968460111317256 0.0971094973657981 0.08121162409289177 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.07471749030190589 0.0966823294888225 0.0915033192231631 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+[WARNING] [2025-06-02 07:23:30,550:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:23:30,550:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.1224489795918367 0.09782144382742419 0.10362828172213365 0.23578639577494742
+[WARNING] [2025-06-02 07:24:28,220:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:24:28,220:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.017203575645134084 0.1411077886942902 0.11189286087809847 0.23578639577494742
+[WARNING] [2025-06-02 07:24:47,606:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:24:47,606:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0021926125822229747 0.12359390573828843 0.09496913238260196 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.02968460111317256 0.0971094973657981 0.08121162409289177 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.07471749030190589 0.0966823294888225 0.0915033192231631 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.0021926125822229747 0.12359390573828843 0.09496913238260196 0.23578639577494742
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+[WARNING] [2025-06-02 07:25:24,749:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:25:24,749:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.13493000505987518 0.10892780862879115 0.11505877280750865 0.23578639577494742
+[WARNING] [2025-06-02 07:26:05,292:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:26:05,292:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:26:06,458:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:26:06,458:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+[WARNING] [2025-06-02 07:26:19,115:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:26:19,115:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.09259571597233934 0.11035170155204332 0.10616508170877298 0.23578639577494742
+[WARNING] [2025-06-02 07:26:31,898:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:26:31,898:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.11182324169337157 0.12815036309269545 0.12430064998456886 0.23578639577494742
+[WARNING] [2025-06-02 07:26:41,864:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:26:41,865:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.02344408837915335 0.1569130001423893 0.12544284648973142 0.23578639577494742
+[WARNING] [2025-06-02 07:29:51,990:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:29:51,990:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0986675662000337 0.11191798376762063 0.10879371556684626 0.23578639577494742
+[WARNING] [2025-06-02 07:33:49,025:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:33:49,025:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.042165626581211035 0.1275808059233946 0.1074410686418304 0.23578639577494742
+[WARNING] [2025-06-02 07:34:03,636:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:34:03,636:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.024118738404452666 0.1117755944752955 0.09110730031738815 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.02968460111317256 0.0971094973657981 0.08121162409289177 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.024118738404452666 0.1117755944752955 0.09110730031738815 0.23578639577494742
+3
+0.07471749030190589 0.0966823294888225 0.0915033192231631 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.0021926125822229747 0.12359390573828843 0.09496913238260196 0.23578639577494742
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+[WARNING] [2025-06-02 07:34:32,461:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:34:32,461:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.13678529262944847 0.11163320518297026 0.11756372522819165 0.23578639577494742
+[WARNING] [2025-06-02 07:34:40,616:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:34:40,616:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:34:41,293:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:34:41,293:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.052454039467026536 0.14295884949451798 0.12161904653783945 0.23578639577494742
+[WARNING] [2025-06-02 07:35:07,000:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:35:07,000:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.04688817675830659 0.10024206179695283 0.08766194154309953 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.02968460111317256 0.0971094973657981 0.08121162409289177 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.04688817675830659 0.10024206179695283 0.08766194154309953 0.23578639577494742
+3
+0.024118738404452666 0.1117755944752955 0.09110730031738815 0.23578639577494742
+3
+0.07471749030190589 0.0966823294888225 0.0915033192231631 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.0021926125822229747 0.12359390573828843 0.09496913238260196 0.23578639577494742
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+[WARNING] [2025-06-02 07:37:56,575:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:37:56,575:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.03592511384719177 0.11248754093692159 0.09443516220165199 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.02968460111317256 0.0971094973657981 0.08121162409289177 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.04688817675830659 0.10024206179695283 0.08766194154309953 0.23578639577494742
+3
+0.024118738404452666 0.1117755944752955 0.09110730031738815 0.23578639577494742
+3
+0.07471749030190589 0.0966823294888225 0.0915033192231631 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.03592511384719177 0.11248754093692159 0.09443516220165199 0.23578639577494742
+3
+0.0021926125822229747 0.12359390573828843 0.09496913238260196 0.23578639577494742
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+[WARNING] [2025-06-02 07:38:49,830:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:38:49,830:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+[WARNING] [2025-06-02 07:39:24,346:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:39:24,346:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.09074042840276608 0.09767905453509895 0.09604302088772633 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+3
+0.013155675493337848 0.09995728321230246 0.07949064498077693 0.23578639577494742
+3
+0.01517962556923591 0.10066922967392855 0.08051194404585592 0.23578639577494742
+3
+0.02968460111317256 0.0971094973657981 0.08121162409289177 0.23578639577494742
+3
+0.0033732501264969184 0.10907019792111639 0.08414829555621028 0.23578639577494742
+3
+0.03305785123966942 0.10166595472020501 0.08548909727957489 0.23578639577494742
+3
+0.04688817675830659 0.10024206179695283 0.08766194154309953 0.23578639577494742
+3
+0.024118738404452666 0.1117755944752955 0.09110730031738815 0.23578639577494742
+3
+0.07471749030190589 0.0966823294888225 0.0915033192231631 0.23578639577494742
+3
+0.07606679035250469 0.09810622241207456 0.09290962416182176 0.23578639577494742
+3
+0.0662843649856637 0.10166595472020501 0.09332345719990963 0.23578639577494742
+3
+0.03592511384719177 0.11248754093692159 0.09443516220165199 0.23578639577494742
+3
+0.0021926125822229747 0.12359390573828843 0.09496913238260196 0.23578639577494742
+3
+0.09074042840276608 0.09767905453509895 0.09604302088772633 0.23578639577494742
+3
+0.02445606341710227 0.11875266979923105 0.09651881284658001 0.23578639577494742
+3
+0.0005059875189745155 0.10380179410508328 0.07944604817147861 0.23578639577494742
+[WARNING] [2025-06-02 07:39:49,624:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:39:49,624:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.14555574295834034 0.10921258721344151 0.11778180891761877 0.23578639577494742
+[WARNING] [2025-06-02 07:40:02,361:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:40:02,361:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.0 0.1275808059233946 0.09749898752465433 0.23578639577494742
+[WARNING] [2025-06-02 07:40:24,031:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:40:24,031:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:40:25,733:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:40:25,733:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+3
+0.11907572946533984 0.11775594475295459 0.11806713203348679 0.23578639577494742
+[WARNING] [2025-06-02 07:43:37,228:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:43:37,228:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:44:47,132:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-02 07:44:47,132:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'none', 'classifier:__choice__': 'CustomMLPClassifier', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'no_encoding', 'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'minority_coalescer', 'data_preprocessing:numerical_transformer:imputation:strategy': 'mean', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'power_transformer', 'feature_preprocessor:__choice__': 'select_percentile_classification', 'classifier:CustomMLPClassifier:activation': 'logistic', 'classifier:CustomMLPClassifier:alpha': 3.864324519502553e-05, 'classifier:CustomMLPClassifier:learning_rate_init': 0.2813819927745899, 'classifier:CustomMLPClassifier:max_iter': 445, 'classifier:CustomMLPClassifier:num_units': 374, 'classifier:CustomMLPClassifier:tol': 0.0019987455507069966, 'data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction': 0.48317279204655106, 'feature_preprocessor:select_percentile_classification:percentile': 9.205839250202121, 'feature_preprocessor:select_percentile_classification:score_func': 'f_classif'},
+dataset_properties={
+  'task': 1,
+  'sparse': False,
+  'multilabel': False,
+  'multiclass': False,
+  'target_type': 'classification',
+  'signed': False})),
+]
+Configuration space object:
+  Hyperparameters:
+    balancing:strategy, Type: Categorical, Choices: {none, weighting}, Default: none
+    classifier:CustomMLPClassifier:activation, Type: Categorical, Choices: {identity, logistic, tanh, relu}, Default: relu
+    classifier:CustomMLPClassifier:alpha, Type: UniformFloat, Range: [1e-06, 0.1], Default: 0.0001, on log-scale
+    classifier:CustomMLPClassifier:learning_rate_init, Type: UniformFloat, Range: [0.0001, 1.0], Default: 0.001, on log-scale
+    classifier:CustomMLPClassifier:max_iter, Type: UniformInteger, Range: [100, 500], Default: 300
+    classifier:CustomMLPClassifier:num_units, Type: UniformInteger, Range: [50, 500], Default: 100
+    classifier:CustomMLPClassifier:tol, Type: UniformFloat, Range: [1e-05, 0.01], Default: 0.0001, on log-scale
+    classifier:__choice__, Type: Categorical, Choices: {CustomMLPClassifier}, Default: CustomMLPClassifier
+    data_preprocessing:categorical_transformer:categorical_encoding:__choice__, Type: Categorical, Choices: {no_encoding, one_hot_encoding}, Default: one_hot_encoding
+    data_preprocessing:categorical_transformer:category_coalescence:__choice__, Type: Categorical, Choices: {minority_coalescer, no_coalescense}, Default: minority_coalescer
+    data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction, Type: UniformFloat, Range: [0.0001, 0.5], Default: 0.01, on log-scale
+    data_preprocessing:numerical_transformer:imputation:strategy, Type: Categorical, Choices: {mean, median, most_frequent}, Default: mean
+    data_preprocessing:numerical_transformer:rescaling:__choice__, Type: Categorical, Choices: {minmax, none, normalize, power_transformer, quantile_transformer, robust_scaler, standardize}, Default: standardize
+    data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles, Type: UniformInteger, Range: [10, 2000], Default: 1000
+    data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution, Type: Categorical, Choices: {uniform, normal}, Default: uniform
+    data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max, Type: UniformFloat, Range: [0.7, 0.999], Default: 0.75
+    data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min, Type: UniformFloat, Range: [0.001, 0.3], Default: 0.25
+    feature_preprocessor:__choice__, Type: Categorical, Choices: {fast_ica, select_percentile_classification, select_rates_classification}, Default: fast_ica
+    feature_preprocessor:fast_ica:algorithm, Type: Categorical, Choices: {parallel, deflation}, Default: parallel
+    feature_preprocessor:fast_ica:fun, Type: Categorical, Choices: {logcosh, exp, cube}, Default: logcosh
+    feature_preprocessor:fast_ica:n_components, Type: UniformInteger, Range: [10, 2000], Default: 100
+    feature_preprocessor:fast_ica:whiten, Type: Categorical, Choices: {False, True}, Default: False
+    feature_preprocessor:select_percentile_classification:percentile, Type: UniformFloat, Range: [1.0, 99.0], Default: 50.0
+    feature_preprocessor:select_percentile_classification:score_func, Type: Categorical, Choices: {chi2, f_classif, mutual_info}, Default: chi2
+    feature_preprocessor:select_rates_classification:alpha, Type: UniformFloat, Range: [0.01, 0.5], Default: 0.1
+    feature_preprocessor:select_rates_classification:mode, Type: Categorical, Choices: {fpr, fdr, fwe}, Default: fpr
+    feature_preprocessor:select_rates_classification:score_func, Type: Categorical, Choices: {chi2, f_classif, mutual_info_classif}, Default: chi2
+  Conditions:
+    classifier:CustomMLPClassifier:activation | classifier:__choice__ == 'CustomMLPClassifier'
+    classifier:CustomMLPClassifier:alpha | classifier:__choice__ == 'CustomMLPClassifier'
+    classifier:CustomMLPClassifier:learning_rate_init | classifier:__choice__ == 'CustomMLPClassifier'
+    classifier:CustomMLPClassifier:max_iter | classifier:__choice__ == 'CustomMLPClassifier'
+    classifier:CustomMLPClassifier:num_units | classifier:__choice__ == 'CustomMLPClassifier'
+    classifier:CustomMLPClassifier:tol | classifier:__choice__ == 'CustomMLPClassifier'
+    data_preprocessing:categorical_transformer:category_coalescence:minority_coalescer:minimum_fraction | data_preprocessing:categorical_transformer:category_coalescence:__choice__ == 'minority_coalescer'
+    data_preprocessing:numerical_transformer:rescaling:quantile_transformer:n_quantiles | data_preprocessing:numerical_transformer:rescaling:__choice__ == 'quantile_transformer'
+    data_preprocessing:numerical_transformer:rescaling:quantile_transformer:output_distribution | data_preprocessing:numerical_transformer:rescaling:__choice__ == 'quantile_transformer'
+    data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_max | data_preprocessing:numerical_transformer:rescaling:__choice__ == 'robust_scaler'
+    data_preprocessing:numerical_transformer:rescaling:robust_scaler:q_min | data_preprocessing:numerical_transformer:rescaling:__choice__ == 'robust_scaler'
+    feature_preprocessor:fast_ica:algorithm | feature_preprocessor:__choice__ == 'fast_ica'
+    feature_preprocessor:fast_ica:fun | feature_preprocessor:__choice__ == 'fast_ica'
+    feature_preprocessor:fast_ica:n_components | feature_preprocessor:fast_ica:whiten == 'True'
+    feature_preprocessor:fast_ica:whiten | feature_preprocessor:__choice__ == 'fast_ica'
+    feature_preprocessor:select_percentile_classification:percentile | feature_preprocessor:__choice__ == 'select_percentile_classification'
+    feature_preprocessor:select_percentile_classification:score_func | feature_preprocessor:__choice__ == 'select_percentile_classification'
+    feature_preprocessor:select_rates_classification:alpha | feature_preprocessor:__choice__ == 'select_rates_classification'
+    feature_preprocessor:select_rates_classification:mode | feature_preprocessor:select_rates_classification:score_func != 'mutual_info_classif'
+    feature_preprocessor:select_rates_classification:score_func | feature_preprocessor:__choice__ == 'select_rates_classification'
+
+[0. 0. 1. ... 0. 0. 0.]
+[0. 0. 1. ... 0. 0. 0.] 9209
+EOD-Accuracy score: 0.9003149093278314
+0.7081862555945386
+0.09276210429987117
+0.09022766608973509
+0.05453979824945457
+Precision: 0.631578947368421
+Recall: 0.47244094488188976
+F1 score: 0.5405405405405405
