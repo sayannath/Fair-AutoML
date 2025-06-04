@@ -80,7 +80,7 @@ echo "German Dataset"
 
 # LRG Classifier for German Dataset
 echo "Running LRG SPD age"
-python german_LRG_SPD_age.py >> ./training_logs/german_LRG_SPD_age.txt # Needs a re-run
+python german_LRG_SPD_age.py >> ./training_logs/german_LRG_SPD_age.txt
 
 #echo "Running LRG EOD age"
 #python german_LRG_EOD_age.py >> ./training_logs/german_LRG_EOD_age.txt
