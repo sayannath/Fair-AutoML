@@ -21,8 +21,8 @@ from autosklearn.upgrade.metric import (
 # ----------------------------------------------------------------------------
 # (a) Identify features vs. label
 # ----------------------------------------------------------------------------
-LABEL_COL = 'Probability'
-PROTECTED_COL = 'RACE'
+LABEL_COL = "Probability"
+PROTECTED_COL = "RACE"
 
 # ----------------------------------------------------------------------------
 # 1. Load the AIF360 MEPS dataset (as an AIF360 StandardDataset), then split
@@ -41,8 +41,8 @@ train_df, _ = dataset_orig_train.convert_to_dataframe()
 test_df, _ = dataset_orig_test.convert_to_dataframe()
 
 # Rename 'UTILIZATION' → 'Probability' in each split
-train_df = train_df.rename(columns={'UTILIZATION': LABEL_COL})
-test_df = test_df.rename(columns={'UTILIZATION': LABEL_COL})
+train_df = train_df.rename(columns={"UTILIZATION": LABEL_COL})
+test_df = test_df.rename(columns={"UTILIZATION": LABEL_COL})
 
 # ----------------------------------------------------------------------------
 # 3. Separate features (X), labels (y), and protected attribute (race) for each split
@@ -63,25 +63,19 @@ race_test_full = test_df[PROTECTED_COL].to_numpy()
 feats = [c for c in X_train_full.columns if c != PROTECTED_COL]
 
 cat_feats = [
-    c for c in feats
+    c
+    for c in feats
     if pd.api.types.is_object_dtype(train_df[c])
-       or pd.api.types.is_categorical_dtype(train_df[c])
+    or pd.api.types.is_categorical_dtype(train_df[c])
 ]
 num_feats = [c for c in feats if c not in cat_feats]
 
-mlp_classifier = MLPClassifier(
-    hidden_layer_sizes=(100,),
-    max_iter=300,
-    random_state=42
-)
+mlp_classifier = MLPClassifier(hidden_layer_sizes=(100,), max_iter=300, random_state=42)
 
 # ----------------------------------------------------------------------------
 # 6. Fit the pipeline on the training split
 # ----------------------------------------------------------------------------
-mlp_classifier.fit(
-    X_train_full[feats],
-    y_train_full
-)
+mlp_classifier.fit(X_train_full[feats], y_train_full)
 
 # ----------------------------------------------------------------------------
 # 7. Evaluate on the test split (accuracy + ROC‐AUC)

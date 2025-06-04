@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
@@ -8,39 +8,15 @@ sys.path.append(package_dir)
 import datetime
 import pickle
 
-from ConfigSpace.conditions import EqualsCondition, InCondition
-from ConfigSpace.configuration_space import ConfigurationSpace
-from ConfigSpace.forbidden import ForbiddenAndConjunction, ForbiddenEqualsClause
-from ConfigSpace.hyperparameters import (
-    CategoricalHyperparameter,
-    UniformFloatHyperparameter,
-    UniformIntegerHyperparameter,
-    UnParametrizedHyperparameter,
-    Constant,
-)
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
-from xgboost import XGBClassifier
 
 import autosklearn.pipeline.components.classification
 from autosklearn.Fairea.fairea import create_baseline
-from autosklearn.pipeline.components.classification import (
-    AutoSklearnClassificationAlgorithm,
-)
-from autosklearn.pipeline.constants import (
-    DENSE,
-    UNSIGNED_DATA,
-    PREDICTIONS,
-    SPARSE,
-    SIGNED_DATA,
-)
 import autosklearn.classification
 import numpy as np
-from aif360.datasets import GermanDataset
 
 import sklearn.metrics
 import autosklearn.classification
-from autosklearn.pipeline.implementations.util import softmax
 from autosklearn.upgrade.metric import (
     disparate_impact,
     statistical_parity_difference,
@@ -48,9 +24,6 @@ from autosklearn.upgrade.metric import (
     average_odds_difference,
 )
 import os
-import shutil
-
-from autosklearn.util.common import check_for_bool, check_none
 
 train_list = "data_orig_train_german.pkl"
 test_list = "data_orig_test_german.pkl"
@@ -138,7 +111,7 @@ f.close()
 # ============
 
 import pandas as pd
-from aif360.datasets import GermanDataset, StandardDataset
+from aif360.datasets import StandardDataset
 
 train = pd.read_pickle(train_list)
 test = pd.read_pickle(test_list)
@@ -227,13 +200,11 @@ data_orig_test = StandardDataset(
 privileged_groups = [{"sex": 1}]
 unprivileged_groups = [{"sex": 0}]
 
-
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
 
 X_test = data_orig_test.features
 y_test = data_orig_test.labels.ravel()
-
 
 # dataset_orig = GermanDataset(protected_attribute_names=['sex'],
 #                             privileged_classes=[[1]],
@@ -618,3 +589,18 @@ print(disparate_impact(data_orig_test, predictions, "sex"))
 print(statistical_parity_difference(data_orig_test, predictions, "sex"))
 print(equal_opportunity_difference(data_orig_test, predictions, y_test, "sex"))
 print(average_odds_difference(data_orig_test, predictions, y_test, "sex"))
+
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+print("Precision:", precision_score(y_test, predictions))
+print("Recall:", recall_score(y_test, predictions))
+print("F1 score:", f1_score(y_test, predictions))
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/german_svc_aod_sex_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)

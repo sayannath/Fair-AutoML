@@ -11,7 +11,7 @@ df = df[
     & (df["is_recid"] != -1)
     & (df["c_charge_degree"] != "O")
     & (df["score_text"] != "N/A")
-    ]
+]
 
 # Target variable: whether someone reoffended within 2 years
 y = df["two_year_recid"]

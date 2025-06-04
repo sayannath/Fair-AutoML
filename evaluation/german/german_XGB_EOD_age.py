@@ -103,7 +103,7 @@ def custom_preprocessing(df):
 # ============
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "german_knn_aod" + str(now)
+temp_path = "german_xgb_eod" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -244,13 +244,13 @@ y_test = data_orig_test.labels.ravel()
 
 class CustomXGBoost(AutoSklearnClassificationAlgorithm):
     def __init__(
-            self,
-            n_estimators,
-            max_depth,
-            learning_rate,
-            subsample,
-            min_child_weight,
-            random_state=None,
+        self,
+        n_estimators,
+        max_depth,
+        learning_rate,
+        subsample,
+        min_child_weight,
+        random_state=None,
     ):
         self.n_estimators = n_estimators
         self.max_depth = max_depth
@@ -433,7 +433,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-            1 - np.mean(solution == prediction)
+        1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
