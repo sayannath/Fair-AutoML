@@ -1,0 +1,418 @@
+Configuration space object:
+  Hyperparameters:
+    bootstrap, Type: Categorical, Choices: {True, False}, Default: True
+    criterion, Type: Categorical, Choices: {gini, entropy}, Default: gini
+    max_depth, Type: Constant, Value: None
+    max_features, Type: UniformFloat, Range: [0.20107, 0.75235], Default: 0.20107
+    max_leaf_nodes, Type: Constant, Value: None
+    min_impurity_decrease, Type: Constant, Value: 0.0
+    min_samples_leaf, Type: UniformInteger, Range: [6, 16], Default: 6
+    min_samples_split, Type: UniformInteger, Range: [6, 16], Default: 6
+    min_weight_fraction_leaf, Type: Constant, Value: 0.0
+    n_estimators, Type: UniformInteger, Range: [255, 855], Default: 255
+
+################################################################################
+Use self defined accuracy metric
+[WARNING] [2025-06-05 08:59:55,597:Client-AutoMLSMBO(1)::bdcf0206-421d-11f0-88f3-fe576b4fae26] Could not find meta-data directory /Users/sayannath/Projects/Fair-AutoML/autosklearn/metalearning/files/accu_binary.classification_dense
+[WARNING] [2025-06-05 09:00:16,749:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+1
+1
+[WARNING] [2025-06-05 09:00:26,447:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 2. Number of dummy models: 1
+1
+[WARNING] [2025-06-05 09:00:34,216:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+2
+[WARNING] [2025-06-05 09:00:48,283:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 4. Number of dummy models: 1
+3
+[WARNING] [2025-06-05 09:00:55,818:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 5. Number of dummy models: 1
+4
+[WARNING] [2025-06-05 09:01:32,236:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 6. Number of dummy models: 1
+5
+[WARNING] [2025-06-05 09:04:44,370:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 7. Number of dummy models: 1
+6
+[WARNING] [2025-06-05 09:05:09,969:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 8. Number of dummy models: 1
+7
+[WARNING] [2025-06-05 09:06:18,588:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 9. Number of dummy models: 1
+8
+[WARNING] [2025-06-05 09:06:39,249:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 10. Number of dummy models: 1
+9
+[WARNING] [2025-06-05 09:06:47,730:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+10
+10
+[WARNING] [2025-06-05 09:07:00,515:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 2. Number of dummy models: 1
+11
+[WARNING] [2025-06-05 09:07:08,157:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+12
+[WARNING] [2025-06-05 09:07:23,612:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 4. Number of dummy models: 1
+13
+[WARNING] [2025-06-05 09:07:31,119:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 5. Number of dummy models: 1
+14
+[WARNING] [2025-06-05 09:07:42,483:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 6. Number of dummy models: 1
+15
+[WARNING] [2025-06-05 09:07:51,686:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 7. Number of dummy models: 1
+16
+[WARNING] [2025-06-05 09:07:59,512:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 8. Number of dummy models: 1
+17
+[WARNING] [2025-06-05 09:08:06,114:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 9. Number of dummy models: 1
+18
+[WARNING] [2025-06-05 09:09:10,555:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 10. Number of dummy models: 1
+19
+[WARNING] [2025-06-05 09:09:18,988:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+20
+20
+[WARNING] [2025-06-05 09:09:24,144:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 2. Number of dummy models: 1
+21
+[WARNING] [2025-06-05 09:10:42,606:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+22
+[WARNING] [2025-06-05 09:10:50,336:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 4. Number of dummy models: 1
+23
+[WARNING] [2025-06-05 09:10:56,207:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 5. Number of dummy models: 1
+24
+[WARNING] [2025-06-05 09:11:03,313:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 6. Number of dummy models: 1
+25
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+26
+[(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'weighting', 'classifier:__choice__': 'CustomRandomForest', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'one_hot_encoding', 'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'no_coalescense', 'data_preprocessing:numerical_transformer:imputation:strategy': 'mean', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'none', 'feature_preprocessor:__choice__': 'select_rates_classification', 'classifier:CustomRandomForest:bootstrap': 'False', 'classifier:CustomRandomForest:criterion': 'entropy', 'classifier:CustomRandomForest:max_depth': 'None', 'classifier:CustomRandomForest:max_features': 0.7333340712606429, 'classifier:CustomRandomForest:max_leaf_nodes': 'None', 'classifier:CustomRandomForest:min_impurity_decrease': 0.0, 'classifier:CustomRandomForest:min_samples_leaf': 6, 'classifier:CustomRandomForest:min_samples_split': 8, 'classifier:CustomRandomForest:min_weight_fraction_leaf': 0.0, 'classifier:CustomRandomForest:n_estimators': 673, 'feature_preprocessor:select_rates_classification:alpha': 0.3007913796535908, 'feature_preprocessor:select_rates_classification:score_func': 'chi2', 'feature_preprocessor:select_rates_classification:mode': 'fwe'},
+dataset_properties={
+  'task': 1,
+  'sparse': False,
+  'multilabel': False,
+  'multiclass': False,
+  'target_type': 'classification',
+  'signed': False})),
+]
+[0. 0. 1. ... 0. 0. 0.]
+[0. 0. 0. ... 0. 0. 1.] 13803
+EOD-Accuracy score: 0.8567702673331884
+1.1157898027058248
+0.16674295679124213
+0.04884507722979636
+0.05516398801366161
+Precision: 0.7726931732933233
+Recall: 0.6004080443019528
+F1 score: 0.6757421682794817

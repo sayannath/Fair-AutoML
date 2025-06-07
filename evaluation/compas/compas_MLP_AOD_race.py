@@ -387,10 +387,10 @@ predictions = automl.predict(X_test)
 print(predictions)
 print(y_test, len(predictions))
 print("AOD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-print(disparate_impact(dataset_orig_train, predictions, "race"))
-print(statistical_parity_difference(dataset_orig_train, predictions, "race"))
-print(equal_opportunity_difference(dataset_orig_train, predictions, y_test, "race"))
-print(average_odds_difference(dataset_orig_train, predictions, y_test, "race"))
+print(disparate_impact(dataset_orig_test, predictions, "race"))
+print(statistical_parity_difference(dataset_orig_test, predictions, "race"))
+print(equal_opportunity_difference(dataset_orig_test, predictions, y_test, "race"))
+print(average_odds_difference(dataset_orig_test, predictions, y_test, "race"))
 
 from sklearn.metrics import precision_score, recall_score, f1_score
 

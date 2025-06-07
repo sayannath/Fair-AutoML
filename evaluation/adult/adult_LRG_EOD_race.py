@@ -102,7 +102,6 @@ default_mappings = {
     ],
 }
 
-
 data_orig_train = StandardDataset(
     df=train,
     label_name="income-per-year",
@@ -333,16 +332,16 @@ def accuracy(solution, prediction):
         ),
     ]
 
-    print(
-        fairness_metrics[metric_id],
-        1 - np.mean(solution == prediction),
-        fairness_metrics[metric_id] * beta
-        + (1 - np.mean(solution == prediction)) * (1 - beta),
-        beta,
-    )
+    # print(
+    #     fairness_metrics[metric_id],
+    #     1 - np.mean(solution == prediction),
+    #     fairness_metrics[metric_id] * beta
+    #     + (1 - np.mean(solution == prediction)) * (1 - beta),
+    #     beta,
+    # )
 
     return fairness_metrics[metric_id] * beta + (
-        1 - np.mean(solution == prediction)
+            1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
@@ -365,7 +364,6 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
-    # per_run_time_limit=500,
     memory_limit=10000000,
     include_estimators=["CustomLRG"],
     ensemble_size=1,
@@ -386,6 +384,15 @@ automl.fit(X_train, y_train)
 
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/adult_lrg_eod_race_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)
 
 a_file = open("adult_lrg_eod_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
@@ -409,12 +416,3 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 print("Precision:", precision_score(y_test, predictions))
 print("Recall:", recall_score(y_test, predictions))
 print("F1 score:", f1_score(y_test, predictions))
-
-import json
-from utils.file_ops import write_file
-from utils.run_history import _get_run_history
-
-write_file(
-    "./run_history/adult_lrg_eod_race_run_history.json",
-    json.dumps(_get_run_history(automl_model=automl), indent=4),
-)

@@ -1,0 +1,383 @@
+(11081, 137)
+(11081,)
+(4749, 137)
+(4749,)
+Configuration space object:
+  Hyperparameters:
+    bootstrap, Type: Categorical, Choices: {True, False}, Default: True
+    criterion, Type: Categorical, Choices: {gini, entropy}, Default: gini
+    max_depth, Type: Constant, Value: None
+    max_features, Type: UniformFloat, Range: [0.2, 0.9], Default: 0.5689655172
+    max_leaf_nodes, Type: Constant, Value: None
+    min_impurity_decrease, Type: Constant, Value: 0.0
+    min_samples_leaf, Type: UniformInteger, Range: [2, 20], Default: 9
+    min_samples_split, Type: UniformInteger, Range: [2, 20], Default: 9
+    min_weight_fraction_leaf, Type: Constant, Value: 0.0
+    n_estimators, Type: UniformInteger, Range: [100, 1000], Default: 542
+
+[WARNING] [2025-06-06 09:32:55,526:Client-AutoMLSMBO(1)::845b208a-42eb-11f0-929c-fe576b4fae26] Could not find meta-data directory /Users/sayannath/Projects/Fair-AutoML/autosklearn/metalearning/files/accu_binary.classification_dense
+[WARNING] [2025-06-06 09:33:45,224:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:33:48,602:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+[WARNING] [2025-06-06 09:33:48,609:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:33:53,372:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 2. Number of dummy models: 1
+1
+[WARNING] [2025-06-06 09:33:53,380:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:34:47,531:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 2. Number of dummy models: 1
+[WARNING] [2025-06-06 09:34:47,537:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:34:49,367:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+3
+[WARNING] [2025-06-06 09:34:49,374:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:35:53,013:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+[WARNING] [2025-06-06 09:35:53,018:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:36:43,669:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+[WARNING] [2025-06-06 09:36:43,674:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:37:32,587:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+[WARNING] [2025-06-06 09:37:32,592:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:38:23,642:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+[WARNING] [2025-06-06 09:38:23,648:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:38:26,348:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 4. Number of dummy models: 1
+8
+[WARNING] [2025-06-06 09:38:26,355:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:38:31,608:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 5. Number of dummy models: 1
+9
+[WARNING] [2025-06-06 09:38:31,615:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:38:34,585:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+10
+10
+[WARNING] [2025-06-06 09:38:34,592:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:39:34,789:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+[WARNING] [2025-06-06 09:39:34,795:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:40:19,064:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+[WARNING] [2025-06-06 09:40:19,069:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:40:23,116:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 2. Number of dummy models: 1
+13
+[WARNING] [2025-06-06 09:40:23,122:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:40:27,597:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+14
+[WARNING] [2025-06-06 09:40:27,606:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:41:18,508:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+[WARNING] [2025-06-06 09:41:18,514:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:41:37,861:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 4. Number of dummy models: 1
+16
+[WARNING] [2025-06-06 09:41:37,868:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:41:40,036:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 5. Number of dummy models: 1
+17
+[WARNING] [2025-06-06 09:41:40,043:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:42:48,602:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 5. Number of dummy models: 1
+[WARNING] [2025-06-06 09:42:48,608:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:43:35,007:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 5. Number of dummy models: 1
+[WARNING] [2025-06-06 09:43:35,013:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:43:39,487:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+20
+20
+[WARNING] [2025-06-06 09:43:39,495:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:44:19,565:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+[WARNING] [2025-06-06 09:44:19,571:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:45:27,331:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+[WARNING] [2025-06-06 09:45:27,337:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:46:27,342:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+[WARNING] [2025-06-06 09:46:27,348:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:47:18,233:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 1. Number of dummy models: 1
+[WARNING] [2025-06-06 09:47:18,239:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:47:22,849:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 2. Number of dummy models: 1
+25
+[WARNING] [2025-06-06 09:47:22,857:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:47:25,848:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+26
+[WARNING] [2025-06-06 09:47:25,855:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:48:19,803:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 3. Number of dummy models: 1
+[WARNING] [2025-06-06 09:48:19,809:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:48:23,483:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 4. Number of dummy models: 1
+28
+[WARNING] [2025-06-06 09:48:23,490:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:48:27,271:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 5. Number of dummy models: 1
+29
+[WARNING] [2025-06-06 09:48:27,278:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:49:18,584:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 5. Number of dummy models: 1
+[WARNING] [2025-06-06 09:49:18,589:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:49:22,252:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 6. Number of dummy models: 1
+31
+[WARNING] [2025-06-06 09:49:22,259:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:50:12,859:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 6. Number of dummy models: 1
+[WARNING] [2025-06-06 09:50:12,865:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:50:17,407:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 7. Number of dummy models: 1
+33
+[WARNING] [2025-06-06 09:50:17,415:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:51:09,838:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 7. Number of dummy models: 1
+[WARNING] [2025-06-06 09:51:09,844:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:52:02,365:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 7. Number of dummy models: 1
+[WARNING] [2025-06-06 09:52:02,372:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:52:04,425:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 8. Number of dummy models: 1
+36
+[WARNING] [2025-06-06 09:52:04,432:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:52:08,183:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 9. Number of dummy models: 1
+37
+[WARNING] [2025-06-06 09:52:08,190:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:53:07,861:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 9. Number of dummy models: 1
+[WARNING] [2025-06-06 09:53:07,867:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:53:11,346:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 10. Number of dummy models: 1
+39
+[WARNING] [2025-06-06 09:53:11,353:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:54:07,389:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 10. Number of dummy models: 1
+[WARNING] [2025-06-06 09:54:07,394:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:54:47,095:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 10. Number of dummy models: 1
+[WARNING] [2025-06-06 09:54:47,101:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:54:49,251:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 11. Number of dummy models: 1
+42
+[WARNING] [2025-06-06 09:54:49,258:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:54:53,798:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 12. Number of dummy models: 1
+43
+[WARNING] [2025-06-06 09:54:53,805:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:55:42,151:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 12. Number of dummy models: 1
+[WARNING] [2025-06-06 09:55:42,157:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:56:26,441:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 12. Number of dummy models: 1
+[WARNING] [2025-06-06 09:56:26,448:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:57:10,551:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 12. Number of dummy models: 1
+[WARNING] [2025-06-06 09:57:10,558:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:57:12,511:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 13. Number of dummy models: 1
+47
+[WARNING] [2025-06-06 09:57:12,519:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:58:02,537:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 13. Number of dummy models: 1
+[WARNING] [2025-06-06 09:58:02,543:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:58:04,765:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 14. Number of dummy models: 1
+49
+[WARNING] [2025-06-06 09:58:04,773:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:58:58,578:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 14. Number of dummy models: 1
+[WARNING] [2025-06-06 09:58:58,584:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 09:59:45,413:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 14. Number of dummy models: 1
+[WARNING] [2025-06-06 09:59:45,420:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:00:59,594:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 14. Number of dummy models: 1
+[WARNING] [2025-06-06 10:00:59,600:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:01:47,675:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 14. Number of dummy models: 1
+[WARNING] [2025-06-06 10:01:47,682:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:01:49,973:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 15. Number of dummy models: 1
+54
+[WARNING] [2025-06-06 10:01:49,981:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:01:52,772:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 16. Number of dummy models: 1
+55
+[WARNING] [2025-06-06 10:01:52,780:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:02:39,569:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 16. Number of dummy models: 1
+[WARNING] [2025-06-06 10:02:39,576:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:03:51,504:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 16. Number of dummy models: 1
+[WARNING] [2025-06-06 10:03:51,511:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:03:54,074:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 17. Number of dummy models: 1
+58
+[WARNING] [2025-06-06 10:03:54,081:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:03:56,742:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 18. Number of dummy models: 1
+59
+[WARNING] [2025-06-06 10:03:56,750:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:05:15,294:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 18. Number of dummy models: 1
+[WARNING] [2025-06-06 10:05:15,301:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:05:18,729:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+61
+[WARNING] [2025-06-06 10:05:18,736:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:06:15,613:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:06:15,620:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:07:17,110:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:07:17,116:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:08:08,052:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:08:08,059:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:08:59,826:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:08:59,833:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:10:11,982:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:10:11,989:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:10:54,151:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:10:54,158:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:11:54,713:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:11:54,719:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:12:47,014:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:12:47,022:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:13:43,699:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:13:43,706:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:14:51,170:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:14:51,177:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:15:39,036:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 19. Number of dummy models: 1
+[WARNING] [2025-06-06 10:15:39,043:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:15:41,596:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 20. Number of dummy models: 1
+73
+[WARNING] [2025-06-06 10:15:41,605:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:15:44,893:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 21. Number of dummy models: 1
+74
+[WARNING] [2025-06-06 10:15:44,901:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:16:52,723:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 21. Number of dummy models: 1
+[WARNING] [2025-06-06 10:16:52,730:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:16:55,780:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 22. Number of dummy models: 1
+76
+[WARNING] [2025-06-06 10:16:55,788:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:17:52,806:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 22. Number of dummy models: 1
+[WARNING] [2025-06-06 10:17:52,813:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:17:54,971:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 23. Number of dummy models: 1
+78
+[WARNING] [2025-06-06 10:17:54,979:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:18:55,419:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 23. Number of dummy models: 1
+[WARNING] [2025-06-06 10:18:55,426:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:19:42,302:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 23. Number of dummy models: 1
+[WARNING] [2025-06-06 10:19:42,309:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:20:23,985:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 23. Number of dummy models: 1
+[WARNING] [2025-06-06 10:20:23,992:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:21:12,276:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 23. Number of dummy models: 1
+[WARNING] [2025-06-06 10:21:12,283:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:22:00,488:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 23. Number of dummy models: 1
+[WARNING] [2025-06-06 10:22:00,495:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:22:47,986:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 23. Number of dummy models: 1
+[WARNING] [2025-06-06 10:22:47,993:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:23:38,214:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 23. Number of dummy models: 1
+[WARNING] [2025-06-06 10:23:38,222:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:23:41,324:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 24. Number of dummy models: 1
+86
+[WARNING] [2025-06-06 10:23:41,333:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:24:53,792:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 24. Number of dummy models: 1
+[WARNING] [2025-06-06 10:24:53,799:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:24:57,834:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 25. Number of dummy models: 1
+88
+[WARNING] [2025-06-06 10:24:57,843:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:26:09,440:Client-EnsembleBuilder] No models better than random - using Dummy loss!Number of models besides current dummy model: 25. Number of dummy models: 1
+[WARNING] [2025-06-06 10:26:09,447:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:26:15,205:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+[WARNING] [2025-06-06 10:27:04,385:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:27:08,806:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+[WARNING] [2025-06-06 10:27:57,425:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:28:02,127:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:28:25,871:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:29:00,473:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:29:08,040:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:29:15,224:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:29:23,045:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:29:46,816:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:30:05,229:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:30:10,909:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:30:28,176:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:30:35,211:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:30:53,383:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:31:09,745:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:31:26,110:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:31:36,092:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+90
+90
+90
+90
+90
+90
+90
+90
+[WARNING] [2025-06-06 10:32:04,091:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:32:21,904:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[WARNING] [2025-06-06 10:32:44,775:smac.runhistory.runhistory2epm.RunHistory2EPM4LogCost] Got cost of smaller/equal to 0. Replace by 0.000010 since we use log cost.
+[(1.000000, SimpleClassificationPipeline({'balancing:strategy': 'weighting', 'classifier:__choice__': 'CustomRandomForest', 'data_preprocessing:categorical_transformer:categorical_encoding:__choice__': 'no_encoding', 'data_preprocessing:categorical_transformer:category_coalescence:__choice__': 'no_coalescense', 'data_preprocessing:numerical_transformer:imputation:strategy': 'most_frequent', 'data_preprocessing:numerical_transformer:rescaling:__choice__': 'power_transformer', 'feature_preprocessor:__choice__': 'select_rates_classification', 'classifier:CustomRandomForest:bootstrap': 'False', 'classifier:CustomRandomForest:criterion': 'gini', 'classifier:CustomRandomForest:max_depth': 'None', 'classifier:CustomRandomForest:max_features': 0.4540269048819756, 'classifier:CustomRandomForest:max_leaf_nodes': 'None', 'classifier:CustomRandomForest:min_impurity_decrease': 0.0, 'classifier:CustomRandomForest:min_samples_leaf': 8, 'classifier:CustomRandomForest:min_samples_split': 3, 'classifier:CustomRandomForest:min_weight_fraction_leaf': 0.0, 'classifier:CustomRandomForest:n_estimators': 976, 'feature_preprocessor:select_rates_classification:alpha': 0.46113464552363076, 'feature_preprocessor:select_rates_classification:score_func': 'f_classif', 'feature_preprocessor:select_rates_classification:mode': 'fpr'},
+dataset_properties={
+  'task': 1,
+  'sparse': False,
+  'multilabel': False,
+  'multiclass': False,
+  'target_type': 'classification',
+  'signed': False})),
+]
+[0 0 0 ... 0 0 1]
+[0 0 0 ... 1 0 1] 4749
+SPD-Accuracy score: 0.8637607917456307
+0.630198124697081
+0.06301995946883247
+0.0019147788565264112
+0.013964108873967061
+Precision: 0.639821029082774
+Recall: 0.3704663212435233
+F1 score: 0.46923707957342087

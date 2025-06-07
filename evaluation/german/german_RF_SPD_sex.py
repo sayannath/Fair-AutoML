@@ -102,7 +102,7 @@ def custom_preprocessing(df):
 # ============
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "german_knn_aod" + str(now)
+temp_path = "german_rf_spd" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -243,20 +243,20 @@ y_test = data_orig_test.labels.ravel()
 
 class CustomRandomForest(AutoSklearnClassificationAlgorithm):
     def __init__(
-        self,
-        n_estimators,
-        criterion,
-        max_features,
-        min_samples_split,
-        min_samples_leaf,
-        min_weight_fraction_leaf,
-        bootstrap,
-        max_leaf_nodes,
-        min_impurity_decrease,
-        max_depth=10,
-        random_state=20,
-        n_jobs=1,
-        class_weight=None,
+            self,
+            n_estimators,
+            criterion,
+            max_features,
+            min_samples_split,
+            min_samples_leaf,
+            min_weight_fraction_leaf,
+            bootstrap,
+            max_leaf_nodes,
+            min_impurity_decrease,
+            max_depth=10,
+            random_state=20,
+            n_jobs=1,
+            class_weight=None,
     ):
         self.n_estimators = n_estimators
         self.criterion = criterion
@@ -511,16 +511,16 @@ def accuracy(solution, prediction):
         ),
     ]
 
-    print(
-        fairness_metrics[metric_id],
-        1 - np.mean(solution == prediction),
-        fairness_metrics[metric_id] * beta
-        + (1 - np.mean(solution == prediction)) * (1 - beta),
-        beta,
-    )
+    # print(
+    #     fairness_metrics[metric_id],
+    #     1 - np.mean(solution == prediction),
+    #     fairness_metrics[metric_id] * beta
+    #     + (1 - np.mean(solution == prediction)) * (1 - beta),
+    #     beta,
+    # )
 
     return fairness_metrics[metric_id] * beta + (
-        1 - np.mean(solution == prediction)
+            1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
@@ -563,6 +563,16 @@ automl.fit(X_train, y_train)
 # ===================================
 
 print(automl.show_models())
+
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/german_rf_spd_sex_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)
+
 predictions = automl.predict(X_test)
 count = 0
 print(predictions)
@@ -586,12 +596,3 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 print("Precision:", precision_score(y_test, predictions))
 print("Recall:", recall_score(y_test, predictions))
 print("F1 score:", f1_score(y_test, predictions))
-
-import json
-from utils.file_ops import write_file
-from utils.run_history import _get_run_history
-
-write_file(
-    "./run_history/german_rf_spd_sex_run_history.json",
-    json.dumps(_get_run_history(automl_model=automl), indent=4),
-)

@@ -8,3 +8,9 @@ evaluation/german/*.pkl
 evaluation/german/*.txt
 evaluation/titanic/*.pkl
 evaluation/titanic/*.txt
+/evaluation/bank/bank_lrg_aod2025-06-05 12_59_51/
+/evaluation/bank/bank_lrg_eod2025-06-05 11_59_54/
+/evaluation/bank/bank_lrg_spd2025-06-05 10_59_54/
+/evaluation/bank/bank_rf_aod2025-06-05 20_50_07/
+/evaluation/bank/bank_rf_eod2025-06-05 14_59_54/
+/evaluation/bank/bank_rf_spd2025-06-05 13_59_51/

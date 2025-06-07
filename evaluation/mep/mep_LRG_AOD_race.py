@@ -21,11 +21,11 @@ from autosklearn.upgrade.metric import (
     equal_opportunity_difference,
     average_odds_difference,
 )
-from sklearn.neural_network import MLPClassifier
+from sklearn.linear_model import LogisticRegression
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "temp" + str(now)
+temp_path = "mep_LRG_AOD_race" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -84,43 +84,24 @@ import numpy as np
 from autosklearn.pipeline.components.base import AutoSklearnClassificationAlgorithm
 from ConfigSpace.configuration_space import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
-    UniformIntegerHyperparameter,
-    UniformFloatHyperparameter,
     CategoricalHyperparameter,
 )
 
 
-class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
-    def __init__(
-            self,
-            num_units,
-            alpha,
-            learning_rate_init,
-            max_iter,
-            tol,
-            activation,
-            random_state=None,
-    ):
-        self.num_units = num_units
-        self.hidden_layer_sizes = (num_units,)
-        self.alpha = alpha
-        self.learning_rate_init = learning_rate_init
-        self.max_iter = max_iter
-        self.tol = tol
-        self.activation = activation
+class CustomLRG(AutoSklearnClassificationAlgorithm):
+    def __init__(self, penalty, C, dual, random_state=None):
+        self.penalty = penalty
+        self.C = C
+        self.dual = dual
         self.random_state = random_state
-        self.estimator = None
 
     def fit(self, X, y):
-        from sklearn.neural_network import MLPClassifier
+        from sklearn.linear_model import LogisticRegression
 
-        self.estimator = MLPClassifier(
-            hidden_layer_sizes=self.hidden_layer_sizes,
-            alpha=self.alpha,
-            learning_rate_init=self.learning_rate_init,
-            max_iter=self.max_iter,
-            tol=self.tol,
-            activation=self.activation,
+        self.estimator = LogisticRegression(
+            penalty=self.penalty,
+            C=self.C,
+            dual=self.dual,
             random_state=self.random_state,
         )
         self.estimator.fit(X, y)
@@ -139,14 +120,15 @@ class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
     @staticmethod
     def get_properties(dataset_properties=None):
         return {
-            "shortname": "MLP",
-            "name": "Multi-Layer Perceptron Classifier",
+            "shortname": "LRG",
+            "name": "LRG Classifier",
             "handles_regression": False,
             "handles_classification": True,
             "handles_multiclass": True,
             "handles_multilabel": False,
             "handles_multioutput": False,
             "is_deterministic": False,
+            # Both input and output must be tuple(iterable)
             "input": [DENSE, SIGNED_DATA, UNSIGNED_DATA],
             "output": [PREDICTIONS],
         }
@@ -155,41 +137,35 @@ class CustomMLPClassifier(AutoSklearnClassificationAlgorithm):
     def get_hyperparameter_search_space(dataset_properties=None):
         cs = ConfigurationSpace()
 
-        num_units = UniformIntegerHyperparameter(
-            "num_units", 50, 500, default_value=100
+        # The maximum number of features used in the forest is calculated as m^max_features, where
+        # m is the total number of features, and max_features is the hyperparameter specified below.
+        # The default is 0.5, which yields sqrt(m) features as max_features in the estimator. This
+        # corresponds with Geurts' heuristic.
+
+        penalty = CategoricalHyperparameter(
+            name="penalty", choices=["l2"], default_value="l2"
         )
-        alpha = UniformFloatHyperparameter(
-            "alpha", 1e-6, 1e-1, log=True, default_value=1e-4
+        C = CategoricalHyperparameter(
+            name="C",
+            choices=[1e-4, 1e-3, 1e-2, 1e-1, 0.5, 1.0, 5.0, 10.0, 15.0],
+            default_value=1.0,
         )
-        learning_rate_init = UniformFloatHyperparameter(
-            "learning_rate_init", 1e-4, 1.0, log=True, default_value=0.001
-        )
-        max_iter = UniformIntegerHyperparameter("max_iter", 100, 500, default_value=300)
-        tol = UniformFloatHyperparameter(
-            "tol", 1e-5, 1e-2, log=True, default_value=1e-4
-        )
-        activation = CategoricalHyperparameter(
-            "activation", ["identity", "logistic", "tanh", "relu"], default_value="relu"
+        dual = CategoricalHyperparameter(
+            name="dual", choices=[False], default_value=False
         )
 
-        cs.add_hyperparameters(
-            [
-                num_units,
-                alpha,
-                learning_rate_init,
-                max_iter,
-                tol,
-                activation,
-            ]
-        )
+        cs.add_hyperparameters([penalty, C, dual])
         return cs
 
 
-autosklearn.pipeline.components.classification.add_classifier(CustomMLPClassifier)
-cs = CustomMLPClassifier.get_hyperparameter_search_space()
+autosklearn.pipeline.components.classification.add_classifier(CustomLRG)
+cs = CustomLRG.get_hyperparameter_search_space()
 print(cs)
 
 
+############################################################################
+# Custom metrics definition
+# =========================
 def accuracy(solution, prediction):
     metric_id = 4
     protected_attr = "RACE"
@@ -204,17 +180,7 @@ def accuracy(solution, prediction):
 
     if os.stat("beta.txt").st_size == 0:
 
-        default = MLPClassifier(
-            hidden_layer_sizes=(
-                100,
-            ),  # analogous to n_estimators=200 → 1 hidden layer of 100 units
-            alpha=1e-4,  # L2 penalty (default small value)
-            learning_rate_init=0.001,  # analogous to learning_rate=0.35
-            max_iter=300,  # analogous to max_depth=6 → more iterations
-            tol=1e-4,  # convergence tolerance
-            activation="relu",  # common default
-            random_state=None,
-        )
+        default = LogisticRegression()
         degrees = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
         mutation_strategies = {"0": [1, 0], "1": [0, 1]}
         dataset_orig = subset_data_orig_train
@@ -291,19 +257,22 @@ def accuracy(solution, prediction):
         ),
     ]
 
-    print(
-        fairness_metrics[metric_id],
-        1 - np.mean(solution == prediction),
-        fairness_metrics[metric_id] * beta
-        + (1 - np.mean(solution == prediction)) * (1 - beta),
-        beta,
-    )
+    # print(
+    #     fairness_metrics[metric_id],
+    #     1 - np.mean(solution == prediction),
+    #     fairness_metrics[metric_id] * beta
+    #     + (1 - np.mean(solution == prediction)) * (1 - beta),
+    #     beta,
+    # )
 
     return fairness_metrics[metric_id] * beta + (
             1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
+############################################################################
+# Second example: Use own accuracy metric
+# =======================================
 print("#" * 80)
 print("Use self defined accuracy metric")
 accuracy_scorer = autosklearn.metrics.make_scorer(
@@ -315,16 +284,14 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_threshold=False,
 )
 
+############################################################################
+# Build and fit a classifier
+# ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
     memory_limit=10000000,
-    include_estimators=["CustomMLPClassifier"],
+    include_estimators=["CustomLRG"],
     ensemble_size=1,
-    include_preprocessors=[
-        "select_percentile_classification",
-        "extra_trees_preproc_for_classification",
-        "select_rates_classification",
-    ],
     tmp_folder=temp_path,
     delete_tmp_folder_after_terminate=False,
     metric=accuracy_scorer,

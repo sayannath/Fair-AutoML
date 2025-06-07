@@ -1,17 +1,5 @@
-# -*- encoding: utf-8 -*-
-"""
-=======
-Metrics
-=======
-
-*Auto-sklearn* supports various built-in metrics, which can be found in the
-:ref:`metrics section in the API <api:Built-in Metrics>`. However, it is also
-possible to define your own metric and use it to fit and evaluate your model.
-The following examples show how to use built-in and self-defined metrics for a
-classification problem.
-"""
-import sys
 import os
+import sys
 
 # Get the directory path containing autosklearn
 package_dir = os.path.abspath(os.path.join(os.path.dirname("Fair-AutoML"), "../.."))
@@ -35,14 +23,11 @@ from autosklearn.pipeline.components.classification import (
     AutoSklearnClassificationAlgorithm,
 )
 from autosklearn.pipeline.constants import DENSE, UNSIGNED_DATA, PREDICTIONS, SPARSE
-import shutil
 import autosklearn.classification
 import autosklearn.metrics
 import warnings
 
 warnings.filterwarnings("ignore")
-from aif360.datasets import AdultDataset, BankDataset
-from sklearn.preprocessing import StandardScaler
 import os
 import numpy as np
 
@@ -216,20 +201,20 @@ y_test = data_orig_test.labels.ravel()
 
 class CustomRandomForest(AutoSklearnClassificationAlgorithm):
     def __init__(
-        self,
-        n_estimators,
-        criterion,
-        max_features,
-        min_samples_split,
-        min_samples_leaf,
-        min_weight_fraction_leaf,
-        bootstrap,
-        max_leaf_nodes,
-        min_impurity_decrease,
-        max_depth=9,
-        random_state=1,
-        n_jobs=1,
-        class_weight=None,
+            self,
+            n_estimators,
+            criterion,
+            max_features,
+            min_samples_split,
+            min_samples_leaf,
+            min_weight_fraction_leaf,
+            bootstrap,
+            max_leaf_nodes,
+            min_impurity_decrease,
+            max_depth=9,
+            random_state=1,
+            n_jobs=1,
+            class_weight=None,
     ):
         self.n_estimators = n_estimators
         self.criterion = criterion
@@ -495,7 +480,7 @@ def accuracy(solution, prediction):
     )
 
     return fairness_metrics[metric_id] * beta + (
-        1 - np.mean(solution == prediction)
+            1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
@@ -512,7 +497,6 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
     needs_proba=False,
     needs_threshold=False,
 )
-
 
 ############################################################################
 # Build and fit a classifier
@@ -544,7 +528,6 @@ cs = automl.get_configuration_space(X_train, y_train)
 print(cs)
 predictions = automl.predict(X_test)
 print(predictions)
-
 
 a_file = open("bank_rf_aod" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)

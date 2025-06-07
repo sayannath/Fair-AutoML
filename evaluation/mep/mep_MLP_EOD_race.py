@@ -25,7 +25,7 @@ from sklearn.neural_network import MLPClassifier
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "temp" + str(now)
+temp_path = "mep_MLP_EOD_race" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -291,13 +291,13 @@ def accuracy(solution, prediction):
         ),
     ]
 
-    print(
-        fairness_metrics[metric_id],
-        1 - np.mean(solution == prediction),
-        fairness_metrics[metric_id] * beta
-        + (1 - np.mean(solution == prediction)) * (1 - beta),
-        beta,
-    )
+    # print(
+    #     fairness_metrics[metric_id],
+    #     1 - np.mean(solution == prediction),
+    #     fairness_metrics[metric_id] * beta
+    #     + (1 - np.mean(solution == prediction)) * (1 - beta),
+    #     beta,
+    # )
 
     return fairness_metrics[metric_id] * beta + (
             1 - np.mean(solution == prediction)

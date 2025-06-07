@@ -69,7 +69,7 @@ def custom_preprocessing(df):
 # ============
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "bank_xgb_spd" + str(now)
+temp_path = "bank_lrg_eod" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -427,6 +427,16 @@ automl.fit(X_train, y_train)
 print(automl.show_models())
 cs = automl.get_configuration_space(X_train, y_train)
 
+import json
+from utils.file_ops import write_file
+from utils.run_history import _get_run_history
+
+write_file(
+    "./run_history/bank_lrg_eod_age_run_history.json",
+    json.dumps(_get_run_history(automl_model=automl), indent=4),
+)
+print("Run-History created!!!!!")
+
 a_file = open("adult_lrg_eod_60sp" + str(now) + ".pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
 a_file.close()
@@ -449,12 +459,3 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 print("Precision:", precision_score(y_test, predictions))
 print("Recall:", recall_score(y_test, predictions))
 print("F1 score:", f1_score(y_test, predictions))
-
-import json
-from utils.file_ops import write_file
-from utils.run_history import _get_run_history
-
-write_file(
-    "./run_history/adult_lrg_eod_age_run_history.json",
-    json.dumps(_get_run_history(automl_model=automl), indent=4),
-)

@@ -387,10 +387,10 @@ predictions = automl.predict(X_test)
 print(predictions)
 print(y_test, len(predictions))
 print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-print(disparate_impact(dataset_orig_train, predictions, "sex"))
-print(statistical_parity_difference(dataset_orig_train, predictions, "sex"))
-print(equal_opportunity_difference(dataset_orig_train, predictions, y_test, "sex"))
-print(average_odds_difference(dataset_orig_train, predictions, y_test, "sex"))
+print(disparate_impact(dataset_orig_test, predictions, "sex"))
+print(statistical_parity_difference(dataset_orig_test, predictions, "sex"))
+print(equal_opportunity_difference(dataset_orig_test, predictions, y_test, "sex"))
+print(average_odds_difference(dataset_orig_test, predictions, y_test, "sex"))
 
 from sklearn.metrics import precision_score, recall_score, f1_score
 

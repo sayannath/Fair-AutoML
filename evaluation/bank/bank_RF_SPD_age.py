@@ -1,15 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-=======
-Metrics
-=======
-
-*Auto-sklearn* supports various built-in metrics, which can be found in the
-:ref:`metrics section in the API <api:Built-in Metrics>`. However, it is also
-possible to define your own metric and use it to fit and evaluate your model.
-The following examples show how to use built-in and self-defined metrics for a
-classification problem.
-"""
 import sys
 import os
 

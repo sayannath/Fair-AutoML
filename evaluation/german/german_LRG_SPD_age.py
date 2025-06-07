@@ -390,13 +390,13 @@ def accuracy(solution, prediction):
         ),
     ]
 
-    print(
-        fairness_metrics[metric_id],
-        1 - np.mean(solution == prediction),
-        fairness_metrics[metric_id] * beta
-        + (1 - np.mean(solution == prediction)) * (1 - beta),
-        beta,
-    )
+    # print(
+    #     fairness_metrics[metric_id],
+    #     1 - np.mean(solution == prediction),
+    #     fairness_metrics[metric_id] * beta
+    #     + (1 - np.mean(solution == prediction)) * (1 - beta),
+    #     beta,
+    # )
 
     return fairness_metrics[metric_id] * beta + (
         1 - np.mean(solution == prediction)
@@ -466,6 +466,6 @@ from utils.file_ops import write_file
 from utils.run_history import _get_run_history
 
 write_file(
-    "./run_history/adult_lrg_spd_age_run_history.json",
+    "run_history/german_lrg_spd_age_run_history.json",
     json.dumps(_get_run_history(automl_model=automl), indent=4),
 )

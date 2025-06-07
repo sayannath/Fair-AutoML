@@ -68,7 +68,7 @@ def custom_preprocessing(df):
 
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "temp" + str(now)
+temp_path = "adult_rf_aod_" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -145,8 +145,8 @@ data_orig_test = StandardDataset(
     metadata=default_mappings,
 )
 
-privileged_groups = [{"race": 1}]
-unprivileged_groups = [{"race": 0}]
+privileged_groups = [{"sex": 1}]
+unprivileged_groups = [{"sex": 0}]
 
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
@@ -421,13 +421,13 @@ def accuracy(solution, prediction):
         ),
     ]
 
-    print(
-        fairness_metrics[metric_id],
-        1 - np.mean(solution == prediction),
-        fairness_metrics[metric_id] * beta
-        + (1 - np.mean(solution == prediction)) * (1 - beta),
-        beta,
-    )
+    # print(
+    #     fairness_metrics[metric_id],
+    #     1 - np.mean(solution == prediction),
+    #     fairness_metrics[metric_id] * beta
+    #     + (1 - np.mean(solution == prediction)) * (1 - beta),
+    #     beta,
+    # )
 
     return fairness_metrics[metric_id] * beta + (
         1 - np.mean(solution == prediction)
@@ -453,7 +453,6 @@ accuracy_scorer = autosklearn.metrics.make_scorer(
 # ==========================
 automl = autosklearn.classification.AutoSklearnClassifier(
     time_left_for_this_task=60 * 60,
-    # per_run_time_limit=500,
     memory_limit=10000000,
     include_estimators=["CustomRandomForest"],
     ensemble_size=1,
@@ -499,6 +498,6 @@ from utils.file_ops import write_file
 from utils.run_history import _get_run_history
 
 write_file(
-    "./run_history/adult_xgb_aod_sex_run_history.json",
+    "./run_history/adult_rf_aod_sex_run_history.json",
     json.dumps(_get_run_history(automl_model=automl), indent=4),
 )

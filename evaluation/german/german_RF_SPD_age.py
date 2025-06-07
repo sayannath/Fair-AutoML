@@ -102,7 +102,7 @@ def custom_preprocessing(df):
 # ============
 now = str(datetime.datetime.now())[:19]
 now = now.replace(":", "_")
-temp_path = "german_knn_aod" + str(now)
+temp_path = "german_rf_spd" + str(now)
 try:
     os.remove("test_split.txt")
 except:
@@ -139,7 +139,7 @@ data_orig_train = StandardDataset(
     df=train,
     label_name="credit",
     favorable_classes=[1],
-    protected_attribute_names=["sex"],
+    protected_attribute_names=["age"],
     privileged_classes=[[1]],
     instance_weights_name=None,
     categorical_features=[
@@ -176,7 +176,7 @@ data_orig_test = StandardDataset(
     df=test,
     label_name="credit",
     favorable_classes=[1],
-    protected_attribute_names=["sex"],
+    protected_attribute_names=["age"],
     privileged_classes=[[1]],
     instance_weights_name=None,
     categorical_features=[
@@ -209,8 +209,8 @@ data_orig_test = StandardDataset(
     metadata=default_mappings,
 )
 
-privileged_groups = [{"sex": 1}]
-unprivileged_groups = [{"sex": 0}]
+privileged_groups = [{"age": 1}]
+unprivileged_groups = [{"age": 0}]
 
 X_train = data_orig_train.features
 y_train = data_orig_train.labels.ravel()
@@ -243,20 +243,20 @@ y_test = data_orig_test.labels.ravel()
 
 class CustomRandomForest(AutoSklearnClassificationAlgorithm):
     def __init__(
-        self,
-        n_estimators,
-        criterion,
-        max_features,
-        min_samples_split,
-        min_samples_leaf,
-        min_weight_fraction_leaf,
-        bootstrap,
-        max_leaf_nodes,
-        min_impurity_decrease,
-        max_depth=10,
-        random_state=20,
-        n_jobs=1,
-        class_weight=None,
+            self,
+            n_estimators,
+            criterion,
+            max_features,
+            min_samples_split,
+            min_samples_leaf,
+            min_weight_fraction_leaf,
+            bootstrap,
+            max_leaf_nodes,
+            min_impurity_decrease,
+            max_depth=10,
+            random_state=20,
+            n_jobs=1,
+            class_weight=None,
     ):
         self.n_estimators = n_estimators
         self.criterion = criterion
@@ -414,7 +414,7 @@ print(cs)
 # =========================
 def accuracy(solution, prediction):
     metric_id = 2
-    protected_attr = "sex"
+    protected_attr = "age"
     with open("test_split.txt") as f:
         first_line = f.read().splitlines()
         last_line = first_line[-1]
@@ -511,16 +511,16 @@ def accuracy(solution, prediction):
         ),
     ]
 
-    print(
-        fairness_metrics[metric_id],
-        1 - np.mean(solution == prediction),
-        fairness_metrics[metric_id] * beta
-        + (1 - np.mean(solution == prediction)) * (1 - beta),
-        beta,
-    )
+    # print(
+    #     fairness_metrics[metric_id],
+    #     1 - np.mean(solution == prediction),
+    #     fairness_metrics[metric_id] * beta
+    #     + (1 - np.mean(solution == prediction)) * (1 - beta),
+    #     beta,
+    # )
 
     return fairness_metrics[metric_id] * beta + (
-        1 - np.mean(solution == prediction)
+            1 - np.mean(solution == prediction)
     ) * (1 - beta)
 
 
@@ -568,10 +568,10 @@ count = 0
 print(predictions)
 print(y_test, len(predictions))
 print("SPD-Accuracy score:", sklearn.metrics.accuracy_score(y_test, predictions))
-print(disparate_impact(data_orig_test, predictions, "sex"))
-print(statistical_parity_difference(data_orig_test, predictions, "sex"))
-print(equal_opportunity_difference(data_orig_test, predictions, y_test, "sex"))
-print(average_odds_difference(data_orig_test, predictions, y_test, "sex"))
+print(disparate_impact(data_orig_test, predictions, "age"))
+print(statistical_parity_difference(data_orig_test, predictions, "age"))
+print(equal_opportunity_difference(data_orig_test, predictions, y_test, "age"))
+print(average_odds_difference(data_orig_test, predictions, y_test, "age"))
 
 a_file = open("german_rf_spd" + str(now) + "60sp.pkl", "wb")
 pickle.dump(automl.cv_results_, a_file)
